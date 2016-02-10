@@ -1,0 +1,126 @@
+% Use only LaTeX2e, calling the article.cls class and 12-point type.
+
+\documentclass[12pt]{article}
+
+% Users of the {thebibliography} environment or BibTeX should use the
+% scicite.sty package, downloadable from *Science* at
+% www.sciencemag.org/about/authors/prep/TeX_help/ .
+% This package should properly format in-text
+% reference calls and reference-list numbers.
+
+\usepackage{scicite}
+
+% Use times if you have the font installed; otherwise, comment out the
+% following line.
+
+\usepackage{times}
+
+% The preamble here sets up a lot of new/revised commands and
+% environments.  It's annoying, but please do *not* try to strip these
+% out into a separate .sty file (which could lead to the loss of some
+% information when we convert the file to other formats).  Instead, keep
+% them in the preamble of your main LaTeX source file.
+
+
+% The following parameters seem to provide a reasonable page setup.
+
+\topmargin 0.0cm
+\oddsidemargin 0.2cm
+\textwidth 16cm 
+\textheight 21cm
+\footskip 1.0cm
+
+
+%The next command sets up an environment for the abstract to your paper.
+
+\newenvironment{sciabstract}{%
+\begin{quote} \bf}
+{\end{quote}}
+
+
+% If your reference list includes text notes as well as references,
+% include the following line; otherwise, comment it out.
+
+\renewcommand\refname{References and Notes}
+
+% The following lines set up an environment for the last note in the
+% reference list, which commonly includes acknowledgments of funding,
+% help, etc.  It's intended for users of BibTeX or the {thebibliography}
+% environment.  Users who are hand-coding their references at the end
+% using a list environment such as {enumerate} can simply add another
+% item at the end, and it will be numbered automatically.
+
+\newcounter{lastnote}
+\newenvironment{scilastnote}{%
+\setcounter{lastnote}{\value{enumiv}}%
+\addtocounter{lastnote}{+1}%
+\begin{list}%
+{\arabic{lastnote}.}
+{\setlength{\leftmargin}{.22in}}
+{\setlength{\labelsep}{.5em}}}
+{\end{list}}
+
+\title{Visualizing Collections of Archived Webpages} 
+
+\author
+{John Berlin, Joel Rodriguez-Ortiz, Slobodan Milanko\\
+\\
+\normalsize{Department of Computer Science, Old Dominion University,CS825}\\
+}
+
+\date{}
+
+\begin{document} 
+\baselineskip24pt
+\maketitle 
+
+\begin{sciabstract}
+  In this document, we will first address the initial description of the selected project, consisting of what we know and what we aim to propose as a solution. This is followed by a brief discussion of the dataset that we are anticipating, and how we will mitigate risk if the dataset type changes. Lastly, we will address some questions we aim to answer with our visualization, which will be refined as we learn more about the data.
+  
+\end{sciabstract}
+
+
+\section*{Initial project description}
+
+As a group, we have decided to propose an idea for visualizing collections of archived webpages. With general examples presented by Dr. Weigle, we believe that we can make a solution that will help users navigate large archive collections more easily. One of our plans is to make the visualization clutter free, where we aim to ensure users can manage the amount of information displayed, no matter the size of the collection. Our next goal is to give the visualization compatibility features, providing accessibility over many browsers, and lightweight features, the power of dynamically filtering data to increase performance. Lastly, as we approach further milestones in the project, we aim to continuously assess the effectiveness of our proposed solution by surveying our advisers and clients.
+
+\section*{Dataset}
+
+Per our email conversation, we will first reach out to Yasmin, in hopes of understanding her already developed collection. This will give us a good idea as to what the client seeks to see, and what data is ready for us to use. If the provided material is not sufficient or lacks in quantity, we will follow a general format for Google Docs in creating sample collections. Lastly, we also aim to talk to Michigan State client's with Dr. Weigle, to ensure the dataset we use will meet their needs.
+
+On a more specific note, we anticipate the dataset being presented to us in a table form. Each item within the data, at a minimum, will contain an attribute for a target webpage and an archived webpage. In addition, we anticipate categorical attributes for tags, which will give more context to the webpages we are differentiating. While uncertain, we forecast clients will desire several other categorical, temporal or quantitative attributes to filter data easier. 
+
+\section*{Questions}
+The current list of questions, in no particular order, includes:
+
+\begin{itemize}
+  \item How does the archived webpage differ from the currently live webpage?
+  \item Is there a relationship between specific tag combinations and the ratio of difference between current and archived webpages?
+  \item Are some webpages better archived than others?
+  \item Is there a specific period where archived pages were damaged the most?
+  \item Will the user want to navigate the archived network spatially?
+\end{itemize}
+
+\clearpage
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
