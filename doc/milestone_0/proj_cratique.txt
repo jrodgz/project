@@ -1,0 +1,16 @@
+Feb 10 - Initial project description. One-page document listing project members, dataset to be used, and initial questions/tasks to be addressed.
+
+The project members are: John Berlin, Joel Rodriguez-Ortiz, and Slobodan Milanko
+
+Background on the project:
+As a group, we have decided to propose an idea for visualizing collections of archived webpages. With general examples presented by Dr. Weigle, we believe that we can make a solution that will help users navigate large archive collections more easily. One of our plans is to make the visualization very clutter free, where we aim to ensure users can manage the amount of information displayed, no matter the size of the collection. Our next goal is to give the visualization compatibility features, providing accessibility over many browsers, and lightweight features, the power of dynamically filtering data to increase performance.
+
+Dataset to be used: Per our email conversation, we will first reach out to Yasmin, in hopes of understanding her already developed collection. This will give us a good idea as to what the client seeks to see, and what data is ready for us to use. If the provided material is not sufficient or lacks in quantity, we will follow a general format for Google Docs in creating sample collections. Lastly, we also aim to talk to Michigan State client's with Dr. Weigle, to ensure the dataset we use will meet their needs.
+
+Initial questions to be addressed:
+
+How does the archived page differ from the currently live page?
+Is there a relationship between specific tags and the difference between current and archived webpages?
+Are some webpages better archived than others?
+Is there a specific period where archived pages were not as accurate?
+Will the user want to navigate the archived network spatially?
