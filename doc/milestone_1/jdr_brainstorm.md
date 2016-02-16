@@ -58,6 +58,7 @@ produce different results (different views) based on the user's current intentio
   - [Wayback Machine](https://en.wikipedia.org/wiki/Help:Using_the_Wayback_Machine)
   - [PhantomJS](http://phantomjs.org/)
   - [Google Docs](https://www.google.com/docs/about/)
+    - [Spreadsheet API](https://developers.google.com/google-apps/spreadsheets/)
   - [WAIL](https://github.com/machawk1/wail)
   - [ODU Research Group](http://ws-dl.blogspot.com/2012/08/2012-08-10-ms-thesis-visualizing.html)
 
