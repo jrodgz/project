@@ -50,3 +50,23 @@ produce different results (different views) based on the user's current intentio
 ```
 
 **Brief**: The user has a massive data set and needs to navigate it efficiently.
+
+##Next Steps
+- Explore tools and examples of interest.
+  - [Mink](https://github.com/machawk1/mink)
+  - [WARCreate](https://github.com/machawk1/warcreate)
+  - [Wayback Machine](https://en.wikipedia.org/wiki/Help:Using_the_Wayback_Machine)
+  - [PhantomJS](http://phantomjs.org/)
+  - [Google Docs](https://www.google.com/docs/about/)
+  - [WAIL](https://github.com/machawk1/wail)
+  - [ODU Research Group](http://ws-dl.blogspot.com/2012/08/2012-08-10-ms-thesis-visualizing.html)
+
+- As a group, define and settle on a model.
+  - We've got many ideas flying around. Once we pick one we can begin implementing well before
+    we settle on a view, which is the actual point of interest for this class.
+
+- Begin implementing the selected model.
+
+- The rest is kindof followed by the milestones. The next one involves the five sheet design assignment
+  in which we'll begin working out our different views. It'll be convenient to have settled on a model by
+  then.
