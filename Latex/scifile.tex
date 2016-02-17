@@ -75,7 +75,7 @@
 \maketitle 
 
 \begin{sciabstract}
-  In this document, we will first address the initial description of the selected project, consisting of what we know and what we aim to propose as a solution. This is followed by a brief discussion of the dataset that we are anticipating, and how we will mitigate risk if the dataset type changes. Lastly, we will address some questions we aim to answer with our visualization, which will be refined as we learn more about the data.
+  In this document, we will first address the initial description of the selected project, consisting of what we know and what we aim to propose as a solution. This is followed by a brief discussion of the dataset we are anticipating, and how we will mitigate risk if the dataset type changes. Lastly, we will address some questions we aim to answer with our visualization, which will be refined as we learn more about the data.
   
 \end{sciabstract}
 
@@ -86,9 +86,19 @@ As a group, we have decided to propose an idea for visualizing collections of ar
 
 \section*{Dataset}
 
-Per our email conversation, we will first reach out to Yasmin, in hopes of understanding her already developed collection. This will give us a good idea as to what the client seeks to see, and what data is ready for us to use. If the provided material is not sufficient or lacks in quantity, we will follow a general format for Google Docs in creating sample collections. Lastly, we also aim to talk to Michigan State clients with Dr. Weigle, to ensure the dataset we use will meet their needs.
+\subsection*{What?}
 
-On a more specific note, we anticipate the dataset being presented to us in a table form. Each item within the data, at a minimum, will contain an attribute for a target webpage and an archived webpage. In addition, we anticipate categorical attributes for tags, which will give more context to the webpages we are differentiating. While uncertain, we forecast clients will desire several other categorical, temporal or quantitative attributes to filter data easier. 
+Each item within the dataset, at a minimum, will contain a URI-M (memento) attribute for a URI. In addition, we anticipate categorical attributes such as contributors and tags, which will give more context to the webpages we are differentiating. While uncertain, we forecast clients will desire several other key identifiers, temporal or even quantitative attributes to filter data easier.  This leads us to believe that the dataset will be presented in two distinct forms, a table or a tree layout. The attributes for each table entry could contain a specific tag, time date value of when a URI was archived, or even a set of memenots that construct a story. On the contrary, a tree layout could provide us with a set of nodes where each link is a specific tag. It is up to the user to define the primary attribute, and relationship, they seek to focus on.  
+
+
+\subsection*{Why?}
+Since the goal of our visualization centers around story telling, our users will be presented with a wide variety of analysis goals, such as discovery, presentation, and enjoyment. They can discover new knowledge or insights about each story within a web archive. In addition, the presented material can help narrate the same story of how particular archives eventually transformed into something distinctively different than its origin. Which ever the case, full enjoyment is achievable to any user getting a glimpse of what was once collected.
+
+When it comes to searching, a quest towards understanding can simply begin by exploring the entire collection. If more data is known, such as a categorical tag and a specific URI, the users can even perform a lookup or a location search. Browsing will also be possible, in which a user might not necessarily know what they seek to see, but rather a time frame of when it might have happened. A simple example of this can include searching for mementos with tags, by only knowing a specific temporal value.
+
+Finally, when querying for data, users have a choice of identifying, comparing, or summarizing the presented dataset. Identifying will allow a shift in focus towards a particular element, such as the URI and its associated tags over time. Comparing can help further differentiate multiple selected attributes, where finding key areas of differences is critical. With this, users can find answers to questions such as:  how has the content or role of the resource changed, from the original starting point? Has the story shifted significantly over time? Taken even further, addition of summarizing queries, can help outline a specific generalization about stories, such as the most common set of tags presented within the collection.
+
+
 
 \section*{Questions}
 The current list of questions, in no particular order, includes:
