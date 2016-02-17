@@ -1,9 +1,9 @@
-#Abstract Task Definition
+# Abstract Task Definition
 
-##Brief
+## Brief
 We have proposed to visualize an individual's collection of archived web pages (refer to `milestone_0`).
 
-###Ideas Discussed
+### Ideas Discussed
 1. Archive a page locally. The page is saved int it current state at the current time.
 2. Don't archive a page locally. Use [WaybackMachine](https://archive.org/web/) as the archived page database.
    [More help](https://en.wikipedia.org/wiki/Help:Using_the_Wayback_Machine).
@@ -21,7 +21,7 @@ We have proposed to visualize an individual's collection of archived web pages (
    Google Docs. This could simplify data sharing greatly.
 9. Other offline archiving tools discussed: [WARCreate](http://warcreate.com/), TODO (find other links).
 
-##What?
+## What?
 I'm struggling defining this dataset abstractly because I feel two abstractions could represent this data set in an
 equally useful manner. If we represented this data set as a table, keyed by live web page and indexing into a number of attributes including user name, archive link(s), tag(s), etc. we could facilitate navigating this data set by the currently ordered attribute.
 
@@ -37,12 +37,29 @@ network where links are the actual links between pages. This representation migh
 exploring the dataset. It's going to be limited if the user doesn't archive enough web pages and it might be tedious
 to reorganize the data set to facilitate navigation (in comparison to other abstractions).
 
-##Why?
+jberlin: 
+	
+    The URI-L (live web) and URI-M (memento / archived) the key is time ie "When was it archived". Ordered
+    Another one would be a categorical one ie TAG. 
+    If the dataset is massive Tags would be the lets say overview portion.
+    Tag cloud? 
+    
+    A table is the base representation since google doc? 
+    
+
+## Why?
 Abstracting purpose for this visualization feels more straightforward than the dataset itself. The user has a potentially
 large item set, which he needs to explore efficiently. The user will want to _discover_, _present_ (share), and _enjoy_ what will typically (probably most of the time) boil down to an _individual value_ ("One" "Attribute").
 This _individual value_ might be a single _target_ page (TODO: probably don't want to use the word "page" if we're talking abstractly), or a collection of similar pages which have been grouped together as "one" for a reason or another (same tag, same time stamp, etc.).
 
 The user will want to navigate the data set in all the forms described in the book: _lookup_, _browse_, _locate_, _explore_. So we'll need to build a healthy amount of filters to facilitate these operations.
+
+
+Ok here are some links that Dr. Weigle sent to us: 
+
+[URI-M collection for story](https://docs.google.com/spreadsheets/d/1QbkU1WTG6S7BhQKDe0HqHSeQRhoxu0rNOpEKEYX6_pU/edit#gid=0)
+
+[Comments on story](https://docs.google.com/document/d/1r7BAclFmZttmgdJmQaKkFZ_3oJvTK6s79YWOk0p3ZJ0/edit)
 
 ```
 Idea Interruption: The user could explicitly put the view into states (_lookup_, _browse_, _locate_, _explore_) which
@@ -71,6 +88,16 @@ produce different results (different views) based on the user's current intentio
 - The rest is kindof followed by the milestones. The next one involves the five sheet design assignment
   in which we'll begin working out our different views. It'll be convenient to have settled on a model by
   then.
+  
+ ## Tasks
+ - Explore
+  		
+  	- What webcites do I have
+  	- What Dates
+  	- What Tags 
+  		- Do mulitple tags have simular mementos?  	
+- Partition
+	-  	s
 
 ##Notes
 1. [Remember random spring network idea when we talk.](http://www.visualthesaurus.com/)
