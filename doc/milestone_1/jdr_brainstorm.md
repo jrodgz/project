@@ -102,4 +102,5 @@ produce different results (different views) based on the user's current intentio
 
 ##Notes
 1. [Remember random spring network idea when we talk.](http://www.visualthesaurus.com/)
+   - [Another Example: Force Directed Graph of Thumbnails](http://bl.ocks.org/mbostock/4062045)
 2. Remember 3D tile thumbnail idea we talk.
