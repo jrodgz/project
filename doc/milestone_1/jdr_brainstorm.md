@@ -71,3 +71,7 @@ produce different results (different views) based on the user's current intentio
 - The rest is kindof followed by the milestones. The next one involves the five sheet design assignment
   in which we'll begin working out our different views. It'll be convenient to have settled on a model by
   then.
+
+##Notes
+1. [Remember random spring network idea when we talk.](http://www.visualthesaurus.com/)
+2. Remember 3D tile thumbnail idea we talk.
