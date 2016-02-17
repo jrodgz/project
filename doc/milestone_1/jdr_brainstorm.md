@@ -20,6 +20,7 @@ We have proposed to visualize an individual's collection of archived web pages (
    (live link, (wayback links)) and simply generating a view for whichever data set happens to be pulled down from
    Google Docs. This could simplify data sharing greatly.
 9. Other offline archiving tools discussed: [WARCreate](http://warcreate.com/), TODO (find other links).
+10. [Example Dataset](https://docs.google.com/spreadsheets/d/1QbkU1WTG6S7BhQKDe0HqHSeQRhoxu0rNOpEKEYX6_pU/edit?pref=2&pli=1#gid=0)
 
 ## What?
 I'm struggling defining this dataset abstractly because I feel two abstractions could represent this data set in an
