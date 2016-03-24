@@ -38,6 +38,8 @@
                 });
                 
                 setParsingComplete(true)
+                updateStatus(statusDiv, "mementos were added " + visualization.parser.getMementos().length);
+                updateStatus(statusDiv, "tags were added " + visualization.parser.getTags().length);
                 
             });
             

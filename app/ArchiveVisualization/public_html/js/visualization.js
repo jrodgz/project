@@ -55,7 +55,7 @@ var visualization = visualization || {};
     };
 
     parser.addTag = function (tagSet) {
-        var numberOfTags = tags.length;
+        var numberOfTags = tagSet.length;
         for (var i = 0; i < numberOfTags; i++) {
             tags.push(tagSet[i]);
         }
