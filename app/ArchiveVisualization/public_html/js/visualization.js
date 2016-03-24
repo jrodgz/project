@@ -24,21 +24,38 @@ var visualization = visualization || {};
                         updateStatus(statusDiv, 'FATAL: unable to reach spreadsheet');
                     })
                     .then(function (data) {
-                        updateStatus(statusDiv, 'Sheet loading complete');
+                        parseSheet(statusDiv, data);
                         return data;
                     });
         }
         return true;
     };
 
+    function parseSheet(statusDiv, data) {
+        updateStatus(statusDiv, 'Sheet loading complete');
+        var entry = data.feed.entry;
+        $(entry).each(function () {
+            var tags = this.gsx$tags.$t.split(",");
+            var mementos = this.gsx$mementos.$t.split(",");
+            visualization.parser.addMemento(mementos);
+            updateStatus(statusDiv, "added " + mementos.length + " mementos for " + this.gsx$uri.$t);
+            visualization.parser.addTag(tags);
+            updateStatus(statusDiv, "added " + tags.length + " tags for " + this.gsx$uri.$t);
+        });
+
+        setParsingComplete(statusDiv, true);
+        updateStatus(statusDiv, "Total mementos added: " + visualization.parser.getMementos().length);
+        updateStatus(statusDiv, "Total tags were added: " + visualization.parser.getTags().length);
+    }
+
 }(window.visualization.google = window.visualization.google || {}, jQuery));
 
-// namespace for parsing the json data, and stroing it into variables
+// namespace for parsing the json data, and storing it into variables
 (function (parser, $, undefined) {
 
     var mementos = [];
     var tags = [];
-    
+
     parser.getMementos = function () {
         return mementos;
     };
@@ -62,4 +79,3 @@ var visualization = visualization || {};
     };
 
 }(window.visualization.parser = window.visualization.parser || {}, jQuery));
-

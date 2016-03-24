@@ -20,30 +20,16 @@
             var spreadsheetID = "1O0JIuvFus0U-WYZ_3IJBU-PB3amRQhfH63hAq8dY6aE";
             var url = "https://spreadsheets.google.com/feeds/list/" + spreadsheetID + "/od6/public/values?alt=json";
             var statusDiv = $('#current_status');
-            var resultsDiv = $('#results')
+            var resultsDiv = $('#results');
 
             visualization.google.setStatusDiv(statusDiv);
-            visualization.google.setSheetUrl(url)
-            visualization.google.loadSheet().then(function (data) {
+            visualization.google.setSheetUrl(url);
+            visualization.google.loadSheet().then(function (jsonData) {
                 
-                // Example: to print the values of the data, we can do this
-                var entry = data.feed.entry;
-                $(entry).each(function () {
-                    var tags = this.gsx$tags.$t.split(",");
-                    var mementos = this.gsx$mementos.$t.split(",");
-                    visualization.parser.addMemento(mementos);
-                    updateStatus(statusDiv, "added " + mementos.length + " mementos for " +  this.gsx$uri.$t)
-                    visualization.parser.addTag(tags);
-                    updateStatus(statusDiv, "added " + tags.length + " tags for " +  this.gsx$uri.$t)
-                });
-                
-                setParsingComplete(true)
-                updateStatus(statusDiv, "mementos were added " + visualization.parser.getMementos().length);
-                updateStatus(statusDiv, "tags were added " + visualization.parser.getTags().length);
+                updateStatus(statusDiv, "SHEET LOADED! JSON ready to use");
                 
             });
             
-            waitForParsingComplete(statusDiv);
             
         </script>
 
