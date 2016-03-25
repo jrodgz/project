@@ -15,4 +15,4 @@ function updateContent(divToUpdate, stringToSay) {
 function setParsingComplete(statusDiv, isComplete) {
     parsingComplete = isComplete;
     updateStatus(statusDiv, 'Parsing complete');
-}
+};
