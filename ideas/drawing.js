@@ -118,7 +118,7 @@ var drawing = drawing || {};
         // Re-paginate to a different number of images per page.
         this.paginate = function(ipp = Number.MAX_VALUE) {
             imagesPerPage = ipp;
-            nPages = nImages / imagesPerPage;
+            nPages = Math.ceil(nImages / imagesPerPage);
             currPage = 0;
             redraw();
         }
