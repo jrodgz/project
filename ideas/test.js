@@ -12,31 +12,30 @@ var svg = d3.select('body')
     .attr('width', width)
     .attr('height', height);
 
-var container = createZoomableContainer(svg, width, height);
-
-container.append('g')
-    .attr('class', 'x axis')
-    .selectAll('line')
-    .data(d3.range(0, width, 10))
-    .enter()
-    .append('line')
-    .attr('x1', function(d) { return d; })
-    .attr('y1', 0)
-    .attr('x2', function(d) { return d; })
-    .attr('y2', height);
-
-container.append('g')
-    .attr('class', 'y axis')
-    .selectAll('line')
-    .data(d3.range(0, height, 10))
-    .enter()
-    .append('line')
-    .attr('x1', 0)
-    .attr('y1', function(d) { return d; })
-    .attr('x2', width)
-    .attr('y2', function(d) { return d; });
+var container = drawing.createZoomableContainer(svg, width, height);
+drawing.drawGridLines(container, width, height);
 
 // -----------------------------------------------------------------------------
+
+var dictionary = [ 'foo', 'bar', 'baz', 'qux' ];
+var words = [];
+for (var i = 0; i < 100; ++i)
+{
+    words.push({
+        text: dictionary[i % 4],
+        x: Math.floor(Math.random() * width) + 1,
+        y: Math.floor(Math.random() * height) + 1,
+        style: { 
+            // So we'll be able to evaluate individually for each word.
+            // We'll be able to grow, color, etc. words based on different
+            // criteria.
+            // See below.
+            'font-family': 'sans-serif',
+            'font-size': 10 + 'px',
+            'font-weight': 'bold'
+        }
+    });
+}
 
 var drag = d3.behavior.drag()
     .origin(function(d) { return d; })
@@ -44,26 +43,7 @@ var drag = d3.behavior.drag()
     .on('drag', dragged)
     .on('dragend', dragEnded);
 
-function dotType(d)
-{
-    d.x = +d.x * 3;
-    d.y = +d.y * 3;
-    return d;
-}
-
-d3.tsv('dots.tsv', dotType, function(error, dots)
-{
-    dot = container.append('g')
-        .attr('class', 'dot')
-        .selectAll('circle')
-        .data(dots)
-        .enter()
-        .append('circle')
-        .attr('r', 10)
-        .attr('cx', function(d) { return d.x; })
-        .attr('cy', function(d) { return d.y; })
-        .call(drag);
-});
+var wordGroup = new drawing.WordGroup(container, words, drag);
 
 function dragStarted(d)
 {
@@ -74,8 +54,8 @@ function dragStarted(d)
 function dragged(d)
 {
     d3.select(this)
-        .attr('cx', d.x = d3.event.x)
-        .attr('cy', d.y = d3.event.y);
+        .attr('x', d.x = d3.event.x)
+        .attr('y', d.y = d3.event.y);
 }
 
 function dragEnded(d)
@@ -83,3 +63,40 @@ function dragEnded(d)
     d3.select(this).classed('dragging', false);
 }
 
+// -----------------------------------------------------------------------------
+
+for (var i = 0; i < 100; ++i)
+{
+    words[i].style['font-size'] = (Math.floor(Math.random() * 25) + 1) + 'px';
+
+    if (i % 2)
+    {
+        words[i].style['fill'] = 'green';
+    }
+    else
+    {
+        words[i].style['fill'] = 'blue';
+    }
+}
+
+wordGroup.updateStyle();
+
+var button = d3.select('body')
+    .append('input')
+    .attr('type', 'submit')
+    .attr('value', 'override');
+
+button.pressed = false;
+
+button.on('click', function() {
+    if (button.pressed)
+    {
+        wordGroup.updateStyle();
+    }
+    else
+    {
+        wordGroup.overrideStyle({ 'fill': 'black' });
+    }
+
+    button.pressed = !button.pressed;
+});
