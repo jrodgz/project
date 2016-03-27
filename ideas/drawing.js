@@ -19,8 +19,7 @@ var drawing = drawing || {};
 
         var container = group.append('g');
 
-        function zoomed()
-        {
+        function zoomed() {
             container.attr('transform',
                            'translate(' + d3.event.translate + ')scale(' + 
                            d3.event.scale + ')');
@@ -60,14 +59,12 @@ var drawing = drawing || {};
     // The rendered group of words is retained for further manipulations.
     drawing.WordGroup = function(group, words, action = null) {
         // Overrides the current styles in the word group to rules.
-        this.overrideStyle = function(rules)
-        {
+        this.overrideStyle = function(rules) {
             word.style(rules);
         }
 
         // Updates CSS styles based on the state of the dataset.
-        this.updateStyle = function()
-        {
+        this.updateStyle = function() {
             word.each(function(d) {
                 d3.select(this)
                     .style(d.style);
@@ -91,3 +88,64 @@ var drawing = drawing || {};
         this.updateStyle();
     }
 }(window.drawing = window.drawing || {}, d3));
+
+// Extends the drawing namespace to include useful layout routines.
+(function(drawing, $, undefined) {
+    // Instantiate these to create a small image gallery.
+    // Expects div to be a jQuery div selection.
+    drawing.ImageGroup = function(div, pathList, ipp = Number.MAX_VALUE) {
+        // Resize images in this gallery.
+        this.resize = function(width, height) {
+            images.attr('width', width);
+            images.attr('height', height);
+        }
+
+        // Show the next page of images.
+        this.nextPage = function() {
+            currPage = (currPage + 1) % nPages;
+            redraw();
+        }
+
+        // Show the previous page of images.
+        this.previousPage = function() {
+            --currPage;
+            if (currPage == -1) {
+                currPage = nPages - 1;
+            }
+            redraw();
+        }
+
+        // Re-paginate to a different number of images per page.
+        this.paginate = function(ipp = Number.MAX_VALUE) {
+            imagesPerPage = ipp;
+            nPages = nImages / imagesPerPage;
+            currPage = 0;
+            redraw();
+        }
+
+        function redraw()
+        {
+            images.each(function(i, v) {
+                var pageOfImage = Math.floor(i / imagesPerPage);
+                if (pageOfImage == currPage) {
+                    $(v).css('display', 'inline');
+                } else {
+                    $(v).css('display', 'none');
+                }
+            });
+        }
+
+        pathList.forEach(function(v, i) {
+            div.append('<img class="gallery" id="img' + i + 
+                       '" src="' + v + '" />');
+        });
+
+        var images = $('.gallery');
+        var nImages = pathList.length;
+        var imagesPerPage = ipp;
+        var nPages = Math.ceil(nImages / ipp);
+        var currPage = 0;
+
+        redraw();
+    }
+}(window.drawing = window.drawing || {}, jQuery));
