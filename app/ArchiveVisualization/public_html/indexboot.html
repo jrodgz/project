@@ -130,8 +130,7 @@
                 </div>
             </div>
             <div class="col-sm-3">
-                <div class="chart-wrapper">
-                    <img data-src="holder.js/100%x150/white">
+                <div class="chart-stage" id="chart2">
                 </div>
             </div>
             <div class="col-sm-3">
@@ -266,6 +265,26 @@
                 });
                 $('#btn1').click(function() {
                     ig.nextPage();
+                });
+
+                x = [];
+                y = [];
+                for (var i = 0; i < 100; ++i)
+                {
+                    x.push(i);
+                    y.push(Math.random() * 100 + 1);
+                }
+
+                x.unshift('x');
+                y.unshift('count');
+
+                // TODO: bind some real data to this
+                var otherChart = c3.generate({
+                    bindto: '#chart2',
+                    data: {
+                        x: 'x',
+                        columns: [ x, y ]
+                    }
                 });
             });
         </script>

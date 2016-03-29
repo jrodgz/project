@@ -195,3 +195,9 @@ var drawing = drawing || {};
         redraw();
     }
 }(window.drawing = window.drawing || {}, jQuery));
+
+// Extends the drawing namespace with convenience functions for the c3 library.
+(function(drawing, c3, undefined) {
+    // Probably won't need this. c3 seems convenient enough.
+})(window.drawing = window.drawing || {}, c3);
+
