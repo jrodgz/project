@@ -77,11 +77,11 @@ var drawing = drawing || {};
             .data(words)
             .enter()
             .append('text')
-            .attr('x', function(d) { 
-                return Math.floor(Math.random() * width) + 1;
+            .attr('x', function(d) {
+                return Math.floor(Math.random() * width) + 1
             })
             .attr('y', function(d) {
-                return Math.floor(Math.random() * height) + 1;
+                return Math.floor(Math.random() * height) + 1
             })
             .text(function(d) { return d; });
 
