@@ -11,6 +11,13 @@
     stroke: brown;
 }
 
+/* Do inline styles override CSS? */
+.word text.dragging
+{
+    fill: red !important;
+    stroke: brown !important;
+}
+
 .axis line
 {
     fill: none;
