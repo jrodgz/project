@@ -87,6 +87,232 @@ var drawing = drawing || {};
 
         this.updateStyle();
     }
+
+    // Poops out a scatterplot. Assumes data has the following members:
+    // { x, y, color }.
+    drawing.ScatterPlot = function(g,       // group
+                                   d,       // dataset { x, y, color }
+                                   w = 640, // width
+                                   h = 480, // height
+                                   p = 75,  // padding
+                                   t = 5,   // ticks
+                                   r = 4)   // radius
+    {
+        // Draws the dataset inside its corresponding group.
+        this.draw = function() {
+            // only draw once
+            if (marks == null) {
+                // create circles
+                marks = group.selectAll('circle')
+                    .data(dataset)
+                    .enter()
+                    .append('circle')
+                    .attr('cx', function(d) {
+                        return xScale(d.x);
+                    })
+                    .attr('cy', function(d) {
+                        return yScale(d.y);
+                    })
+                    .attr('r', radius);
+
+                // create x axis
+                group.append('g')
+                    .attr('class', 'axis x-axis')
+                    .attr('transform', 'translate(0,' + (height - padding) + ')')
+                    .call(xAxis);
+
+                // create y axis
+                group.append('g')
+                    .attr('class', 'axis y-axis')
+                    .attr('transform', 'translate(' + padding + ',0)')
+                    .call(yAxis);
+            }
+        }
+
+        // Update mark colors.
+        this.recolor = function() {
+            if (marks != null) {
+                marks.style('fill', function(d) { return d.color; });
+            }
+        }
+
+        // Places the text returned by readData as a label shown when the mouse
+        // hovers over the chart marks. The callback is expected to know how to
+        // read implementation specific details of the data to return the text
+        // to be used for a lable.
+        this.makeHoverLabels = function(readData) {
+            if (hoverLabels == null && marks != null) {
+                hoverLabels = group.selectAll('.hover-label')
+                    .data(dataset)
+                    .enter()
+                    .append('text')
+                    .attr('class', 'hover-label')
+                    .attr('transform', function(d, i) {
+                        return 'translate(' + (xScale(d.x) - 55) + ',' + 
+                               (yScale(d.y) - 10) + ')';
+                    });
+
+                marks.on('mouseover', function(d, i) { 
+                    hoverLabels.each(function(d, j) {
+                        if (i == j) {
+                            d3.select(this)
+                                .text(function(d, i) {
+                                    return readData(d, i);
+                                });
+                        }
+                    })
+                })
+                .on('mouseout', function(d, i) {
+                    hoverLabels.each(function(d, j) {
+                        if (i == j) {
+                            d3.select(this).text('');
+                        }
+                    })
+                });
+            }
+        }
+
+        // Place lables on the vertical and horizontal axes.
+        this.drawAxisLabels = function(vertical, horizontal) {
+            if (group != null) {
+                group.select('.x-axis')
+                    .append('text')
+                    .attr('x', width * 0.80 / 2 )
+                    .attr('y', -5)
+                    .text(horizontal);
+
+                group.select('.y-axis')
+                    .append('text')
+                    .attr('transform', 'rotate(-90)')
+                    .attr('x', -height * 1.10 / 2)
+                    .attr('y', 10)
+                    .text(vertical);
+            }
+        }
+
+        // private
+        var group = g;
+        var dataset = d;
+        var width = w;
+        var height = h;
+        var padding = p;
+        var radius = r;
+        var ticks = t;
+
+        var xScale = d3.scale.linear()
+            .domain([ d3.min(dataset, function(d) { return d.x }) - 50,
+                      d3.max(dataset, function(d) { return d.x }) + 50])
+            .range([ padding, width - padding * 2]); 
+
+        var yScale = d3.scale.linear()
+            .domain([ d3.min(dataset, function(d) { return d.y }) - 50,
+                      d3.max(dataset, function(d) { return d.y }) + 50])
+            .range([ height - padding, padding ]);
+
+        var xAxis = d3.svg.axis()
+            .scale(xScale)
+            .orient('bottom')
+            .ticks(t);
+
+        var yAxis = d3.svg.axis()
+            .scale(yScale)
+            .orient('left')
+            .ticks(t);
+
+        var marks = null;
+        var hoverLabels = null;
+    }
+
+    // TODO: Probably should have base class for common functionality.
+    // TODO: WIP
+    drawing.BarPlot = function(g,       // group
+                               d,       // dataset { x, y, color }
+                               w = 640, // width
+                               h = 480, // height
+                               p = 75,  // padding
+                               t = 5,   // ticks
+                               r = 4)   // radius
+    {
+        // Draw the bar plot inside its corresponding group.
+        this.draw = function() {
+            if (marks == null) {
+                group.selectAll('.bar')
+                    .data(dataset)
+                    .enter()
+                    .append('rect')
+                    .attr('class', 'bar')
+                    .attr('x', function(d) { return xScale(d.name); })
+                    .attr('y', function(d) { return yScale(d.value); })
+                    .attr('height', function(d) { return height - yScale(d.value); })
+                    .attr('width', xScale.rangeBand());
+            }
+        }
+
+        // private
+        var group = g;
+        var dataset = d;
+        var width = w;
+        var height = h;
+        var padding = p;
+        var ticks = t
+
+        var xScale = d3.scale.ordinal()
+            .domain(dataset.map(function(d) { return d.name; }))
+            .rangeRoundBands([ padding, width - padding * 2], 0.1); 
+
+        var yScale = d3.scale.linear()
+            .domain([ 0, d3.max(dataset, function(d) { return d.value; }) ])
+            .range([ height - padding, padding ]);
+
+        var marks = null;
+    }
+
+    // Poops out a legend.
+    drawing.Legend = function(g, mw = 25, mh = 25, mp = 10) {
+        // Draw the legend with the provided categories.
+        // { category, color }
+        this.draw = function(categories) {
+            if (marks == null) {
+                marks = group.append('g')
+                    .attr('class', 'legend')
+                    .selectAll('rect')
+                    .data(categories)
+                    .enter()
+                    .append('g'); // rectangle label combination
+
+                marks.append('rect')
+                    .attr('x', 0)
+                    .attr('y', function (d, i) {
+                        return (markHeight + markPadding) * i;
+                    })
+                    .attr('width', markWidth)
+                    .attr('height', markHeight)
+                    .attr('fill', function(d, i) {
+                        return d.color
+                    });
+
+                marks.append('text')
+                    .attr('transform', function(d, i) { 
+                        var x = markWidth + markPadding;
+                        var y = (markHeight + markPadding) * i;
+                        y += tweak;
+                        return 'translate(' + x + ',' + y + ')';
+                    })
+                    .attr('class', 'legend-text')
+                    .text(function(d) {
+                        return d.category;
+                    });
+            }
+        }
+
+        // private
+        var group = g;
+        var markWidth = mw;
+        var markHeight = mh;
+        var markPadding = mp;
+        var tweak = 16; // might need to expose this
+        var marks = null;
+    }
 }(window.drawing = window.drawing || {}, d3));
 
 // Extends the drawing namespace to include useful layout routines.
