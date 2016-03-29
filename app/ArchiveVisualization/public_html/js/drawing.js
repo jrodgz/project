@@ -77,9 +77,9 @@ var drawing = drawing || {};
             .data(words)
             .enter()
             .append('text')
-            .attr('x', function(d) { return d.x; })
-            .attr('y', function(d) { return d.y; })
-            .text(function(d) { return d.text; });
+            .attr('x', Math.floor(Math.random() * width) + 1)
+            .attr('y', Math.floor(Math.random() * height) + 1)
+            .text(function(d) { return d; });
 
         if (action != null) {
             word.call(action);
