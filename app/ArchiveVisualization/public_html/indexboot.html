@@ -112,8 +112,7 @@
 
         <div class="row">
             <div class="col-sm-3">
-                <div class="chart-wrapper">
-                    <img data-src="holder.js/100%x150/white">
+                <div class="chart-wrapper" id="chart0">
                 </div>
             </div>
             <div class="col-sm-3">
@@ -180,13 +179,13 @@
                     return tm.tags;
                 });
                 tags = _.flatten(tags);
-                console.log(tags);
+                //console.log(tags);
 //                drawing.WordGroup(container,tags,width,height);
                 var histdata = {
                     cols: []
                 };
                 data.forEach(function (tm) {
-                    console.log(tm);
+                    //console.log(tm);
                     var d = [];
                     d.push(tm.title);
                     d.push(tm.mementos.length);
@@ -207,7 +206,40 @@
                  }
 
               });
+
+
+
+                var width = 448;
+                var height = 150;
+                var svg = d3.select('#chart0')
+                    .append('svg')
+                    .attr('width', width)
+                    .attr('height', height);
+                var container = drawing.createZoomableContainer(svg, width, height);
+                drawing.drawGridLines(container, width * 10, height * 10);
+
+                var count = 0;
+                var words = data.map(function(d) {
+                    return { 
+                        text: d.title,
+                        x: Math.floor(Math.random() * width) + 1,
+                        y: Math.floor(Math.random() * height) + 1,
+                        style: {
+                            'font-family': 'sans-serif',
+                            'font-size': (d.mementos.length * 2.0) + 'px',
+                            'font-weight': 'bold',
+                            'fill': (count++ % 2 == 0) ? 'red' : 'blue'
+                        }
+                    }
+                });
+
+                var wg = new drawing.WordGroup(container, words);
+                wg.makeDraggable();
+
+
+
             });
+
 
         </script>
 
