@@ -77,12 +77,8 @@ var drawing = drawing || {};
             .data(words)
             .enter()
             .append('text')
-            .attr('x', function(d) {
-                Math.floor(Math.random() * 100) + 1
-            })
-            .attr('y', function(d) {
-                Math.floor(Math.random() * 100) + 1
-            })
+            .attr('x', functionMath.floor(Math.random() * width) + 1)
+            .attr('y', Math.floor(Math.random() * height) + 1)
             .text(function(d) { return d; });
 
         if (action != null) {
