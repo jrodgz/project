@@ -57,7 +57,7 @@ var drawing = drawing || {};
     // Renders the list of words inside group, optionally calling action on 
     // the group of words.
     // The rendered group of words is retained for further manipulations.
-    drawing.WordGroup = function(group, words, action = null) {
+    drawing.WordGroup = function(group, words, width, height, action = null) {
         // Overrides the current styles in the word group to rules.
         this.overrideStyle = function(rules) {
             word.style(rules);
@@ -78,10 +78,10 @@ var drawing = drawing || {};
             .enter()
             .append('text')
             .attr('x', function(d) {
-                return Math.floor(Math.random() * 100) + 1
+                return Math.floor(Math.random() * width) + 1
             })
             .attr('y', function(d) {
-                return Math.floor(Math.random() * 100) + 1
+                return Math.floor(Math.random() * height) + 1
             })
             .text(function(d) { return d; });
 
