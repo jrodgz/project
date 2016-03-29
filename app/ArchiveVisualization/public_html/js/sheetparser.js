@@ -27,7 +27,6 @@ sheetParser.prototype.parseSheet = function (data) {
    updateStatus(statusDiv, "Preparing to parse mementos for timestamps");
    var taggedMementos = [];
    data.feed.entry.forEach(function (entry) {
-      console.log(entry);
       var data = {
          archiver: entry.gsx$archiver.$t,
          name: entry.gsx$name.$t,
@@ -40,14 +39,12 @@ sheetParser.prototype.parseSheet = function (data) {
          if(sp.linkExtractor.test(m))
             data.mementos.push(new Memento(sp.linkExtractor.exec(m),m));
       });
-      console.log(data);
       taggedMementos.push(new TaggedMemmentos(data));
    });
    return taggedMementos;
 };
 
 sheetParser.prototype.loadSheet = function () {
-   console.log(this.url);
    if ((typeof this.url !== 'undefined') && this.url !== null) {
       updateStatus(statusDiv, 'Loading sheet...');
       return $.getJSON(this.url)
