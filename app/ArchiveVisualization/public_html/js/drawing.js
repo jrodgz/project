@@ -45,7 +45,13 @@ var drawing = drawing || {};
             'stroke': 'lightgray'
         };
 
-        group.append('g')
+        var g = group.append('g')
+            .attr('class', 'grid')
+            // center the grid lines
+            .attr('transform', 'translate(' + (-width / 2) + ',' 
+                                            + (-height / 2) + ')');
+
+        g.append('g')
             .attr('class', 'x axis')
             .selectAll('line')
             .data(d3.range(0, width, tick))
@@ -57,7 +63,7 @@ var drawing = drawing || {};
             .attr('y2', height)
             .style(rules);
 
-        group.append('g')
+        g.append('g')
             .attr('class', 'y axis')
             .selectAll('line')
             .data(d3.range(0, height, tick))
