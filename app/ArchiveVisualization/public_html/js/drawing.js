@@ -78,10 +78,10 @@ var drawing = drawing || {};
             .enter()
             .append('text')
             .attr('x', function(d) {
-                Math.floor(Math.random() * 100) + 1
+                return Math.floor(Math.random() * 100) + 1
             })
             .attr('y', function(d) {
-                Math.floor(Math.random() * 100) + 1
+                return Math.floor(Math.random() * 100) + 1
             })
             .text(function(d) { return d; });
 
