@@ -28,11 +28,6 @@ var drawing = drawing || {};
         return container;
     };
 
-    // Makes the input group of elements draggable.
-    // Expects a d3 group element selection.
-    drawing.makeDraggable = function(group) {
-    };
-
     // Use this function to draw width and height worth of grid lines 
     // inside group.
     drawing.drawGridLines = function(group, width, height, tick) {
@@ -146,6 +141,7 @@ var drawing = drawing || {};
 
         // Resize images in this gallery.
         this.resize = function(width, height) {
+            height = height || width;
             images.attr('width', width);
             images.attr('height', height);
         };

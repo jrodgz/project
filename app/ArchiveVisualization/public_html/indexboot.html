@@ -21,6 +21,12 @@
         <script src="js/global.js"></script>
         <script src="js/sheetparser.js"></script>
         <script src="js/drawing.js"></script>
+        <style>
+            .gallery
+            {
+                margin: 10px;
+            }
+        </style>
     </head>
     <body>
     <nav role="navigation" class="navbar navbar-default navbar-static-top">
@@ -116,8 +122,11 @@
                 </div>
             </div>
             <div class="col-sm-3">
-                <div class="chart-wrapper">
-                    <img data-src="holder.js/100%x150/white">
+                <div class="chart-wrapper" id="chart1">
+                </div>
+                <div style="text-align: center;">
+                    <button id="btn0">prev</button>
+                    <button id="btn1">next</button>
                 </div>
             </div>
             <div class="col-sm-3">
@@ -180,7 +189,6 @@
                 });
                 tags = _.flatten(tags);
                 //console.log(tags);
-//                drawing.WordGroup(container,tags,width,height);
                 var histdata = {
                     cols: []
                 };
@@ -192,22 +200,16 @@
                     histdata.cols.push(d);
                 });
 
-
-             var chart = c3.generate({
-                 bindto: "#chart-results",
-                 data: {
-                     columns: histdata.cols,
-                     type: 'bar'
-                 },
-                 bar: {
-                     width: {
-                         ratio: 0.5
-                     }
-                 }
-
-              });
-
-
+                var chart = c3.generate({
+                    bindto: "#chart-results",
+                    data: {
+                        columns: histdata.cols,
+                        type: 'bar'
+                    },
+                    bar: {
+                        width: { ratio: 0.5 }
+                    }
+                });
 
                 var width = 448;
                 var height = 150;
@@ -236,12 +238,36 @@
                 var wg = new drawing.WordGroup(container, words);
                 wg.makeDraggable();
 
+                var images = [
+                    'images/page0.png',
+                    'images/page1.png',
+                    'images/page2.png',
+                    'images/page3.png',
+                    'images/page4.png',
 
+                    'images/page4.png',
+                    'images/page3.png',
+                    'images/page2.png',
+                    'images/page1.png',
+                    'images/page0.png',
 
+                    'images/page1.png',
+                    'images/page0.png',
+                    'images/page3.png',
+                    'images/page2.png',
+                    'images/page4.png'
+                ];
+                var ig = new drawing.ImageGroup($('#chart1'), images);
+                var npages = Math.ceil(images.length / 3);
+                ig.paginate(npages);
+                ig.resize(128);
+                $('#btn0').click(function() {
+                    ig.previousPage();
+                });
+                $('#btn1').click(function() {
+                    ig.nextPage();
+                });
             });
-
-
         </script>
-
     </body>
 </html>
