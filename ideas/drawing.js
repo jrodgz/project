@@ -26,7 +26,7 @@ var drawing = drawing || {};
         }
 
         return container;
-    }
+    };
 
     // Use this function to draw width and height worth of grid lines 
     // inside group.
@@ -52,7 +52,7 @@ var drawing = drawing || {};
             .attr('y1', function(d) { return d; })
             .attr('x2', width)
             .attr('y2', function(d) { return d; });
-    }
+    };
 
     // Renders the list of words inside group, optionally calling action on 
     // the group of words.
@@ -61,7 +61,7 @@ var drawing = drawing || {};
         // Overrides the current styles in the word group to rules.
         this.overrideStyle = function(rules) {
             word.style(rules);
-        }
+        };
 
         // Updates CSS styles based on the state of the dataset.
         this.updateStyle = function() {
@@ -69,7 +69,7 @@ var drawing = drawing || {};
                 d3.select(this)
                     .style(d.style);
             });
-        }
+        };
 
         var word = group.append('g')
             .attr('class', 'word')
@@ -86,7 +86,7 @@ var drawing = drawing || {};
         }
 
         this.updateStyle();
-    }
+    };
 
     // Poops out a scatterplot. Assumes data has the following members:
     // { x, y, color }.
@@ -127,14 +127,14 @@ var drawing = drawing || {};
                     .attr('transform', 'translate(' + padding + ',0)')
                     .call(yAxis);
             }
-        }
+        };
 
         // Update mark colors.
         this.recolor = function() {
             if (marks != null) {
                 marks.style('fill', function(d) { return d.color; });
             }
-        }
+        };
 
         // Places the text returned by readData as a label shown when the mouse
         // hovers over the chart marks. The callback is expected to know how to
@@ -170,7 +170,7 @@ var drawing = drawing || {};
                     })
                 });
             }
-        }
+        };
 
         // Place lables on the vertical and horizontal axes.
         this.drawAxisLabels = function(vertical, horizontal) {
@@ -188,7 +188,7 @@ var drawing = drawing || {};
                     .attr('y', 10)
                     .text(vertical);
             }
-        }
+        };
 
         // private
         var group = g;
@@ -221,7 +221,7 @@ var drawing = drawing || {};
 
         var marks = null;
         var hoverLabels = null;
-    }
+    };
 
     // TODO: Probably should have base class for common functionality.
     // TODO: WIP
@@ -246,7 +246,7 @@ var drawing = drawing || {};
                     .attr('height', function(d) { return height - yScale(d.value); })
                     .attr('width', xScale.rangeBand());
             }
-        }
+        };
 
         // private
         var group = g;
@@ -254,7 +254,7 @@ var drawing = drawing || {};
         var width = w;
         var height = h;
         var padding = p;
-        var ticks = t
+        var ticks = t;
 
         var xScale = d3.scale.ordinal()
             .domain(dataset.map(function(d) { return d.name; }))
@@ -265,7 +265,7 @@ var drawing = drawing || {};
             .range([ height - padding, padding ]);
 
         var marks = null;
-    }
+    };
 
     // Poops out a legend.
     drawing.Legend = function(g, mw = 25, mh = 25, mp = 10) {
@@ -303,7 +303,7 @@ var drawing = drawing || {};
                         return d.category;
                     });
             }
-        }
+        };
 
         // private
         var group = g;
@@ -324,13 +324,13 @@ var drawing = drawing || {};
         this.resize = function(width, height) {
             images.attr('width', width);
             images.attr('height', height);
-        }
+        };
 
         // Show the next page of images.
         this.nextPage = function() {
             currPage = (currPage + 1) % nPages;
             redraw();
-        }
+        };
 
         // Show the previous page of images.
         this.previousPage = function() {
@@ -339,7 +339,7 @@ var drawing = drawing || {};
                 currPage = nPages - 1;
             }
             redraw();
-        }
+        };
 
         // Re-paginate to a different number of images per page.
         this.paginate = function(ipp = Number.MAX_VALUE) {
@@ -347,7 +347,7 @@ var drawing = drawing || {};
             nPages = Math.ceil(nImages / imagesPerPage);
             currPage = 0;
             redraw();
-        }
+        };
 
         function redraw()
         {
