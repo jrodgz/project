@@ -20,3 +20,24 @@ TaggedMemmentos.prototype.numMementos = function () {
    return this.mementos.length;
 };
 
+TaggedMemmentos.prototype.groupedByYear = function () {
+  return  _.groupBy(this.mementos,function (m) {
+      return m.date.year();
+  });
+};
+
+TaggedMemmentos.prototype.groupedByDomain = function () {
+  return _.groupBy(this.mementos,function (m) {
+      return m.domain;
+  })
+};
+
+TaggedMemmentos.prototype.groupedByYrMnth = function () {
+    var it =  this.groupedByYear();
+    _.keys(it).forEach(function (k) {
+        it[k] = _.groupBy(it[k],function (m) {
+            return m.date.month()+1;
+        })
+    });
+    return it;
+};
