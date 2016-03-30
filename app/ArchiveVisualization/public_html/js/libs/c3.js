@@ -7,11 +7,13 @@
 
    var c3_chart_fn,
       c3_chart_internal_fn,
-      c3_chart_internal_axis_fn;
+      c3_chart_internal_axis_fn,
+       updateDiv;
 
    function API(owner) {
       this.owner = owner;
    }
+
 
    function inherit(base, derived) {
 
@@ -29,6 +31,9 @@
    }
 
    function Chart(config) {
+       var bindingTo = config.bindto;
+       updateMessage("Preparing to load c3 chart in " + bindingTo);
+
       var $$ = this.internal = new ChartInternal(this);
       $$.loadConfig(config);
 
@@ -45,6 +50,9 @@
             }
          });
       })(c3_chart_fn, this, this);
+
+       updateMessage("Loaded c3 chart in " + bindingTo)
+
    }
 
    function ChartInternal(api) {
@@ -56,6 +64,16 @@
       $$.cache = {};
       $$.axes = {};
    }
+
+    c3.setUpdateDiv = function(updateDivToSet) {
+        updateDiv = updateDivToSet;
+    };
+
+    function updateMessage(message) {
+        if (updateDiv != null) {
+            updateStatus(updateDiv, message);
+        }
+    };
 
    c3.generate = function (config) {
       return new Chart(config);

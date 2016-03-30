@@ -159,6 +159,7 @@
             var statusDiv = $('#chart-update');
             gui.constructor.prepareMenuItems('items');
             gui.constructor.setLoadigScreen('chart-results');
+            c3.setUpdateDiv(statusDiv)
             var sp = new sheetParser(url,statusDiv);
             var resultsDiv = $("#chart-results");
             resultsDiv.css("height","400px");
@@ -199,7 +200,7 @@
                     histdata.cols.push(d);
                 });
 
-                var chart = c3.generate({
+                c3.generate({
                     bindto: "#chart-results",
                     data: {
                         columns: histdata.cols,
