@@ -23,7 +23,6 @@ sheetParser.prototype.setStatusDiv = function (div) {
 };
 
 sheetParser.prototype.parseSheet = function (data) {
-   updateStatus(statusDiv, 'Sheet loading complete');
    updateStatus(statusDiv, "Preparing to parse mementos for timestamps");
    var taggedMementos = [];
    data.feed.entry.forEach(function (entry) {
@@ -53,6 +52,7 @@ sheetParser.prototype.loadSheet = function () {
             updateStatus(statusDiv, 'FATAL: unable to reach spreadsheet');
          })
          .then(function (data) {
+             updateStatus(statusDiv, 'Sheet loading complete');
            return sp.parseSheet(data);
          });
    } else {
