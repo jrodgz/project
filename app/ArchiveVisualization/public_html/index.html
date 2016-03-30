@@ -165,21 +165,7 @@
              width: 89%; 400px
              height: 95%; 400px
              */
-//            resultsDiv.css("width","89%");
-//            resultsDiv.css("height","100px");
-//            resultsDiv.css("background-image", "url(images/loading.gif)");
-//            resultsDiv.css("background-repeat", "no-repeat");
-//            resultsDiv.css("background-position", "center");
-//            resultsDiv.css("height","400");
-//            var svg = d3.select("#chart-results").append("svg").attr('width', $(resultsDiv).innerWidth())
-//                    .attr('height', $(resultsDiv).innerHeight());
-//            var container = drawing.createZoomableContainer(svg,$(resultsDiv).innerWidth(),$(resultsDiv).innerHeight());
-//            var width = $(resultsDiv).innerWidth(),height=$(resultsDiv).innerHeight();
-//            var imageList = ["images/page0.png","images/page1.png","images/page2.png",
-//                "images/page3.png","images/page4.png","images/page5.png"];
-//            var igroup = new drawing.ImageGroup(resultsDiv,imageList);
-////            igroup.paginate(imageList.length / 2);
-//            igroup.resize(128, 128);
+//
             sp.loadSheet().then(function (data) {
                 var tags = _.map(data,function (tm) {
                     return tm.tags;
@@ -187,24 +173,38 @@
                 tags = _.flatten(tags);
                 //console.log(tags);
                 var histdata = {
-                    cols: []
+                    x: ['x'],
+                    cols: ['Number of Mementos']
                 };
                 data.forEach(function (tm) {
-                    //console.log(tm);
-                    var d = [];
-                    d.push(tm.title);
-                    d.push(tm.mementos.length);
-                    histdata.cols.push(d);
+                    histdata.cols.push(tm.numMementos());
+                    if(tm.title == 'Row: 2'){
+                        histdata.x.push("Egypt Conflict");
+                    } else {
+                        histdata.x.push(tm.title);
+                    }
                 });
 
                 c3.generate({
                     bindto: "#chart-results",
                     data: {
-                        columns: histdata.cols,
+                        x: 'x',
+                        columns: [
+                            histdata.x,
+                            histdata.cols
+                        ],
                         type: 'bar'
                     },
                     bar: {
-                        width: { ratio: 0.5 }
+                        width: {
+                            ratio: 0.5
+                        }
+                    },
+                    axis: {
+                        x: {
+                            type: 'category',
+                            show: true
+                        }
                     }
                 });
 
