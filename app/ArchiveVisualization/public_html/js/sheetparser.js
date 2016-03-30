@@ -41,6 +41,7 @@ sheetParser.prototype.parseSheet = function (data) {
       });
       taggedMementos.push(new TaggedMemmentos(data));
    });
+   updateStatus(statusDiv, "Finished parsing mementos for timestamps");
    return taggedMementos;
 };
 
