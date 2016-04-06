@@ -110,6 +110,11 @@ body.application .return-link:hover,
 	width: 99%;
 }
 
+.top-ten-chart {
+	height: 90%;
+	width: 99%;
+}
+
 .charts {
     margin: 0px;
     padding: 0px;

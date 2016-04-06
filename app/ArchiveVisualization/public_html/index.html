@@ -25,6 +25,7 @@
 		<script src="js/ChartTagHistogram.js"></script>
 		<script src="js/ChartZoomWords.js"></script>
 		<script src="js/ChartLine.js"></script>
+		<script src="js/ChartTopTenArchivers.js"></script>
 
     </head>
     <body>
@@ -113,15 +114,15 @@
                 <div class="col-sm-4">
                     <div class="chart-wrapper">
 						<div class="chart-title">
-							Total Archivers
+							Top 10 Contributing Archivers
 						</div>
-						<div class="chart-stage" id="sample1" data-chart-desc="word spread"></div>
+						<div class="top-ten-chart chart-stage" id="topTenArchivers" data-chart-desc="word spread"></div>
 					</div>
                 </div>
                 <div class="col-sm-4">
                     <div class="chart-wrapper">
 						<div class="chart-title">
-							Common Domains
+							Top 10 Common Domains
 						</div>
 						<div class="chart-stage" id="sample2" data-chart-desc="word spread"></div>
 					</div>
@@ -129,7 +130,7 @@
 				<div class="col-sm-4">
                     <div class="chart-wrapper">
 						<div class="chart-title">
-							Something else
+							Top 10 Common Tags
 						</div>
 						<div class="chart-stage" id="sample3" data-chart-desc="word spread"></div>
 					</div>
@@ -157,6 +158,7 @@
 				createZoomableContainer('#chart3', parsedData);
 				createMementoPreviews('#chart2', '#btn0', '#btn1');
 				createLineChart('#chart4');
+				createTopTenArchivers('#topTenArchivers', parsedData);
 				
 				
 				listenForClicks();
