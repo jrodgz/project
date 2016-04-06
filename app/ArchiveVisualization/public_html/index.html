@@ -19,272 +19,148 @@
         <script src="js/global.js"></script>
         <script src="js/sheetparser.js"></script>
         <script src="js/drawing.js"></script>
-        <style>
-            .gallery
-            {
-                margin: 10px;
-            }
-        </style>
+        <script src="js/slider.js"></script>
+		<!-- charts -->
+		<script src="js/ChartmementoPreview.js"></script>
+		<script src="js/ChartTagHistogram.js"></script>
+		<script src="js/ChartZoomWords.js"></script>
+		<script src="js/ChartLine.js"></script>
+
     </head>
     <body>
-    <nav role="navigation" class="navbar navbar-default navbar-static-top">
-        <div class="container-fluid">
-            <p class="navbar-text">Controls</p>
-            <button type="button" class="btn btn-default navbar-btn">Mementos</button>
-            <button type="button" class="btn btn-default navbar-btn">Tags</button>
-            <button type="button" class="btn btn-default navbar-btn">Resources</button>
-        </div>
-    </nav>
-    <div class="container-fluid">
-        <div class="row">
-
-            <div class="col-sm-8">
-                <div class="chart-wrapper">
-                    <div class="chart-title">
-                        Tags
-                    </div>
-                    <div class="chart-stage" id="chart-results">
-
-                    </div>
-                </div>
+        <nav role="navigation" class="navbar navbar-default navbar-static-top">
+            <div class="container-fluid">
+                <p class="navbar-text">Controls</p>
+                <button type="button" class="btn btn-default navbar-btn">Mementos</button>
+                <button type="button" class="btn btn-default navbar-btn">Tags</button>
+                <button type="button" class="btn btn-default navbar-btn">Resources</button>
             </div>
-
-            <div class="col-sm-4">
-                <div class="chart-wrapper">
-                    <div class="chart-title">
-                        Updates
-                    </div>
-                    <div class="chart-stage">
-                        <div  class="h-scroll" id="chart-update">
-
+        </nav>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="charts">
+                        <div id="box1" class="chart">
+                            <div class="chart-wrapper">
+                                <div class="chart-title">
+                                    Tags
+                                </div>
+                                <div class="slide-chart chart-stage" id="chart1" data-chart-desc="tag histogram"></div>
+                            </div>
+                        </div>
+                        <div id="box2" class="chart">
+                            <div class="chart-wrapper">
+                                <div class="chart-title">
+                                    Memenots
+                                </div>
+                                <div class="slide-chart chart-stage" id="chart2" data-chart-desc="memento preview"></div>
+                                <div style="text-align: center;">
+                                    <button id="btn0">prev</button>
+                                    <button id="btn1">next</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="box3" class="chart">
+                            <div class="chart-wrapper">
+                                <div class="chart-title">
+                                    Word Play
+                                </div>
+                                <div class="slide-chart chart-stage" id="chart3" data-chart-desc="word spread"></div>
+                            </div>
+                        </div>
+                         <div id="box4" class="chart">
+                            <div class="chart-wrapper">
+                                <div class="chart-title">
+                                    Something
+                                </div>
+                                <div class="slide-chart chart-stage" id="chart4" data-chart-desc="line graph"></div>
+                            </div>
                         </div>
                     </div>
-                    <div class="chart-notes">
-                        Notes go down here
+
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="chart-wrapper">
+
+                        <div class="chart-title">
+                            Activity Log
+                        </div>
+                        <div class="chart-stage">
+                            <div  class="h-scroll" id="chart-update">
+
+                            </div>
+                        </div>
+                        <div class="chart-notes">
+                            This is the activity the application managed to use. Observe its output if things do not add up.
+                        </div>
                     </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="slideshow">
+                        <span class="move left">&larr; <span id="prev_chart"></span></span>
+                        <span class="move right"><span id="next_chart"></span> &rarr;</span>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                </div>
+            </div>
+			
+			<div class="row">
+                <div class="col-sm-4">
+                    <div class="chart-wrapper">
+						<div class="chart-title">
+							Total Archivers
+						</div>
+						<div class="chart-stage" id="sample1" data-chart-desc="word spread"></div>
+					</div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="chart-wrapper">
+						<div class="chart-title">
+							Common Domains
+						</div>
+						<div class="chart-stage" id="sample2" data-chart-desc="word spread"></div>
+					</div>
+                </div>
+				<div class="col-sm-4">
+                    <div class="chart-wrapper">
+						<div class="chart-title">
+							Something else
+						</div>
+						<div class="chart-stage" id="sample3" data-chart-desc="word spread"></div>
+					</div>
                 </div>
             </div>
 
         </div>
 
-
-        <div class="row">
-
-            <div class="col-sm-4">
-                <div class="chart-wrapper">
-                    <div class="chart-title">
-                        Chart alternative #1
-                    </div>
-                    <div class="chart-stage">
-                        <div id="chart-03"></div>
-                    </div>
-                    <div class="chart-notes">
-                        Description of chart #1
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-4">
-                <div class="chart-wrapper">
-                    <div class="chart-title">
-                        Chart alternative #2
-                    </div>
-                    <div class="chart-stage">
-                        <div id="chart-04"></div>
-                    </div>
-                    <div class="chart-notes">
-                        Description of chart #2
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-4">
-                <div class="chart-wrapper">
-                    <div class="chart-title">
-                        Chart alternative #3
-                    </div>
-                    <div class="chart-stage">
-                        <div id="chart-05"></div>
-                    </div>
-                    <div class="chart-notes">
-                        Description of chart #3
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="row">
-            <div class="col-sm-3">
-                <div class="chart-wrapper" id="chart0">
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="chart-wrapper" id="chart1">
-                </div>
-                <div style="text-align: center;">
-                    <button id="btn0">prev</button>
-                    <button id="btn1">next</button>
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="chart-stage" id="chart2">
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="chart-wrapper">
-                    <img data-src="holder.js/100%x150/white">
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-        <!--<div class="content" id="results">
-
-            <div class="visiualization"></div>
-
-            <div class="controls">
-                <button id="controlsButton"></button>
-            </div>
-
-        </div>
-        <div class="errorDiv" id="current_status"></div>-->
         <script src="js/libs/bootstrap.js"></script>
         <script>
+
             var spreadsheetID = "1O0JIuvFus0U-WYZ_3IJBU-PB3amRQhfH63hAq8dY6aE";
             var url = "https://spreadsheets.google.com/feeds/list/" + spreadsheetID + "/od6/public/values?alt=json";
             var statusDiv = $('#chart-update');
-            gui.constructor.setLoadigScreen('chart-results');
+            
+            // default chart has the loading screen set
+            gui.constructor.setLoadigScreen('chart1');
             c3.setUpdateDiv(statusDiv)
-            var sp = new sheetParser(url,statusDiv);
-            var resultsDiv = $("#chart-results");
-            resultsDiv.css("height","400px");
-            //
-            /*
-             width: 89%; 400px
-             height: 95%; 400px
-             */
-//
-            sp.loadSheet().then(function (data) {
-                var tags = _.map(data,function (tm) {
-                    return tm.tags;
-                });
-                tags = _.flatten(tags);
-                //console.log(tags);
-                var histdata = {
-                    x: ['x'],
-                    cols: ['Number of Mementos']
-                };
-                data.forEach(function (tm) {
-                    histdata.cols.push(tm.numMementos());
-                    if(tm.title == 'Row: 2'){
-                        tm.title="Egypt Conflict";
-                        histdata.x.push("Egypt Conflict");
-                    } else {
-                        histdata.x.push(tm.title);
-                    }
-                });
+            var sp = new sheetParser(url, statusDiv);
 
-                c3.generate({
-                    bindto: "#chart-results",
-                    data: {
-                        x: 'x',
-                        columns: [
-                            histdata.x,
-                            histdata.cols
-                        ],
-                        type: 'bar'
-                    },
-                    bar: {
-                        width: {
-                            ratio: 0.5
-                        }
-                    },
-                    axis: {
-                        x: {
-                            type: 'category',
-                            show: true
-                        }
-                    }
-                });
-
-                var width = 448;
-                var height = 150;
-                var svg = d3.select('#chart0')
-                    .append('svg')
-                    .attr('width', width)
-                    .attr('height', height);
-                var container = drawing.createZoomableContainer(svg, width, height);
-                drawing.drawGridLines(container, width * 10, height * 10);
-
-                var count = 0;
-                var words = data.map(function(d) {
-                    return { 
-                        text: d.title,
-                        x: Math.floor(Math.random() * width) + 1,
-                        y: Math.floor(Math.random() * height) + 1,
-                        style: {
-                            'font-family': 'sans-serif',
-                            'font-size': (d.mementos.length * 2.0) + 'px',
-                            'font-weight': 'bold',
-                            'fill': (count++ % 2 == 0) ? 'red' : 'blue'
-                        }
-                    }
-                });
-
-                var wg = new drawing.WordGroup(container, words);
-                wg.makeDraggable();
-
-                var images = [
-                    'images/page0.png',
-                    'images/page1.png',
-                    'images/page2.png',
-                    'images/page3.png',
-                    'images/page4.png',
-
-                    'images/page4.png',
-                    'images/page3.png',
-                    'images/page2.png',
-                    'images/page1.png',
-                    'images/page0.png',
-
-                    'images/page1.png',
-                    'images/page0.png',
-                    'images/page3.png',
-                    'images/page2.png',
-                    'images/page4.png'
-                ];
-                var ig = new drawing.ImageGroup($('#chart1'), images);
-                var npages = Math.ceil(images.length / 3);
-                ig.paginate(npages);
-                ig.resize(128);
-                $('#btn0').click(function() {
-                    ig.previousPage();
-                });
-                $('#btn1').click(function() {
-                    ig.nextPage();
-                });
-
-                x = [];
-                y = [];
-                for (var i = 0; i < 10; ++i)
-                {
-                    x.push(i);
-                    y.push(Math.random() * 10 + 1);
-                }
-
-                x.unshift('x');
-                y.unshift('count');
-
-                // TODO: bind some real data to this
-                var otherChart = c3.generate({
-                    bindto: '#chart2',
-                    data: {
-                        x: 'x',
-                        columns: [ x, y ]
-                    }
-                });
+			//#################################
+			// create histogram chart 1
+            sp.loadSheet().then(function (parsedData) {
+                createHistogramOfTags('#chart1', parsedData);
+				createZoomableContainer('#chart3', parsedData);
+				createMementoPreviews('#chart2', '#btn0', '#btn1');
+				createLineChart('#chart4');
+				
+				
+				listenForClicks();
+				
             });
         </script>
     </body>
