@@ -10,10 +10,23 @@
 var TaggedMemmentos = function (data) {
     this.tags = data.tags;
     this.mementos = data.mementos;
+    this.mementos.sort(function (m1,m2) {
+      if(m1.date.isBefore(m2.date)) return -1;
+      if(m1.date.isSame(m2.date)) return 0;
+      return 1;
+    });
     this.uri = data.uri;
     this.archiver = data.archiver;
     this.title = data.title;
     this.uri = data.uri;
+};
+
+TaggedMemmentos.prototype.first= function () {
+   return this.mementos[0];
+};
+
+TaggedMemmentos.prototype.last= function () {
+   return this.mementos[this.mementos.length-1];
 };
 
 TaggedMemmentos.prototype.numMementos = function () {

@@ -1,172 +1,175 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Start Page</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" type="text/css" href="css/boostrapflat.css">
-        <link rel="stylesheet" type="text/css" href="css/dashboard.css">
-        <link rel="stylesheet" type="text/css" href="css/c3.css">
-        <!--<script data-main="js/main" src="js/require.js"></script>-->
-        <script src="js/libs/d3.js"></script>
-        <script src="js/libs/jquery-2.2.1.js"></script>
-        <script src="js/libs/moment.js"></script>
-        <script src="js/libs/holder.js"></script>
-        <script src="js/libs/c3.js"></script>
-        <script src="js/libs/underscore.js"></script>
-        <script src="js/TaggedMemmentos.js"></script>
-        <script src="js/Memento.js"></script>
-        <script src="js/gui.js"></script>
-        <script src="js/global.js"></script>
-        <script src="js/sheetparser.js"></script>
-        <script src="js/drawing.js"></script>
-        <script src="js/slider.js"></script>
-		<!-- charts -->
-		<script src="js/ChartmementoPreview.js"></script>
-		<script src="js/ChartTagHistogram.js"></script>
-		<script src="js/ChartZoomWords.js"></script>
-		<script src="js/ChartLine.js"></script>
-		<script src="js/ChartTopTenArchivers.js"></script>
-		<script src="js/ChartTopTenPopularDomains.js"></script>
-		<script src="js/ChartTopKeywords.js"></script>
-		
-    </head>
-    <body>
-        <nav role="navigation" class="navbar navbar-default navbar-static-top">
-            <div class="container-fluid">
-                <p class="navbar-text">Controls</p>
-                <button type="button" class="btn btn-default navbar-btn">Mementos</button>
-                <button type="button" class="btn btn-default navbar-btn">Tags</button>
-                <button type="button" class="btn btn-default navbar-btn">Resources</button>
-            </div>
-        </nav>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-sm-8">
-                    <div class="charts">
-                        <div id="box1" class="chart">
-                            <div class="chart-wrapper">
-                                <div class="chart-title">
-                                    Tags
-                                </div>
-                                <div class="slide-chart chart-stage" id="chart1" data-chart-desc="tag histogram"></div>
-                            </div>
-                        </div>
-                        <div id="box2" class="chart">
-                            <div class="chart-wrapper">
-                                <div class="chart-title">
-                                    Memenots
-                                </div>
-                                <div class="slide-chart chart-stage" id="chart2" data-chart-desc="memento preview"></div>
-                                <div style="text-align: center;">
-                                    <button id="btn0">prev</button>
-                                    <button id="btn1">next</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="box3" class="chart">
-                            <div class="chart-wrapper">
-                                <div class="chart-title">
-                                    Word Play
-                                </div>
-                                <div class="slide-chart chart-stage" id="chart3" data-chart-desc="word spread"></div>
-                            </div>
-                        </div>
-                         <div id="box4" class="chart">
-                            <div class="chart-wrapper">
-                                <div class="chart-title">
-                                    Something
-                                </div>
-                                <div class="slide-chart chart-stage" id="chart4" data-chart-desc="line graph"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="col-sm-4">
+<head>
+    <title>Start Page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="css/boostrapflat.css">
+    <link rel="stylesheet" type="text/css" href="css/dashboard.css">
+    <link rel="stylesheet" type="text/css" href="css/timeline-chart.css">
+    <link rel="stylesheet" type="text/css" href="css/d3-tip.css">
+    <link rel="stylesheet" type="text/css" href="css/c3.css">
+    <!--<script data-main="js/main" src="js/require.js"></script>-->
+    <script src="js/libs/d3.js"></script>
+    <script src="js/libs/jquery-2.2.1.js"></script>
+    <script src="js/libs/moment.js"></script>
+    <script src="js/libs/holder.js"></script>
+    <script src="js/libs/c3.js"></script>
+    <script src="js/libs/underscore.js"></script>
+    <script src="js/libs/d3-timeline.js"></script>
+    <script src="js/libs/d3-tip.js"></script>
+    <script src="js/TaggedMemmentos.js"></script>
+    <script src="js/Memento.js"></script>
+    <script src="js/gui.js"></script>
+    <script src="js/global.js"></script>
+    <script src="js/sheetparser.js"></script>
+    <script src="js/drawing.js"></script>
+    <script src="js/slider.js"></script>
+    <!-- charts -->
+    <script src="js/ChartmementoPreview.js"></script>
+    <script src="js/ChartTagHistogram.js"></script>
+    <script src="js/ChartZoomWords.js"></script>
+    <script src="js/ChartLine.js"></script>
+    <script src="js/ChartTopTenArchivers.js"></script>
+    <script src="js/ChartTopTenPopularDomains.js"></script>
+    <script src="js/ChartTopKeywords.js"></script>
+    <script src="js/ChartTimeLine.js"></script>
+</head>
+<body>
+<nav role="navigation" class="navbar navbar-default navbar-static-top">
+    <div class="container-fluid">
+        <p class="navbar-text">Controls</p>
+        <button type="button" class="btn btn-default navbar-btn">Mementos</button>
+        <button type="button" class="btn btn-default navbar-btn">Tags</button>
+        <button type="button" class="btn btn-default navbar-btn">Resources</button>
+    </div>
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="charts">
+                <div id="box1" class="chart">
                     <div class="chart-wrapper">
-
                         <div class="chart-title">
-                            Activity Log
+                            Tags
                         </div>
-                        <div class="chart-stage">
-                            <div  class="h-scroll" id="chart-update">
-
-                            </div>
+                        <div class="slide-chart chart-stage" id="chart1" data-chart-desc="tag histogram"></div>
+                    </div>
+                </div>
+                <div id="box2" class="chart">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Memenots
                         </div>
-                        <div class="chart-notes">
-                            This is the activity the application managed to use. Observe its output if things do not add up.
+                        <div class="slide-chart chart-stage" id="chart2" data-chart-desc="memento preview"></div>
+                        <div style="text-align: center;">
+                            <button id="btn0">prev</button>
+                            <button id="btn1">next</button>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-8">
-                    <div class="slideshow">
-                        <span class="move left">&larr; <span id="prev_chart"></span></span>
-                        <span class="move right"><span id="next_chart"></span> &rarr;</span>
+                <div id="box3" class="chart">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Word Play
+                        </div>
+                        <div class="slide-chart chart-stage" id="chart3" data-chart-desc="word spread"></div>
                     </div>
                 </div>
-                <div class="col-sm-4">
+                <div id="box4" class="chart">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Something
+                        </div>
+                        <div class="slide-chart chart-stage" id="chart4" data-chart-desc="line graph"></div>
+                    </div>
+                </div>
+                <div id="box5" class="chart">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Timeline
+                        </div>
+                        <div class="slide-chart chart-stage" id="chart5" data-chart-desc="timeline"></div>
+                    </div>
                 </div>
             </div>
-			
-			<div class="row">
-                <div class="col-sm-4">
-                    <div class="chart-wrapper">
-						<div class="chart-title">
-							Top 10 Contributing Archivers
-						</div>
-						<div class="top-ten-chart chart-stage" id="topTenArchivers" data-chart-desc="word spread"></div>
-					</div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="chart-wrapper">
-						<div class="chart-title">
-							Top 10 Popular Domains
-						</div>
-						<div class="top-ten-chart chart-stage" id="topTenPopularDomains" data-chart-desc="word spread"></div>
-					</div>
-                </div>
-				<div class="col-sm-4">
-                    <div class="chart-wrapper">
-						<div class="chart-title">
-							Top 10 Common Tags
-						</div>
-						<div class="top-ten-chart chart-stage" id="topTenPopularKeywords" data-chart-desc="word spread"></div>
-					</div>
-                </div>
-            </div>
-
         </div>
+        <div class="col-sm-4">
+            <div class="chart-wrapper">
+                <div class="chart-title">
+                    Activity Log
+                </div>
+                <div class="chart-stage">
+                    <div class="h-scroll" id="chart-update">
+                    </div>
+                </div>
+                <div class="chart-notes">
+                    This is the activity the application managed to use. Observe its output if things do not add up.
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="slideshow">
+                <span class="move left">&larr; <span id="prev_chart"></span></span>
+                <span class="move right"><span id="next_chart"></span> &rarr;</span>
+            </div>
+        </div>
+        <div class="col-sm-4">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="chart-wrapper">
+                <div class="chart-title">
+                    Top 10 Contributing Archivers
+                </div>
+                <div class="top-ten-chart chart-stage" id="topTenArchivers" data-chart-desc="word spread"></div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="chart-wrapper">
+                <div class="chart-title">
+                    Top 10 Popular Domains
+                </div>
+                <div class="top-ten-chart chart-stage" id="topTenPopularDomains" data-chart-desc="word spread"></div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="chart-wrapper">
+                <div class="chart-title">
+                    Top 10 Common Tags
+                </div>
+                <div class="top-ten-chart chart-stage" id="topTenPopularKeywords" data-chart-desc="word spread"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="js/libs/bootstrap.js"></script>
+<script> var spreadsheetID = "1O0JIuvFus0U-WYZ_3IJBU-PB3amRQhfH63hAq8dY6aE";
+    var url = "https://spreadsheets.google.com/feeds/list/" + spreadsheetID + "/od6/public/values?alt=json";
+    var statusDiv = $('#chart-update');
 
-        <script src="js/libs/bootstrap.js"></script>
-        <script>
+    // default chart has the loading screen set
+    gui.constructor.setLoadigScreen('chart1');
+    c3.setUpdateDiv(statusDiv);
+    var sp = new sheetParser(url, statusDiv);
+    let it = 2;
+    //#################################
+    // create histogram chart 1
+    sp.loadSheet().then(function (parsedData) {
+        createHistogramOfTags('#chart1', parsedData);
+        createZoomableContainer('#chart3', parsedData);
+        createMementoPreviews('#chart2', '#btn0', '#btn1');
+        createLineChart('#chart4');
+        createTimeLine('#chart5',parsedData);
+        createTopTenArchivers('#topTenArchivers', parsedData);
+        createTopTenPopularDomains('#topTenPopularDomains', parsedData);
+        createTopTenKeywords('#topTenPopularKeywords', parsedData, statusDiv);
 
-            var spreadsheetID = "1O0JIuvFus0U-WYZ_3IJBU-PB3amRQhfH63hAq8dY6aE";
-            var url = "https://spreadsheets.google.com/feeds/list/" + spreadsheetID + "/od6/public/values?alt=json";
-            var statusDiv = $('#chart-update');
-            
-            // default chart has the loading screen set
-            gui.constructor.setLoadigScreen('chart1');
-            c3.setUpdateDiv(statusDiv)
-            var sp = new sheetParser(url, statusDiv);
+        listenForClicks();
 
-			//#################################
-			// create histogram chart 1
-            sp.loadSheet().then(function (parsedData) {
-                createHistogramOfTags('#chart1', parsedData);
-				createZoomableContainer('#chart3', parsedData);
-				createMementoPreviews('#chart2', '#btn0', '#btn1');
-				createLineChart('#chart4');
-				createTopTenArchivers('#topTenArchivers', parsedData);
-				createTopTenPopularDomains('#topTenPopularDomains', parsedData);
-				createTopTenKeywords('#topTenPopularKeywords', parsedData, statusDiv);
-				
-				listenForClicks();
-				
-            });
-        </script>
-    </body>
+    });
+</script>
+</body>
 </html>

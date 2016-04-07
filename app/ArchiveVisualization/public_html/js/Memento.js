@@ -11,6 +11,27 @@ var Memento = function (marray,original) {
     this.original = original;
 };
 
+Memento.prototype.jsDate = function () {
+   return this.date.toDate();
+};
+
+Memento.prototype.year = function (){
+   return this.date.year();
+};
+
+
+Memento.prototype.month = function (){
+   return this.date.month();
+};
+
+
+Memento.prototype.day = function (){
+   return this.date.days();
+};
+
+
+
+
 function makeMemento(marray,o) {
      return {
         date: moment(marray[5],"YYYYMMDDHHmmss"),
