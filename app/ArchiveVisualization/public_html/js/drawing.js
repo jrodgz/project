@@ -164,7 +164,7 @@ var drawing = drawing || {};
             .text(function(d) { return d.text; })
             .style('cursor', 'default');
 
-        var mode = 'select';
+        var mode = 'drag';
 
         this.updateStyle();
     };
