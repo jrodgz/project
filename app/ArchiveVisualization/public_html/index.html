@@ -26,6 +26,7 @@
 		<script src="js/ChartZoomWords.js"></script>
 		<script src="js/ChartLine.js"></script>
 		<script src="js/ChartTopTenArchivers.js"></script>
+		<script src="js/ChartTopTenPopularDomains.js"></script>
 
     </head>
     <body>
@@ -122,9 +123,9 @@
                 <div class="col-sm-4">
                     <div class="chart-wrapper">
 						<div class="chart-title">
-							Top 10 Common Domains
+							Top 10 Popular Domains
 						</div>
-						<div class="chart-stage" id="sample2" data-chart-desc="word spread"></div>
+						<div class="top-ten-chart chart-stage" id="topTenPopularDomains" data-chart-desc="word spread"></div>
 					</div>
                 </div>
 				<div class="col-sm-4">
@@ -159,7 +160,7 @@
 				createMementoPreviews('#chart2', '#btn0', '#btn1');
 				createLineChart('#chart4');
 				createTopTenArchivers('#topTenArchivers', parsedData);
-				
+				createTopTenPopularDomains('#topTenPopularDomains', parsedData);
 				
 				listenForClicks();
 				

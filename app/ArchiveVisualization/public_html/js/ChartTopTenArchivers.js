@@ -33,6 +33,17 @@ function createTopTenArchivers(where, data) {
 			width: {
 				ratio: 0.5 // this makes bar width 50% of length between ticks
 			}
+		},
+		axis : {
+			y : {
+				label: 'Mementos'
+			},
+			x : {
+				type : 'categorized',
+				tick: {
+					format: function (x) { return ''; }
+				}
+			}
 		}
 	});
 }
