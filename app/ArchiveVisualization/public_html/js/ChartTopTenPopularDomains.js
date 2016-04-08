@@ -39,7 +39,8 @@ function createTopTenPopularDomains(where, data) {
 				type : 'categorized',
 				tick: {
 					format: function (x) { return ''; }
-				}
+				},
+				show: true
 			}
 		}
 	});

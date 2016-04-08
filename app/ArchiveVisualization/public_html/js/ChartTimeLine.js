@@ -5,6 +5,35 @@ function createTimeLine(where, parsedData) {
    var bindTo = d3.select(where)[0][0];
    var tldata = [];
 
+   console.log(d3.select(where));
+  
+   parsedData.forEach(d => {
+      var tmTl = {
+         label: d.title,
+         data: []
+      };
+      d.mementos.forEach(m => 
+         tmTl.data.push({
+            type: TimelineChart.TYPE.POINT,
+            at: m.jsDate(),
+            color: d.title
+         })
+      );
+      tldata.push(tmTl);
+   });
+
+   var tl = new TimelineChart(where,tldata,{
+      tip: function (d) {
+         return d.at || d.from +'<br>'+d.to;
+      }
+   });
+   
+}
+/*
+function createTimeLine(where, parsedData) {
+   var bindTo = d3.select(where)[0][0];
+   var tldata = [];
+
    parsedData.forEach(function (d) {
       console.log(d);
       var tmTl = {
@@ -34,7 +63,6 @@ function createTimeLine(where, parsedData) {
          return d.at || d.from +'<br>'+d.to;
       }
    });
-
-
-
 }
+
+*/

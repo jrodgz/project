@@ -9,14 +9,17 @@
     <link rel="stylesheet" type="text/css" href="css/d3-tip.css">
     <link rel="stylesheet" type="text/css" href="css/c3.css">
     <!--<script data-main="js/main" src="js/require.js"></script>-->
+    <script src="js/libs/es6-shim.js"></script>
+    <script src="js/libs/es6-sham.js"></script>
     <script src="js/libs/d3.js"></script>
+    <script src="js/libs/d3-extended.js"></script>
+    <script src="js/libs/d3-timeline.js"></script>
+    <script src="js/libs/d3-tip.js"></script>
+    <script src="js/libs/c3.js"></script>
     <script src="js/libs/jquery-2.2.1.js"></script>
     <script src="js/libs/moment.js"></script>
     <script src="js/libs/holder.js"></script>
-    <script src="js/libs/c3.js"></script>
     <script src="js/libs/underscore.js"></script>
-    <script src="js/libs/d3-timeline.js"></script>
-    <script src="js/libs/d3-tip.js"></script>
     <script src="js/TaggedMemmentos.js"></script>
     <script src="js/Memento.js"></script>
     <script src="js/gui.js"></script>
@@ -50,9 +53,9 @@
                 <div id="box1" class="chart">
                     <div class="chart-wrapper">
                         <div class="chart-title">
-                            Tags
+                            Timeline
                         </div>
-                        <div class="slide-chart chart-stage" id="chart1" data-chart-desc="tag histogram"></div>
+                        <div class="slide-chart chart-stage" id="chart1" data-chart-desc="timeline"></div>
                     </div>
                 </div>
                 <div id="box2" class="chart">
@@ -86,9 +89,9 @@
                 <div id="box5" class="chart">
                     <div class="chart-wrapper">
                         <div class="chart-title">
-                            Timeline
+                            Tags
                         </div>
-                        <div class="slide-chart chart-stage" id="chart5" data-chart-desc="timeline"></div>
+                        <div class="slide-chart chart-stage" id="chart5" data-chart-desc="tag histogram"></div>
                     </div>
                 </div>
             </div>
@@ -158,15 +161,14 @@
     //#################################
     // create histogram chart 1
     sp.loadSheet().then(function (parsedData) {
-        createHistogramOfTags('#chart1', parsedData);
+        createHistogramOfTags('#chart5', parsedData);
         createZoomableContainer('#chart3', parsedData);
         createMementoPreviews('#chart2', '#btn0', '#btn1');
         createLineChart('#chart4');
-        createTimeLine('#chart5',parsedData);
+        createTimeLine('#chart1',parsedData);
         createTopTenArchivers('#topTenArchivers', parsedData);
         createTopTenPopularDomains('#topTenPopularDomains', parsedData);
         createTopTenKeywords('#topTenPopularKeywords', parsedData, statusDiv);
-
         listenForClicks();
 
     });
