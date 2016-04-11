@@ -3,8 +3,14 @@ class Memento {
    constructor(marray,original){
       this.date = moment(marray[5],"YYYYMMDDHHmmss");
       this.archive = marray[3];
-      this.domain = marray[8];
+      this.domain = marray[9];
       this.original = original;
+      this.story = null;
+   }
+
+   setStory(story){
+      this.story = story;
+      return this;
    }
 
    jsDate() {
@@ -24,6 +30,7 @@ class Memento {
    day(){
       return this.date.days();
    }
+   
 
    compare(m){
       if (this.date.isBefore(m.date)) return -1;

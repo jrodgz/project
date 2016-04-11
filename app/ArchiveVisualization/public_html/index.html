@@ -18,15 +18,22 @@
     <script src="js/libs/c3.js"></script>
     <script src="js/libs/jquery-2.2.1.js"></script>
     <script src="js/libs/moment.js"></script>
+    <script src="js/libs/twix.js"></script>
     <script src="js/libs/holder.js"></script>
     <script src="js/libs/underscore.js"></script>
-    <script src="js/TaggedMemmentos.js"></script>
+    <script src="js/libs/purl.js"></script>
+    <script src="js/libs/strings.js"></script>
+    <script src="js/libs/tldjs.js"></script>
     <script src="js/Memento.js"></script>
+    <script src="js/TaggedMemmentos.js"></script>
+    <script src="js/MementoCollection.js"></script>
     <script src="js/gui.js"></script>
     <script src="js/global.js"></script>
     <script src="js/sheetparser.js"></script>
+    <script src="js/sheetparser2.js"></script>
     <script src="js/drawing.js"></script>
     <script src="js/slider.js"></script>
+
     <!-- charts -->
     <script src="js/ChartmementoPreview.js"></script>
     <script src="js/ChartTagHistogram.js"></script>
@@ -149,18 +156,15 @@
     </div>
 </div>
 <script src="js/libs/bootstrap.js"></script>
-<script> var spreadsheetID = "1O0JIuvFus0U-WYZ_3IJBU-PB3amRQhfH63hAq8dY6aE";
-    var url = "https://spreadsheets.google.com/feeds/list/" + spreadsheetID + "/od6/public/values?alt=json";
-    var statusDiv = $('#chart-update');
+<script>
+    //https://docs.google.com/spreadsheets/d/1hf9yD08bQA825bAxA7fpchDh8q5Dn69K-sKFSs5_NsY/edit#gid=0
 
-    // default chart has the loading screen set
-    gui.constructor.setLoadigScreen('chart1');
-    c3.setUpdateDiv(statusDiv);
-    var sp = new sheetParser(url, statusDiv);
-    let it = 2;
-    //#################################
-    // create histogram chart 1
+    let it = "https://spreadsheets.google.com/feeds/list/1hf9yD08bQA825bAxA7fpchDh8q5Dn69K-sKFSs5_NsY/2/public/values?alt=json";
+    let it2 = "https://spreadsheets.google.com/feeds/worksheets/1hf9yD08bQA825bAxA7fpchDh8q5Dn69K-sKFSs5_NsY/public/values?alt=json";
+    var statusDiv = $('#chart-update');
+    let sp = new sheetParser2(it,statusDiv);
     sp.loadSheet().then(function (parsedData) {
+        console.log(parsedData);
         createHistogramOfTags('#chart5', parsedData);
         createZoomableContainer('#chart3', parsedData);
         createMementoPreviews('#chart2', '#btn0', '#btn1');
@@ -170,8 +174,33 @@
         createTopTenPopularDomains('#topTenPopularDomains', parsedData);
         createTopTenKeywords('#topTenPopularKeywords', parsedData, statusDiv);
         listenForClicks();
-
     });
+
+    //    var spreadsheetID = "1O0JIuvFus0U-WYZ_3IJBU-PB3amRQhfH63hAq8dY6aE";
+//    var url = "https://spreadsheets.google.com/feeds/list/" + spreadsheetID + "/od6/public/values?alt=json";
+//    var statusDiv = $('#chart-update');
+//
+//    // default chart has the loading screen set
+//    gui.constructor.setLoadigScreen('chart1');
+//    c3.setUpdateDiv(statusDiv);
+//    var sp = new sheetParser(url, statusDiv);
+//    let it = 2;
+//    //#################################
+//    // create histogram chart 1
+//    sp.loadSheet().then(function (parsedData) {
+//        createHistogramOfTags('#chart5', parsedData);
+//        createZoomableContainer('#chart3', parsedData);
+//        createMementoPreviews('#chart2', '#btn0', '#btn1');
+//        createLineChart('#chart4');
+//        createTimeLine('#chart1',parsedData);
+//        createTopTenArchivers('#topTenArchivers', parsedData);
+//        createTopTenPopularDomains('#topTenPopularDomains', parsedData);
+//        createTopTenKeywords('#topTenPopularKeywords', parsedData, statusDiv);
+//        listenForClicks();
+//
+//    });
+
+
 </script>
 </body>
 </html>

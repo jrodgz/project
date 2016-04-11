@@ -3,7 +3,7 @@
 */
 function createHistogramOfTags(where, data) {
 	var tags = _.map(data, function (tm) {
-		return tm.tags;
+		return tm.tagArray();
 	});
 	tags = _.flatten(tags);
 	var histdata = {
@@ -12,12 +12,8 @@ function createHistogramOfTags(where, data) {
 	};
 	data.forEach(function (tm) {
 		histdata.cols.push(tm.numMementos());
-		if (tm.title == 'Row: 2') {
-			tm.title = "Egypt Conflict";
-			histdata.x.push("Egypt Conflict");
-		} else {
-			histdata.x.push(tm.title);
-		}
+		histdata.x.push(tm.collectionName);
+		
 	});
 
 	c3.generate({

@@ -9,14 +9,14 @@ function createTimeLine(where, parsedData) {
   
    parsedData.forEach(d => {
       var tmTl = {
-         label: d.title,
+         label: d.collectionName,
          data: []
       };
       d.mementos.forEach(m => 
          tmTl.data.push({
             type: TimelineChart.TYPE.POINT,
             at: m.jsDate(),
-            color: d.title
+            color: d.collectionName
          })
       );
       tldata.push(tmTl);

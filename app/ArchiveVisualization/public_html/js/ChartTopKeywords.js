@@ -79,7 +79,7 @@ function createTopTenKeywords(where, sampleData, statusDiv) {
 		.attr("font-size", function(d) {
 			return "9px;"
 		})
-	    .text(function(d){return d.name})
+	    .text(function(d){return d.name});
 
     updateStatus(statusDiv, "Finished loading D3 chart for top ten keywords");
 }
