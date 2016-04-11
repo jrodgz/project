@@ -111,5 +111,3 @@ class TaggedMemmentos {
 //    });
 //    return it;
 // };
-
-

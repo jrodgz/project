@@ -1,32 +1,55 @@
 var preprocess = window.preprocess || {};
 
-// Lazily collect useful transformations of the data which can be shared between
-// the different views.
+// Collect useful transformations of the data.
 (function(preprocess, undefined) {
     // Notify when the data has loaded.
     preprocess.onLoad = function(data) {
         raw = data;
+        populate();
     };
-    
-    // Fetch all domains across all stories, and the URI-Ms associated to each domain.
-    // Returns null if called before data loads.
-    preprocess.getDomains = function() {
-        if (raw != null && domains == null)
-        {
+
+    preprocess.getTags = function() { return tags; };
+
+    preprocess.getDomains = function() { return domains; };
+
+    // Organize mementos by archivers, tags, and domains.
+    function populate() {
+        if (raw != null) {
+            archivers = {};
+            tags = {};
             domains = {};
-            raw.forEach(function(story) {
-                story.mementos.forEach(function(memento) {
-                    var domain = memento.domain.replace(/(.*?:\/\/)*(www\.)*/g, '');
+            raw.forEach(function(tm) { // tagged mementos
+                tm.mementos.forEach(function(memento) {
+                    var domain = memento.domain.replace(/(.*?:\/\/)*(www\.)*/g, 
+                                                        '');
+                    var payload = { 
+                        urim: memento.original,
+                        urir: domain,
+                        date: memento.dateString()                    
+                    };
+
                     if (domains[domain] == null) {
                         domains[domain] = [];
                     }
-                    domains[domain].push(memento.original);
+
+                    domains[domain].push(payload);
+
+                    tm.tags.forEach(function(tag) {
+                        var tag = tag.replace(/[^a-zA-Z0-9]/g, '');
+                        if (tags[tag] == null) {
+                            tags[tag] = [];
+                        }
+
+                        tags[tag].push(payload);
+                    });
                 });
             });
+        } else {
+            console.log('preprocess.populate: data has not loaded');
         }
-        return domains;
-    };
+    }
 
-    var domains = null;
     var raw = null;
+    var tags = null;
+    var domains = null;
 }(window.preprocess = window.preprocess || {}));

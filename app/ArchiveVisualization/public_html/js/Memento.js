@@ -32,6 +32,10 @@ class Memento {
         return this.date.year();
     }
 
+   dateString() {
+      return this.date.format('DD/MMM/YYYY');
+   };
+
 
     month() {
         return this.date.month();

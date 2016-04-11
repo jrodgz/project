@@ -31,6 +31,7 @@
     <script src="js/gui.js"></script>
     <script src="js/sheetparser.js"></script>
     <script src="js/sheetparser2.js"></script>
+    <script src="js/preprocess.js"></script>
     <script src="js/drawing.js"></script>
     <script src="js/slider.js"></script>
 
@@ -100,14 +101,14 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="slideshow">
-                        <span class="move left">&larr; <span id="prev_chart"></span></span>
-                        <span class="move right"><span id="next_chart"></span> &rarr;</span>
+                        <span id="prev_chart_container" class="move left">&larr; <span id="prev_chart"></span></span>
+                        <span id="next_chart_container" class="move right"><span id="next_chart"></span> &rarr;</span>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-4">
-                    <div class="chart-wrapper">
+                    <div class="detail-chart-wrapper">
                         <div class="chart-title">
                             Top 10 Archiving Years
                         </div>
@@ -115,7 +116,7 @@
                     </div>
                 </div>
                 <div class="col-sm-4">
-                    <div class="chart-wrapper">
+                    <div class="detail-chart-wrapper">
                         <div class="chart-title">
                             Top 10 Popular Domains
                         </div>
@@ -123,7 +124,7 @@
                     </div>
                 </div>
                 <div class="col-sm-4">
-                    <div class="chart-wrapper">
+                    <div class="detail-chart-wrapper">
                         <div class="chart-title">
                             Top 10 Common Tags
                         </div>
@@ -193,5 +194,6 @@
     });
 
 </script>
+<span id="ruler" style="visibility: hidden; white-space: nowrap;"></span>
 </body>
 </html>

@@ -5,11 +5,17 @@ var drawing = drawing || {};
     // Appends a pannable, zoomable container to the given group.
     // Returns the container in which to add elements to pan over.
     drawing.createZoomableContainer = function(group, width, height) {
+        width = width || 1024;
+        height = height || 768;
+
         var zoom = d3.behavior.zoom()
             .scaleExtent([ 1, 10 ])
             .on('zoom', zoomed);
 
-        group.call(zoom);
+        group.call(zoom)
+            .on('dblclick.zoom', null)
+            // Don't let anything in this container change the mouse.
+            .style('cursor', 'default');
 
         var rect = group.append('rect')
             .attr('width', width)
@@ -19,13 +25,29 @@ var drawing = drawing || {};
 
         var container = group.append('g');
 
+        var allow = 250;
         function zoomed() {
-            container.attr('transform',
-                           'translate(' + d3.event.translate + ')scale(' + 
-                           d3.event.scale + ')');
+            var t = d3.event.translate,
+                s = d3.event.scale;
+                
+                t[0] = Math.min(width / 2 * (s - 1) + allow, 
+                                Math.max(width / 2 * (1 - s) - allow, t[0]));
+
+                t[1] = Math.min(height / 2 * (s - 1) + allow * s, 
+                                Math.max(height / 2 * (1 - s) - allow * s, t[1]));
+                zoom.translate(t);
+
+            container.attr('transform', 'translate(' + t + ')scale(' + s + ')');
         }
 
-        group.on('dblclick.zoom', null);
+        container.resetPanZoom = function() {
+            container.attr('transform', 'translate(0,0)scale(1)');
+
+            // https://github.com/mbostock/d3/wiki/Zoom-Behavior
+            // http://stackoverflow.com/questions/31497864/d3-how-do-you-center-an-element-with-pan-zoom-enabled
+            zoom.translate([ 0, 0 ]);
+            zoom.scale(1);
+        };
 
         return container;
     };
@@ -33,6 +55,10 @@ var drawing = drawing || {};
     // Use this function to draw width and height worth of grid lines 
     // inside group.
     drawing.drawGridLines = function(group, width, height, tick) {
+        // Make grid lines larger than container.
+        width = width * 10;
+        height = height * 10;
+
         tick = tick || 10;
 
         var rules = {
@@ -72,45 +98,66 @@ var drawing = drawing || {};
             .style(rules);
     };
 
-    // Renders the list of words inside group, optionally calling action on 
-    // the group of words.
-    // The rendered group of words is retained for further manipulations.
-    drawing.WordGroup = function(group, words) {
-        // Overrides the current styles in the word group to rules.
-        this.overrideStyle = function(rules) {
-            word.style(rules);
+    // A simple list of words, rendered inside group.
+    drawing.WordGroup = function(g, f) {
+        this.draw = function() {
+            if (words) {
+                if (word) {
+                    word.remove();
+                }
+
+                word = group.append('g')
+                    .attr('class', 'word')
+                    .selectAll('text')
+                    .data(words)
+                    .enter()
+                    .append('text')
+                    .attr('x', function(d) { return d.x; })
+                    .attr('y', function(d) { return d.y; })
+                    .text(function(d) { return d.text; })
+                    .style('cursor', 'default')
+                    .each(function(d) {
+                        d3.select(this)
+                            .style(d.style);
+                    })
+                    .style('fill', function(d) { return d.color; })
+                    .style('font-size', fontSize);
+            }
         };
 
-        // Updates CSS styles based on the state of the dataset.
-        this.updateStyle = function() {
-            word.each(function(d) {
-                d3.select(this)
-                    .style(d.style);
-            });
+        this.setData = function(data) {
+            words = data;
+        };
+
+        this.remove = function() {
+            if (word) {
+                word.remove();
+            }
+        };
+
+        // Append events to words.
+        this.on = function(evType, callback) {
+            if (word != null) {
+                word.on(evType, callback);
+            }
         };
 
         // Optionally make the words draggable.
         this.makeDraggable = function() {
-            if (word != undefined) {
+            if (word) {
                 function dragStarted(d) {
                     d3.event.sourceEvent.stopPropagation();
-                    if (mode == 'drag') {
-                        d3.select(this).classed('dragging', true);
-                    }
+                    d3.select(this).classed('dragging', true);
                 }
 
                 function dragged(d) {
-                    if (mode == 'drag') {
-                        d3.select(this)
-                            .attr('x', d.x = d3.event.x)
-                            .attr('y', d.y = d3.event.y);
-                    }
+                    d3.select(this)
+                        .attr('x', d.x = d3.event.x)
+                        .attr('y', d.y = d3.event.y);
                 }
 
                 function dragEnded(d) {
-                    if (mode == 'drag') {
-                        d3.select(this).classed('dragging', false);
-                    }
+                    d3.select(this).classed('dragging', false);
                 }
 
                 var drag = d3.behavior.drag()
@@ -123,102 +170,88 @@ var drawing = drawing || {};
             }
         };
 
-        // Will call action when words are selected if selection mode is 
-        // enabled.
-        this.makeSelectable = function(action) {
-            if (word != undefined) {
-                word.on('click', function(d, i) {
-                    if (mode == 'select' && action) {
-                        action(this, d, i);
-                    }
-                });
-            }
-        };
-        
-        // Allow dragging if words have been made draggable.
-        this.dragMode = function() {
-            mode = 'drag';
-        };
-
-        // Allow selecting if words have been made selectable.
-        this.selectMode = function() {
-            mode = 'select';
-        };
-
-        // Append events to words.
-        this.on = function(evType, callback)
-        {
-            if (word != null) {
-                word.on(evType, callback);
-            }
-        };
-
-        var word = group.append('g')
-            .attr('class', 'word')
-            .selectAll('text')
-            .data(words)
-            .enter()
-            .append('text')
-            .attr('x', function(d) { return d.x; })
-            .attr('y', function(d) { return d.y; })
-            .text(function(d) { return d.text; })
-            .style('cursor', 'default');
-
-        var mode = 'drag';
-
-        this.updateStyle();
+        var group = g; // <g></g>
+        var fontSize = f | 15;
+        var word = null;
+        var words = null;
     };
     
-    // Draws a node link diagrams with different connection types.
-    drawing.TextNodes = function(g, w, h) 
-    {
+    // A node link diagram with inter-connected nodes.
+    drawing.TextNodes = function(g, w, h) {
         // data is an array of objects expected to have the fields: text, style, payload
-        this.setData = function(data, connection)
-        {
+        this.setData = function(data) {
+            nodes = data;
             var i = 0, j = 0;
-            connection = connection || 'i';
+            var n = nodes.length;
             
-            // inter-connected nodes
-            if (connection == 'i')
-            {
-                nodes = data;            
-                links = [];
-                for (i = 0; i < nodes.length; ++i)
-                {
-                    for (j = 0; j < nodes.length; ++j)
-                    {
-                        // create less connections
-                        if (j != i && Math.random() < 0.25)
-                        {
-                            links.push({ source: i, target: j, graph: 0 });
+            // inter-connect nodes within a cluster to spread them
+            links = [];
+            linksPerCluster = {};
+            var connected = {};
+            nodes.forEach(function(v, i) { connected[i] = {} });
+            for (i = 0; i < n; ++i) {
+                for (j = 0; j < n; ++j) {
+                    if (j != i && 
+                        !connected[i][j] &&
+                        nodes[i].group == nodes[j].group) {
+                        connected[i][j] = true;
+                        connected[j][i] = true;
+                        var cluster = nodes[i].group;
+                        links.push({ source: i, target: j, group: cluster });
+                        if (!linksPerCluster[cluster]) {
+                            linksPerCluster[cluster] = 1;
+                        } else {
+                            ++linksPerCluster[cluster];
                         }
                     }
                 }
             }
-            // linearly connected nodes
-            else if (connection == 'l')
-            {
-                nodes = data;            
-                links = [];
-                for (i = 1; i < nodes.length; ++i)
-                {
-                    links.push({ source: i, target: i - 1, graph: 0 });
+
+            // spread nodes from the center of the image radially
+            var groups = [];
+            nodes.forEach(function(d) {
+                d.x = width / 2;
+                d.y = height / 2;
+                groups.push(d.group);
+            });
+            groups = _.uniq(groups);
+            groups = _.sortBy(groups);
+            var delta = 360.0 / groups.length;
+            groups.forEach(function(v, i) {
+                var angle = delta * i;
+                directions[v] = { 
+                    i: Math.cos(angle),
+                    j: Math.sin(angle)
                 }
-            }
-            else
-            {
-                console.log('unknown connection type, no changes made');
+            });
+           
+            force.nodes(nodes).links(links).start();
+
+            // spread the nodes apart a little faster for static layout
+            force.alpha(0.17);
+        };
+
+        this.filterNodesByText = function(searchString) {
+            if (!searchString || searchString == '') {
+                node.style('visibility', 'visible');
+                return;
             }
             
-            force.nodes(nodes).links(links).start();
+            node.each(function(d) {
+                var dlower = d.text.toLowerCase();
+                var slower = searchString.toLowerCase();
+                if (dlower.indexOf(slower) > -1) {
+                    d3.select(this).style('visibility', 'visible');
+                } else {
+                    d3.select(this).style('visibility', 'hidden');
+                }
+            });
         };
         
-        this.drawNodes = function()
-        {
-            if (nodes)
-            {
-                if (node != null)
-                {
+        // remember this exists: .call(force.drag)
+        this.drawNodes = function() {
+            if (nodes) {
+                if (node != null) {
                     node.remove();
                 }
                 
@@ -227,27 +260,26 @@ var drawing = drawing || {};
                     .enter()
                     .append('text')
                     .attr('class', 'node')
-                    .attr('x', function(d) { return d.x; })
+                    // center nodes along middle of word
+                    .attr('x', function(d) {
+                        return d.x - d.offset;
+                    })
                     .attr('y', function(d) { return d.y; })
                     // don't change mouse to text cursor
                     .style('cursor', 'default')
                     .text(function(d) { return d.text; })
-                    .call(force.drag)
-                    .each(function(d) { 
+                    .each(function(d) {
                         d3.select(this)
                             .style(d.style);
-                    });
-
-                this.updateStyle();
+                    })
+                    // set color separately
+                    .style('fill', function(d) { return d.color; });
             }
         };
         
-        this.drawLinks = function()
-        {
-            if (links)
-            {
-                if (link != null)
-                {
+        this.drawLinks = function() {
+            if (links) {
+                if (link != null) {
                     link.remove();
                 }
                 
@@ -257,52 +289,54 @@ var drawing = drawing || {};
                         .append('line')
                         .style('stroke', 'black')
                         .style('stroke-width', '1px');
-                
-                this.updateStyle();
             }
         };
         
-        this.clearLinks = function()
-        {
-            if (link)
-            {
+        this.remove = function() {
+            if (link) {
                 link.remove();
             }
-        };
-        
-        // you can call this repeatedly if the styles are transitioning
-        this.updateStyle = function()
-        {
-            if (node)
-            {
-                node.style(function(d) { return d.style; });
+            if (node) {
+                node.remove();
             }
         };
         
         // appends events for delivery of payload
-        this.on = function(etype, action)
-        {
-            if (node)
-            {
+        this.on = function(etype, action) {
+            if (node) {
                 node.on(etype, function(d) {
-                    if (action)
-                    {
+                    if (action) {
                         action(d.payload);
                     }
                 });
             }
         };
-        
+
         var group = g;
-        var width = w || 640;
-        var height = h || 480;
+        var width = w || 1024;
+        var height = h || 768;
         var nodes = null;
         var links = null;
+        var linksPerCluster = null;
+        var linkDistanceScale = null;
         var node = null;
         var link = null;
+        var directions = {};
+        var amplify = 65;
         var force = d3.layout.force()
                 // rigid links
-                .linkDistance(200)
+                .linkDistance(function(l) {
+                    var nLinks = linksPerCluster[l.group];
+                    if (nLinks == 2) {
+                        return 50;
+                    } else if (nLinks < 10) {
+                        return 75
+                    } else if (nLinks < 20) {
+                        return 100;
+                    } else {
+                        return 300;
+                    }
+                })
                 .linkStrength(1.0)
                 // slow things down
                 .friction(0.001)
@@ -310,7 +344,15 @@ var drawing = drawing || {};
                 .on('tick', function(e) {
                     if (node)
                     {
-                        node.attr('x', function(d) { return d.x; })
+                        var magnitude = amplify * e.alpha;
+                        nodes.forEach(function(o) {
+                            var fi = magnitude * directions[o.group].i;
+                            var fj = magnitude * directions[o.group].j;
+                            o.y += fj;
+                            o.x += fi;
+                        });
+                        
+                        node.attr('x', function(d) { return d.x - d.offset; })
                         node.attr('y', function(d) { return d.y; })
                     }
                     if (link)
@@ -322,10 +364,82 @@ var drawing = drawing || {};
                     }
                 });
     };
+
+    drawing.Legend = function (g,  // <g></g>
+                               mw, // mark width
+                               mh, // mark height
+                               mp) // mark padding
+    {
+        mw = mw || 25;
+        mh = mh || 25;
+        mp = mp || 10;
+    
+        // public 
+        this.draw = function(marks)
+        {
+            if (mark != null) {
+                mark.remove();
+            }
+
+            if (marks != null) {
+                mark = group.selectAll('.legend')
+                    .data(marks)
+                    .enter()
+                    .append('g')
+                    .attr('class', 'legend');
+        
+                mark.append('rect')
+                    .attr('x', 0)
+                    .attr('y', function(d, i) {
+                        return (markHeight + markPadding) * i;
+                    })
+                    .attr('width', markWidth)
+                    .attr('height', markHeight)
+                    .attr('fill', function(d) {
+                        return d.color;
+                    });
+        
+                mark.append('text')
+                    .attr('transform', function(d, i) {
+                        var x = markWidth + markPadding;
+                        var y = (markHeight + markPadding) * i;
+                        y += tweak;
+                        return 'translate(' + x + ',' + y + ')';
+                    })
+                    .attr('class', 'legend-text')
+                    .text(function(d) {
+                        return d.category;
+                    });
+            }
+        };
+
+        this.remove = function() {
+            if (mark != null) {
+                mark.remove();
+            }
+        };
+    
+        // private 
+        var group = g;
+        var mark = null;
+        var markWidth = mw;
+        var markHeight = mh;
+        var markPadding = mp;
+        var tweak = 16;
+    };
 }(window.drawing = window.drawing || {}, d3));
 
 // Extends the drawing namespace to include useful layout routines.
 (function(drawing, $, undefined) {
+    // https://blog.mastykarz.nl/measuring-the-length-of-a-string-in-pixels-using-javascript/
+    drawing.visualLength = function(text, fontSize, font) {
+        var ruler = document.getElementById('ruler');
+        ruler.innerHTML = text;
+        ruler.setAttribute('style', 'visibility: hidden; white-space: nowrap; font-size: ' +
+                                    fontSize + 'px; font: ' + font + ';');
+        return ruler.offsetWidth;
+    };
+    
     // Instantiate these to create a small image gallery.
     // Expects div to be a jQuery div selection.
     drawing.ImageGroup = function(div, pathList, ipp) {
@@ -387,3 +501,198 @@ var drawing = drawing || {};
         redraw();
     }
 }(window.drawing = window.drawing || {}, jQuery));
+
+// Extend drawing with a few predefined views.
+(function(predefined, d3, $, drawing, preprocess, undefined) {
+    // Expects a d3 selection.
+    predefined.DynamicTextNodeView = function(g, w, h, lg) {
+        // Expects a jQuery selection.
+        this.drawControls = function(div) {
+            div.prepend(controlsHtml);
+
+            $('.group-by.category').on('click', function() {
+                active = $(this).attr('value');
+                if (!drawMementos.visible) {
+                    draw();
+                }
+            });
+
+            $('.group-by').css('margin-left', '15px');
+
+            $('.group-by.filter').on('keypress', function(e) {
+                if (e.keyCode == 13) {
+                    nodeCanvas.filterNodesByText($(this).val());
+                }
+            })
+            .css('margin-bottom', '10px');
+
+            controls = $('#group-buttons');
+            back = $('#back-button').on('click', function() { draw(); })
+                .css('margin-bottom', '5px');
+
+            draw();
+        };
+
+        this.setTags = function() {
+            if (tagNodes == null) {
+                tagNodes = [];
+                var tags = preprocess.getTags();
+                var counts = [];
+                for (key in tags) {
+                    tagNodes.push({
+                        text: key,
+                        style: defaultTextStyle,
+                        payload: tags[key],
+                        group: tags[key].length,
+                        offset: drawing.visualLength(key, fontSize, font),
+                        color: colorScale(tags[key].length)
+                    });
+
+                    counts.push(tags[key].length);
+                }
+
+                counts = _.uniq(counts);
+                counts.sort();
+                tagLegendMarks = counts.map(function (d) { 
+                    return {
+                        category: d + ' mementos',
+                        color: colorScale(d)
+                    };
+                });
+            }
+
+            nodeCanvas.setData(tagNodes);
+        };
+
+        this.setDomains = function() {
+            if (domainNodes == null) {
+                domainNodes = [];
+                var domains = preprocess.getDomains();
+                var counts = [];
+
+                for (key in domains) {
+                    domainNodes.push({
+                        text: key,
+                        style: defaultTextStyle,
+                        payload: domains[key],
+                        group: domains[key].length,
+                        offset: drawing.visualLength(key, fontSize, font),
+                        color: colorScale(domains[key].length)
+                    });
+
+                    counts.push(domains[key].length);
+                }
+
+                counts = _.uniq(counts);
+                counts.sort();
+                domainLegendMarks = counts.map(function (d) { 
+                    return {
+                        category: d + ' mementos',
+                        color: colorScale(d)
+                    };
+                });
+            }
+
+            nodeCanvas.setData(domainNodes);
+        };
+
+        // remember: nodeCanvas.drawLinks();
+        function draw() {
+            wordGroup.remove();
+            if (group.resetPanZoom) {
+                group.resetPanZoom();
+            }
+
+            if (active == 'tags') {
+                that.setTags();
+                legend.draw(tagLegendMarks);
+            } else {
+                that.setDomains();
+                legend.draw(domainLegendMarks);
+            }
+
+            nodeCanvas.drawNodes();
+            nodeCanvas.on('dblclick', drawMementos);
+            
+            drawMementos.visible = false;
+            if (back && controls) {
+                back.css('display', 'none');
+                controls.css('display', 'inline');
+            }
+        }
+
+        function drawMementos(payload) {
+            nodeCanvas.remove();
+            legend.remove();
+
+            if (group.resetPanZoom) {
+                group.resetPanZoom();
+            }
+
+            var data = [];
+            payload.forEach(function(v, i) {
+                var s = defaultTextStyle;
+                data.push({
+                    text: v.date + ': ' + v.urim,
+                    style: s,
+                    x: 25,
+                    y: 50 + (smallFontSize + mementoPadding) * i,
+                    color: 'black'
+                });
+            });
+
+            wordGroup.setData(data);
+            wordGroup.draw();
+            wordGroup.on('dblclick', function() {
+                alert('open memento in new tab');
+            });
+
+            drawMementos.visible = true;
+            if (back && controls) {
+                back.css('display', 'inline');
+                controls.css('display', 'none');
+            }
+        }
+
+        var group = g;
+
+        var back = null;
+        var controls = null;
+        var tagNodes = null;
+        var tagLegendMarks = null;
+        var domainNodes = null;
+        var domainLegendMarks = null;
+
+        var active = 'tags';
+
+        var font = 'sans-serif';
+        var fontSize = 30;
+        var smallFontSize = 23;
+        var mementoPadding = 5;
+        var defaultTextStyle = {
+            'font-family': font,
+            'font-size': fontSize + 'px',
+            'font-weight': 'bold',
+            'fill': 'slateblue',
+            'stroke': 'black',
+            'stroke-width': '1px'
+        };
+
+        var colorScale = d3.scale.category20();
+        var nodeCanvas = new drawing.TextNodes(g, w, h);
+        var wordGroup = new drawing.WordGroup(g, smallFontSize);
+        var legend = new drawing.Legend(lg);
+
+        var that = this;
+
+        var controlsHtml = "<span>\
+<span id='group-buttons'>\
+<input class='group-by category' type='radio' name='group-by' value='tags' checked='checked' /> tags\
+<input class='group-by category' type='radio' name='group-by' value='domains' /> domains\
+<input class='group-by filter' type='text' value='' />\
+</span>\
+<input id='back-button' type='submit' value='Back' />\
+</span>";
+    };
+}(window.drawing.predefined = window.drawing.predefined || {}, 
+  d3, jQuery, drawing, preprocess));

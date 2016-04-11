@@ -6,6 +6,7 @@ var parsingComplete = false;
 
 function updateStatus(divToUpdate, stringToSay) {
     divToUpdate.append('Action: ' + stringToSay + ' <br />');
+    divToUpdate.scrollTop(divToUpdate.prop('scrollHeight'));
 };
 
 function updateContent(divToUpdate, stringToSay) {
