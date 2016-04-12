@@ -12,7 +12,7 @@ function createHistogramOfTags(where, data) {
 	};
 	data.forEach(function (tm) {
 		histdata.cols.push(tm.numMementos());
-		histdata.x.push(tm.collectionName);
+		histdata.x.push(tm.tagString);
 		
 	});
 

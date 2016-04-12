@@ -30,36 +30,22 @@ class sheetParser2 {
    parseSheet(data){
       updateStatus(statusDiv, 'Sheet loading complete');
       updateStatus(statusDiv, "Preparing to parse mementos for timestamps");
-      return _.map(_.pairs(_.groupBy(data.feed.entry,e => e.gsx$collectionname.$t)),p=> {
-         console.log(p);
-         var d = {
-            collectedBy: p[1][0].gsx$collectedby.$t,
-            collectionName: p[1][0].gsx$collectionname.$t,
-            tags: new Set(p[1][0].gsx$tags.$t.split(',')),
-            mementos: _.map(p[1],e =>
-               new Memento(this.linkExtractor.exec(e['gsx$uri-m'].$t.trim()),e['gsx$uri-m'].$t.trim())
-            ),
-            id: p[1][0].gsx$id.$t
-         };
-         this._buildStories(p);
-         /*
-
-          */
-         console.log(_.groupBy(p[1],e => e.gsx$story.$t));
-         return new MementoCollection(d);
-      });
+      return _.chain(data.feed.entry)
+         .groupBy(e => e.gsx$tags.$t)
+         .pairs()
+         .map(p => {
+            var d = {
+               tags: new Set(p[0].split(',').map(s => S(s).trim().s)),
+               tagString: p[0],
+               mementos: _.map(p[1],e =>
+                  new Memento(this.linkExtractor.exec(e['gsx$uri-m'].$t.trim()),e['gsx$uri-m'].$t.trim())
+               )
+            };
+            return new TaggedMemmentos(d)
+         })
+         .value();
    }
-
-   _buildStories(collection){
-      console.log(collection);
-      let uniquStories = _.uniq(collection[1],e => e.gsx$story.$t);
-      if(Object.keys(uniquStories).length == 1){
-         console.log("We only have one story");
-      } else {
-         
-      }
-      console.log(uniquStories);
-   }
+   
 }
 
 /*

@@ -1,12 +1,30 @@
 class TaggedMemmentos {
    constructor(data) {
       this.tags = data.tags;
+      this.tagString = data.tagString;
       this.mementos = data.mementos;
       this.mementos.sort((m1, m2)=> m1.compare(m2));
-      this.uri = data.uri;
-      this.archiver = data.archiver;
-      this.title = data.title;
-      this.uri = data.uri;
+      this.range = this.first().date.twix(this.last().date);
+      this.domains = this.mementos.map(m => m.domain);
+   }
+
+   cleanedDomains(){
+      return this.domains.map(d => {
+         return S(tldjs.getDomain(d)).strip(tldjs.getPublicSuffix(d)).stripPunctuation().s;
+      });
+   }
+
+   fullDomains(){
+      return this.domains.map(d => tldjs.getDomain(d));
+   }
+
+
+   hasTag(tag){
+      return this.tags.has(tag);
+   }
+
+   tagArray(){
+      return Array.from(this.tags);
    }
 
    first() {

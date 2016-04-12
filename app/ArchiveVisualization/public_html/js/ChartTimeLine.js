@@ -9,14 +9,14 @@ function createTimeLine(where, parsedData) {
   
    parsedData.forEach(d => {
       var tmTl = {
-         label: d.collectionName,
+         label: S(d.tagString).replaceAll(',',', ').s,
          data: []
       };
       d.mementos.forEach(m => 
          tmTl.data.push({
             type: TimelineChart.TYPE.POINT,
             at: m.jsDate(),
-            color: d.collectionName
+            color: d.tagString
          })
       );
       tldata.push(tmTl);
@@ -25,6 +25,14 @@ function createTimeLine(where, parsedData) {
    var tl = new TimelineChart(where,tldata,{
       tip: function (d) {
          return d.at || d.from +'<br>'+d.to;
+      },
+      ttip: function (d) {
+         let dit = S(d.label);
+         if(dit.contains(',')){
+            return "Tags: "+dit.replaceAll(',',',<br>').s;
+         } else {
+            return "Tags: "+d.s;
+         }
       }
    });
    

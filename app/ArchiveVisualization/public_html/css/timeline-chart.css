@@ -14,3 +14,9 @@
     fill: black;
     stroke: #2b2b2b;
 }
+
+.timeline-chart text.group-label{
+    word-wrap: break-word;
+    word-break: break-all;
+    white-space: normal;
+}

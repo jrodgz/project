@@ -93,7 +93,14 @@ class TimelineChart {
             return (groupHeight * i) + (groupHeight / 2) + 5.5;
          })
          .attr('dx', '0.5em')
-         .text(d => d.label);
+         .text(d => {
+            let dit = S(d.label);
+            if(dit.contains(',')){
+               return dit.s.split(',')[0]+", ....";
+            } else {
+               return d.s;
+            }
+         });
 
       let lineSection = svg.append('line').attr('x1', groupWidth).attr('x2', groupWidth).attr('y1', 0).attr('y2', height).attr('stroke', 'black');
 
@@ -151,8 +158,14 @@ class TimelineChart {
       if (options.tip) {
          if (d3.tip) {
             let tip = d3.tip().attr('class', 'd3-tip').html(options.tip);
-            svg.call(tip);
-            dots.on('mouseover', tip.show).on('mouseout', tip.hide)
+            svg.select('.chart-bounds').call(tip);
+            dots.on('mouseover', tip.show).on('mouseout', tip.hide);
+            if(options.ttip){
+               let ttip = d3.tip().attr('class', 'd3-tip').html(options.ttip);
+               groupLabels.call(ttip);
+               groupLabels.on('mouseover', ttip.show).on('mouseout', ttip.hide);
+            }
+
          } else {
             console.error('Please make sure you have d3.tip included as dependency (https://github.com/Caged/d3-tip)');
          }

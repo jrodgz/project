@@ -5,12 +5,6 @@ class Memento {
       this.archive = marray[3];
       this.domain = marray[9];
       this.original = original;
-      this.story = null;
-   }
-
-   setStory(story){
-      this.story = story;
-      return this;
    }
 
    jsDate() {

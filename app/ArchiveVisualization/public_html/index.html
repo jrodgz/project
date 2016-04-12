@@ -159,12 +159,11 @@
 <script>
     //https://docs.google.com/spreadsheets/d/1hf9yD08bQA825bAxA7fpchDh8q5Dn69K-sKFSs5_NsY/edit#gid=0
 
-    let it = "https://spreadsheets.google.com/feeds/list/1hf9yD08bQA825bAxA7fpchDh8q5Dn69K-sKFSs5_NsY/2/public/values?alt=json";
+    let it = "https://spreadsheets.google.com/feeds/list/1hf9yD08bQA825bAxA7fpchDh8q5Dn69K-sKFSs5_NsY/3/public/values?alt=json";
     let it2 = "https://spreadsheets.google.com/feeds/worksheets/1hf9yD08bQA825bAxA7fpchDh8q5Dn69K-sKFSs5_NsY/public/values?alt=json";
     var statusDiv = $('#chart-update');
     let sp = new sheetParser2(it,statusDiv);
     sp.loadSheet().then(function (parsedData) {
-        console.log(parsedData);
         createHistogramOfTags('#chart5', parsedData);
         createZoomableContainer('#chart3', parsedData);
         createMementoPreviews('#chart2', '#btn0', '#btn1');
