@@ -1,3 +1,4 @@
+'use strict';
 class TimelineChart {
    constructor(element, data, opts) {
       let self = this;
@@ -306,7 +307,10 @@ class TimelineChart {
       }
    }
 
-   extendOptions(ext = {}) {
+   extendOptions(ext) {
+      if(!ext){
+         ext = {};
+      }
       let defaultOptions = {
          tip: undefined,
          textTruncateThreshold: 30

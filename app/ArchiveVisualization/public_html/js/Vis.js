@@ -1,3 +1,4 @@
+'use strict';
 /**
  * Created by john on 4/7/16.
  */
@@ -185,8 +186,7 @@ function createZoomableContainer(where, data) {
 
    var count = 0;
    var words = _.chain(data)
-      .map(d => _.map(d.tagArray(),t => { return { 'tag': t, 'size': d.mementos.length} }))
-      .flatten()
+      .flatMap(d => _.map(d.tagArray(),t => { return { 'tag': t, 'size': d.mementos.length} }))
       .uniq(to => to.tag)
       .map(d => {
          return {
@@ -240,8 +240,8 @@ function createMementoPreviews(where, buttonOne, buttonTwo) {
       imageGroup.nextPage();
    });
 
-   someXvalue = [];
-   someYvalue = [];
+   let someXvalue = [];
+   let someYvalue = [];
    for (var i = 0; i < 10; ++i)
    {
       someXvalue.push(i);
@@ -256,8 +256,8 @@ function createMementoPreviews(where, buttonOne, buttonTwo) {
  create some line chart, need to update this, not sure what it is
  */
 function createLineChart(where) {
-   chartLineX = [];
-   chartLineY = [];
+   let  chartLineX = [];
+   let  chartLineY = [];
    for (var i = 0; i < 10; ++i)
    {
       chartLineX.push(i);
@@ -280,10 +280,10 @@ function createLineChart(where) {
  create histogram chart of tags
  */
 function createHistogramOfTags(where, data) {
-   var tags = _.map(data, function (tm) {
+   var tags = _.flatMap(data, function (tm) {
       return tm.tagArray();
    });
-   tags = _.flatten(tags);
+
    var histdata = {
       x: ['x'],
       cols: ['Number of Mementos']
@@ -320,10 +320,41 @@ function createHistogramOfTags(where, data) {
 
 
 function tagOverlap(where,data) {
-   console.log("IT");
-  let uniqueTags= _.chain(data)
-      .flatMap(d =>d.tagArray())
-     .uniq().value();
 
-   console.log(_.map(data,d =>_.values(d.groupedByYear())));
+   console.log(where,d3.select(where));
+   var it = _.chain(data)
+       .flatMap(tm => tm.tagDateDomain)
+       .groupBy(m => _.toLower(m.tag))
+       .toPairs()
+       .map(p => {
+          var tldata = [];
+          var tag = p[0];
+          var byear =_.chain(p[1])
+              .groupBy(m => m.year())
+              .mapValues(g => g.length)
+              .toPairs()
+              .value();
+          console.log(byear);
+
+          return byear;
+       })
+       .value();
+   console.log(it);
+
+
+   // var byYear = _.chain(data)
+   //     .flatMap(d => d.mementos)
+   //     .groupBy(m => m.year())
+   //
+   //     .value();
+   //
+   //
+   //
+   // console.log( _.flatMap(yrmnth, g => _.values(g)));
+
+  // console.log(_.chain(data).flatMap(d => _.map(d.mementos,m => {
+  //    return _.map(d.tagArray(),t => {
+  //       return { domain: m.cleanDomain(), date: m.date,tag: t };
+  //    })
+  // })).value());
 }

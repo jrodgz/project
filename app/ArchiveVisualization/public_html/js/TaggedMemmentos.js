@@ -1,3 +1,4 @@
+'use strict';
 class TaggedMemmentos {
    constructor(data) {
       this.tags = data.tags;
@@ -6,8 +7,9 @@ class TaggedMemmentos {
       this.mementos.sort((m1, m2)=> m1.compare(m2));
       this.range = this.first().date.twix(this.last().date);
       this.domains = this.mementos.map(m => m.domain);
+      this.tagDateDomain = _.flatMap(this.mementos,m => m.getTagDomainDate());
    }
-
+   
    cleanedDomains(){
       return this.domains.map(d => {
          return S(tldjs.getDomain(d)).strip(tldjs.getPublicSuffix(d)).stripPunctuation().s;

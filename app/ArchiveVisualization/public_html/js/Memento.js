@@ -1,40 +1,82 @@
-
+'use strict';
 class Memento {
-   constructor(marray,original){
-      this.date = moment(marray[5],"YYYYMMDDHHmmss");
-      this.archive = marray[3];
-      this.domain = marray[9];
-      this.original = original;
-   }
-
-   jsDate() {
-      return this.date.toDate();
-   }
-
-   year() {
-      return this.date.year();
-   }
+    constructor(marray, original) {
+        this.date = moment(marray[5], "YYYYMMDDHHmmss");
+        this.archive = marray[3];
+        this.domain = marray[9];
+        this.original = original;
+        this.tags = null;
+        this.tagproject = null;
+    }
 
 
-   month(){
-      return this.date.month();
-   };
+    addTags(tags) {
+        this.tags = tags;
+        var d = S(tldjs.getDomain(this.domain))
+            .strip(tldjs.getPublicSuffix(tldjs.getDomain(this.domain)))
+            .stripPunctuation().s;
+        var dt = this.date;
+        var fullDom = this.domain;
+        this.tagproject = _.map(Array.from(this.tags), t => {
+            return {
+                tag: t,
+                date: dt,
+                domain: d ,
+                site: d,
+                fullD: fullDom,
+                jsDate: function () {
+                    return this.date.toDate();
+                },
+                year: function () {
+                    return this.date.year();
+                },
+                month: function () {
+                    return this.date.month();
+                },
+                day: function () {
+                    return this.date.day();
+                },
+                compare: function(m) {
+                    if (this.date.isBefore(m.date)) return -1;
+                    if (this.date.isSame(m.date)) return 0;
+                    return 1;
+                }
+            }
+        });
+    }
+
+    getTagDomainDate() {
+        return this.tagproject;
+    }
+
+    jsDate() {
+        return this.date.toDate();
+    }
+
+    year() {
+        return this.date.year();
+    }
 
 
-   day(){
-      return this.date.days();
-   }
+    month() {
+        return this.date.month();
+    };
 
-   cleanDomain(){
-      return tldjs.getDomain(this.domain);
-   }
-   
 
-   compare(m){
-      if (this.date.isBefore(m.date)) return -1;
-      if (this.date.isSame(m.date)) return 0;
-      return 1;
-   }
+    day() {
+        return this.date.day();
+    }
+
+    cleanDomain() {
+        return tldjs.getDomain(this.domain);
+    }
+
+
+    compare(m) {
+        if (this.date.isBefore(m.date)) return -1;
+        if (this.date.isSame(m.date)) return 0;
+        return 1;
+    }
 }
 
 
