@@ -27,7 +27,6 @@
     <script src="js/libs/tldjs.js"></script>
     <script src="js/Memento.js"></script>
     <script src="js/TaggedMemmentos.js"></script>
-    <script src="js/MementoCollection.js"></script>
     <script src="js/gui.js"></script>
     <script src="js/sheetparser.js"></script>
     <script src="js/sheetparser2.js"></script>
@@ -35,105 +34,110 @@
     <script src="js/slider.js"></script>
 
     <!-- charts -->
-    <script src="js/ChartmementoPreview.js"></script>
-    <script src="js/ChartTagHistogram.js"></script>
-    <script src="js/ChartZoomWords.js"></script>
-    <script src="js/ChartLine.js"></script>
-    <script src="js/ChartTopTenArchivers.js"></script>
-    <script src="js/ChartTopTenPopularDomains.js"></script>
-    <script src="js/ChartTopKeywords.js"></script>
-    <script src="js/ChartTimeLine.js"></script>
+    <script src="js/Vis.js"></script>
+    <script src="js/tagOverlap.js"></script>
+
 </head>
 <body class="application">
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container-fluid">
-        <p class="navbar-text">Controls</p>
-        <div class="navbar-header">
-
-        </div>
-    </div>
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#all" aria-controls="home" role="tab" data-toggle="tab">All Tags</a></li>
+    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
+    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>
+    <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
+</ul>
 </div>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="charts">
-                <div id="box1" class="chart">
-                    <div class="chart-wrapper">
-                        <div class="chart-title">
-                            Timeline
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="all">
+            <div class="row">
+            <div class="col-sm-12">
+                <div class="charts">
+                    <div id="box1" class="chart">
+                        <div class="chart-wrapper">
+                            <div class="chart-title">
+                                Timeline
+                            </div>
+                            <div class="slide-chart chart-stage" id="chart1" data-chart-desc="timeline"></div>
                         </div>
-                        <div class="slide-chart chart-stage" id="chart1" data-chart-desc="timeline"></div>
                     </div>
-                </div>
-                <div id="box2" class="chart">
-                    <div class="chart-wrapper">
-                        <div class="chart-title">
-                            Memenots
+                    <div id="box2" class="chart">
+                        <div class="chart-wrapper">
+                            <div class="chart-title">
+                                Memenots
+                            </div>
+                            <div class="slide-chart chart-stage" id="chart2" data-chart-desc="memento preview"></div>
                         </div>
-                        <div class="slide-chart chart-stage" id="chart2" data-chart-desc="memento preview"></div>
                     </div>
-                </div>
-                <div id="box3" class="chart">
-                    <div class="chart-wrapper">
-                        <div class="chart-title">
-                            Word Play
+                    <div id="box3" class="chart">
+                        <div class="chart-wrapper">
+                            <div class="chart-title">
+                                Word Play
+                            </div>
+                            <div class="slide-chart chart-stage" id="chart3" data-chart-desc="word spread"></div>
                         </div>
-                        <div class="slide-chart chart-stage" id="chart3" data-chart-desc="word spread"></div>
                     </div>
-                </div>
-                <div id="box4" class="chart">
-                    <div class="chart-wrapper">
-                        <div class="chart-title">
-                            Something
+                    <div id="box4" class="chart">
+                        <div class="chart-wrapper">
+                            <div class="chart-title">
+                                Something
+                            </div>
+                            <div class="slide-chart chart-stage" id="chart4" data-chart-desc="line graph"></div>
                         </div>
-                        <div class="slide-chart chart-stage" id="chart4" data-chart-desc="line graph"></div>
                     </div>
-                </div>
-                <div id="box5" class="chart">
-                    <div class="chart-wrapper">
-                        <div class="chart-title">
-                            Tags
+                    <div id="box5" class="chart">
+                        <div class="chart-wrapper">
+                            <div class="chart-title">
+                                Tags
+                            </div>
+                            <div class="slide-chart chart-stage" id="chart5" data-chart-desc="tag histogram"></div>
                         </div>
-                        <div class="slide-chart chart-stage" id="chart5" data-chart-desc="tag histogram"></div>
                     </div>
                 </div>
             </div>
         </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="slideshow">
+                        <span class="move left">&larr; <span id="prev_chart"></span></span>
+                        <span class="move right"><span id="next_chart"></span> &rarr;</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Top 10 Contributing Archivers
+                        </div>
+                        <div class="top-ten-chart chart-stage" id="topTenArchivers" data-chart-desc="word spread"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Top 10 Popular Domains
+                        </div>
+                        <div class="top-ten-chart chart-stage" id="topTenPopularDomains" data-chart-desc="word spread"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Top 10 Common Tags
+                        </div>
+                        <div class="top-ten-chart chart-stage" id="topTenPopularKeywords" data-chart-desc="word spread"></div>
+                    </div>
+                </div>
+            </div></div>
+        <div role="tabpanel" class="tab-pane" id="profile">...</div>
+        <div role="tabpanel" class="tab-pane" id="messages">...</div>
+        <div role="tabpanel" class="tab-pane" id="settings">...</div>
     </div>
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="slideshow">
-                <span class="move left">&larr; <span id="prev_chart"></span></span>
-                <span class="move right"><span id="next_chart"></span> &rarr;</span>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-4">
-            <div class="chart-wrapper">
-                <div class="chart-title">
-                    Top 10 Contributing Archivers
-                </div>
-                <div class="top-ten-chart chart-stage" id="topTenArchivers" data-chart-desc="word spread"></div>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="chart-wrapper">
-                <div class="chart-title">
-                    Top 10 Popular Domains
-                </div>
-                <div class="top-ten-chart chart-stage" id="topTenPopularDomains" data-chart-desc="word spread"></div>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="chart-wrapper">
-                <div class="chart-title">
-                    Top 10 Common Tags
-                </div>
-                <div class="top-ten-chart chart-stage" id="topTenPopularKeywords" data-chart-desc="word spread"></div>
-            </div>
-        </div>
-    </div>
+
+
+
+
 </div>
 <script src="js/libs/bootstrap.js"></script>
 <script>
@@ -153,32 +157,10 @@
         createTopTenKeywords('#topTenPopularKeywords', parsedData);
 		createTopTenArchivers('#topTenArchivers', parsedData);
         listenForClicks();
+
+        tagOverlap(" ",parsedData);
+        window.parsedData = parsedData;
     });
-
-    //    var spreadsheetID = "1O0JIuvFus0U-WYZ_3IJBU-PB3amRQhfH63hAq8dY6aE";
-//    var url = "https://spreadsheets.google.com/feeds/list/" + spreadsheetID + "/od6/public/values?alt=json";
-//    var statusDiv = $('#chart-update');
-//
-//    // default chart has the loading screen set
-//    gui.constructor.setLoadigScreen('chart1');
-//    c3.setUpdateDiv(statusDiv);
-//    var sp = new sheetParser(url, statusDiv);
-//    let it = 2;
-//    //#################################
-//    // create histogram chart 1
-//    sp.loadSheet().then(function (parsedData) {
-//        createHistogramOfTags('#chart5', parsedData);
-//        createZoomableContainer('#chart3', parsedData);
-//        createMementoPreviews('#chart2', '#btn0', '#btn1');
-//        createLineChart('#chart4');
-//        createTimeLine('#chart1',parsedData);
-//        createTopTenArchivers('#topTenArchivers', parsedData);
-//        createTopTenPopularDomains('#topTenPopularDomains', parsedData);
-//        createTopTenKeywords('#topTenPopularKeywords', parsedData, statusDiv);
-//        listenForClicks();
-//
-//    });
-
 
 </script>
 </body>
