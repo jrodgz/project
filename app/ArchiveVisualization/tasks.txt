@@ -1,0 +1,8 @@
+* see what different domains are in the collection (Joel)
+* see how many URI-Ms I have for each URI-R (a bar chart might be nice, or the timeline view is also nice — just have to be aware of the limit in terms of scale — how many URI-Rs can you handle?) (Dan - in progress)
+* explore all of the tags that I’ve used (Done)
+* explore the number of URI-Rs and URI-Ms associated with a particular tag (In queue)
+* search by tag and find all of the URI-Rs and URI-Ms associated with that tag (In queue)
+* search by archiver and find all of the URI-Rs and URI-Ms associated with that person (In queue)
+* if they exist, see thumbnails of the URI-Ms (Done)
+* navigate to the URI-Ms from the vis interface (open in a new tab) (In queue, but this is super easy so this should have least amount of priority)
