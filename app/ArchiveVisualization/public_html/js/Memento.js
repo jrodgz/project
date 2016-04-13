@@ -24,6 +24,10 @@ class Memento {
    day(){
       return this.date.days();
    }
+
+   cleanDomain(){
+      return tldjs.getDomain(this.domain);
+   }
    
 
    compare(m){

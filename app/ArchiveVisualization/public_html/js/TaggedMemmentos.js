@@ -46,7 +46,7 @@ class TaggedMemmentos {
    groupedByDomain() {
       return _.groupBy(this.mementos, m =>  m.domain)
    };
-
+   
    groupedByYrMnth() {
       var it = this.groupedByYear();
       _.keys(it).forEach(k => it[k] = _.groupBy(it[k],m=> m.month()+1));

@@ -1,6 +1,6 @@
- /*
-	create top ten keywords chart
-*/
+/*
+ create top ten keywords chart
+ */
 function createTopTenKeywords(where, sampleData) {
 
 	var topTen = _.chain(sampleData)
@@ -21,15 +21,16 @@ function createTopTenKeywords(where, sampleData) {
 		newObject.group = "";
 		data.push(newObject);
 	}
-	
+
 	var visualization = d3plus.viz()
-    .container(where)     
-    .data(data)     
-    .type("bubbles")       
-    .id(["group", "name"]) 
-    .depth(1)              
-    .size("size")         
-    .color("group")        
-    .draw() 
+		.container(where)
+		.data(data)
+		.type("bubbles")
+		.id(["group", "name"])
+		.depth(1)
+		.size("size")
+		.color("group")
+		.draw()
 
 }
+
