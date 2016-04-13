@@ -173,7 +173,6 @@ class TimelineChart {
 
 
       $(window).resize(function () {
-         console.log("resizing", d3.select('tlsvg'));
          let elementWidth = options.width || d3.select(element).node().getBoundingClientRect().width;
          let elementHeight = options.height || d3.select(element).node().getBoundingClientRect().height;
          let width = elementWidth - margin.left - margin.right;

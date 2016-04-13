@@ -20,7 +20,7 @@
     <script src="js/libs/moment.js"></script>
     <script src="js/libs/twix.js"></script>
     <script src="js/libs/holder.js"></script>
-    <script src="js/libs/underscore.js"></script>
+    <script src="js/libs/lowdash.js"></script>
     <script src="js/libs/purl.js"></script>
     <script src="js/libs/strings.js"></script>
     <script src="js/libs/tldjs.js"></script>
@@ -28,7 +28,6 @@
     <script src="js/TaggedMemmentos.js"></script>
     <script src="js/MementoCollection.js"></script>
     <script src="js/gui.js"></script>
-    <script src="js/global.js"></script>
     <script src="js/sheetparser.js"></script>
     <script src="js/sheetparser2.js"></script>
     <script src="js/drawing.js"></script>
@@ -44,18 +43,18 @@
     <script src="js/ChartTopKeywords.js"></script>
     <script src="js/ChartTimeLine.js"></script>
 </head>
-<body>
-<nav role="navigation" class="navbar navbar-default navbar-static-top">
+<body class="application">
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container-fluid">
         <p class="navbar-text">Controls</p>
-        <button type="button" class="btn btn-default navbar-btn">Mementos</button>
-        <button type="button" class="btn btn-default navbar-btn">Tags</button>
-        <button type="button" class="btn btn-default navbar-btn">Resources</button>
+        <div class="navbar-header">
+
+        </div>
     </div>
-</nav>
+</div>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-8">
+        <div class="col-sm-12">
             <div class="charts">
                 <div id="box1" class="chart">
                     <div class="chart-wrapper">
@@ -71,10 +70,6 @@
                             Memenots
                         </div>
                         <div class="slide-chart chart-stage" id="chart2" data-chart-desc="memento preview"></div>
-                        <div style="text-align: center;">
-                            <button id="btn0">prev</button>
-                            <button id="btn1">next</button>
-                        </div>
                     </div>
                 </div>
                 <div id="box3" class="chart">
@@ -103,29 +98,13 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-4">
-            <div class="chart-wrapper">
-                <div class="chart-title">
-                    Activity Log
-                </div>
-                <div class="chart-stage">
-                    <div class="h-scroll" id="chart-update">
-                    </div>
-                </div>
-                <div class="chart-notes">
-                    This is the activity the application managed to use. Observe its output if things do not add up.
-                </div>
-            </div>
-        </div>
     </div>
     <div class="row">
-        <div class="col-sm-8">
+        <div class="col-sm-12">
             <div class="slideshow">
                 <span class="move left">&larr; <span id="prev_chart"></span></span>
                 <span class="move right"><span id="next_chart"></span> &rarr;</span>
             </div>
-        </div>
-        <div class="col-sm-4">
         </div>
     </div>
     <div class="row">
@@ -162,16 +141,15 @@
     let it = "https://spreadsheets.google.com/feeds/list/1hf9yD08bQA825bAxA7fpchDh8q5Dn69K-sKFSs5_NsY/3/public/values?alt=json";
     let it2 = "https://spreadsheets.google.com/feeds/worksheets/1hf9yD08bQA825bAxA7fpchDh8q5Dn69K-sKFSs5_NsY/public/values?alt=json";
     var statusDiv = $('#chart-update');
-    let sp = new sheetParser2(it,statusDiv);
+    let sp = new sheetParser2(it);
     sp.loadSheet().then(function (parsedData) {
         createHistogramOfTags('#chart5', parsedData);
         createZoomableContainer('#chart3', parsedData);
         createMementoPreviews('#chart2', '#btn0', '#btn1');
         createLineChart('#chart4');
         createTimeLine('#chart1',parsedData);
-        createTopTenArchivers('#topTenArchivers', parsedData);
         createTopTenPopularDomains('#topTenPopularDomains', parsedData);
-        createTopTenKeywords('#topTenPopularKeywords', parsedData, statusDiv);
+        createTopTenKeywords('#topTenPopularKeywords', parsedData);
         listenForClicks();
     });
 

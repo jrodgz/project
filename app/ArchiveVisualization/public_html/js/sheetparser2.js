@@ -1,9 +1,8 @@
 "use strict";
 class sheetParser2 {
-   constructor(url, statusdiv){
+   constructor(url){
       this.sp = this;
       this._url = url;
-      this.statusDiv = statusdiv;
       this.linkExtractor =
        new RegExp("^((http[s]?):\/)?\/?([^:\/\s]+)\/([0-9]+|web)\/([0-9]+)\/(((http[s]?):\/\/)((www.)?([a-zA-z0-9\.\-]+))(\/(.+)?))$");
    }
@@ -18,21 +17,18 @@ class sheetParser2 {
 
    loadSheet(){
       if((typeof this._url !== 'undefined') && this._url !== null){
-         updateStatus(this.statusDiv,'Loading sheet...');
          return $.getJSON(this._url)
             .error(function () {
-               updateStatus(statusDiv, 'FATAL: unable to reach spreadsheet');
+              alert("error loading sheet");
             }).then(data => this.parseSheet(data))
 
       }
    }
 
    parseSheet(data){
-      updateStatus(statusDiv, 'Sheet loading complete');
-      updateStatus(statusDiv, "Preparing to parse mementos for timestamps");
-      return _.chain(data.feed.entry)
+      return _(data.feed.entry)
          .groupBy(e => e.gsx$tags.$t)
-         .pairs()
+         .toPairs()
          .map(p => {
             var d = {
                tags: new Set(p[0].split(',').map(s => S(s).trim().s)),

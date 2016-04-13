@@ -4,8 +4,6 @@
 function createZoomableContainer(where, data) {
 	var width = $(where).width();
 	var height = $(where).height();
-	console.log(data);
-
 	var svg = d3.select(where)
 			.append('svg')
 			.attr('width', width)

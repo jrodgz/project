@@ -2,81 +2,85 @@
 	create chart top ten popular domains
 */
 
+
+/*
+ var tags = _.map(data, function (tm) {
+ return tm.tagArray();
+ });
+ tags = _.flatten(tags);
+ var histdata = {
+ x: ['x'],
+ cols: ['Number of Mementos']
+ };
+ data.forEach(function (tm) {
+ histdata.cols.push(tm.numMementos());
+ histdata.x.push(tm.tagString);
+
+ });
+
+ c3.generate({
+ bindto: where,
+ data: {
+ x: 'x',
+ columns: [
+ histdata.x,
+ histdata.cols
+ ],
+ type: 'bar'
+ },
+ bar: {
+ width: {
+ ratio: 0.5
+ }
+ },
+ axis: {
+ x: {
+ type: 'category',
+ show: true
+ }
+ }
+ });
+ */
 function createTopTenPopularDomains(where, data) {
-	var topTen =
-		_.take(_.sortBy(_.pairs(
-			_.mapObject(
-				_.groupBy(
-					_.flatten(data.map(mc => mc.cleanedDomains())),
-					d => d),
-				(v,k)=> v.length)
-		),p => -p[1]),10);
+	var topTen =_.chain(data)
+		.flatMap(mc => mc.cleanedDomains())
+		.groupBy(d => d)
+		.mapValues((v,k)=> v.length)
+		.toPairs()
+		.sortBy(p => -p[1])
+		.take(10).value();
+	var histdata = {
+		x: ['x'],
+		cols: ['Occurrence Count']
+	};
+	topTen.forEach(function (tt) {
+		histdata.cols.push(tt[1]);
+		histdata.x.push(tt[0]);
 
-	console.log(topTen);
+	});
 
-	var topTenDomainsArray = topTen.map(p => p[0]);
-
-	var chart = c3.generate({
+	var chart =  c3.generate({
 		bindto: where,
 		data: {
-			columns: topTen,
+			x: 'x',
+			columns: [
+				histdata.x,
+				histdata.cols
+			],
 			type: 'bar'
 		},
-		axis : {
+		bar: {
+			width: {
+				ratio: 0.5
+			}
+		},
+		axis: {
 			rotated: true,
-			y : {
-				label: 'Mementos'
-			},
-			x : {
-				type : 'categorized',
-				tick: {
-					format: function (x) { return ''; }
-				},
+			x: {
+				type: 'category',
 				show: true
 			}
 		}
 	});
 
-
-	// var topTenDomans = {};
-	// data.forEach(function (tm) {
-	// 	var a = document.createElement('a');
-    //     a.href = tm.uri;
-	// 	var currentUri = a.hostname;
-	// 	var mememntoNumber = tm.mementos.length;
-	// 	if (currentUri in topTenDomans) {
-	// 		topTenDomans[currentUri] = topTenDomans[currentUri] + mememntoNumber;
-	// 	} else {
-	// 		topTenDomans[currentUri] = mememntoNumber;
-	// 	}
-	// });
-	//
-	// var sortedTopTenDomainList = [];
-	// for (var key in topTenDomans){
-	// 	sortedTopTenDomainList.push([key, topTenDomans[key]]);
-	// }
-	// sortedTopTenDomainList.sort(function(a, b){return b[1] - a[1]});
-	// var topTenDomainsArray = sortedTopTenDomainList.slice(0,10);
-	//
-	// var chart = c3.generate({
-	// 	bindto: where,
-	// 	data: {
-	// 		columns: topTenDomainsArray,
-	// 		type: 'bar'
-	// 	},
-	// 	axis : {
-	// 		rotated: true,
-	// 		y : {
-	// 			label: 'Mementos'
-	// 		},
-	// 		x : {
-	// 			type : 'categorized',
-	// 			tick: {
-	// 				format: function (x) { return ''; }
-	// 			},
-	// 			show: true
-	// 		}
-	// 	}
-	// });
-	
 }

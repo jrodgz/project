@@ -4,9 +4,7 @@
 function createTimeLine(where, parsedData) {
    var bindTo = d3.select(where)[0][0];
    var tldata = [];
-
-   console.log(d3.select(where));
-  
+   
    parsedData.forEach(d => {
       var tmTl = {
          label: S(d.tagString).replaceAll(',',', ').s,
