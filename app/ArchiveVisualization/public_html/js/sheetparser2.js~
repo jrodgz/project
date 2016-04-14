@@ -30,6 +30,7 @@ class sheetParser2 {
             .groupBy(e => e.gsx$tags.$t)
             .toPairs()
             .map(p => {
+		console.log("######## c is " + JSON.stringify(p[1]) ) ;
                 var t = new Set(p[0].split(',').map(s => S(s).trim().s));
                 var d = {
                     tags: t,

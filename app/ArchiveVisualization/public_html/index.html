@@ -109,9 +109,9 @@
                 <div class="col-sm-4">
                     <div class="chart-wrapper">
                         <div class="chart-title">
-                            Top 10 Something
+                            Top 10 Archiving Years
                         </div>
-                        <div class="top-ten-chart chart-stage" id="topTenSomething" data-chart-desc="something"></div>
+                        <div class="top-ten-chart chart-stage" id="topTenArchivingYears" data-chart-desc="something"></div>
                     </div>
                 </div>
                 <div class="col-sm-4">
@@ -175,6 +175,7 @@
         createTimeLine('#chart1',parsedData);
         createTopTenPopularDomains('#topTenPopularDomains', parsedData);
         createTopTenKeywords('#topTenPopularKeywords', parsedData);
+	createTopTenArchivingYears('#topTenArchivingYears', parsedData);
         listenForClicks();
 //        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 ////            e.target // newly activated tab

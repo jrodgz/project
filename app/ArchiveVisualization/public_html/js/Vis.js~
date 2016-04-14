@@ -45,7 +45,7 @@ function createTopTenArchivingYears(where, data) {
 	/*
 	sample data that the map uses
 	var data = [
-	    {"year": 1991, "value": 15}
+	    {"year": 1991, "name":"alpha", "value": 15}
 	]
 	*/
 
@@ -76,6 +76,7 @@ function createTopTenArchivingYears(where, data) {
 		var entry = new Object();
 		entry['Year of Archive'] = sortable[i][0]
 		entry['Number Of Mementos'] = sortable[i][1]
+		entry.name = "Total Archives"
 		dataToPlot.push(entry)
 	}
 
