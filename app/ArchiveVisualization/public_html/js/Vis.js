@@ -8,7 +8,7 @@ function createTimeLine(where, parsedData) {
 
    parsedData.forEach(d => {
       var tmTl = {
-         label: S(d.tagString).replaceAll(',',', ').s,
+         label: S(d.tagString).replaceAll(',', ', ').s,
          data: []
       };
       d.mementos.forEach(m =>
@@ -21,16 +21,16 @@ function createTimeLine(where, parsedData) {
       tldata.push(tmTl);
    });
 
-   var tl = new TimelineChart(where,tldata,{
+   var tl = new TimelineChart(where, tldata, {
       tip: function (d) {
-         return d.at || d.from +'<br>'+d.to;
+         return d.at || d.from + '<br>' + d.to;
       },
       ttip: function (d) {
          let dit = S(d.label);
-         if(dit.contains(',')){
-            return "Tags: "+dit.replaceAll(',',',<br>').s;
+         if (dit.contains(',')) {
+            return "Tags: " + dit.replaceAll(',', ',<br>').s;
          } else {
-            return "Tags: "+d.s;
+            return "Tags: " + d.s;
          }
       }
    });
@@ -48,7 +48,9 @@ function createTopTenKeywords(where, sampleData) {
       .mapValues(tg => tg.length)
       .toPairs()
       .orderBy(it => -it[1])
-      .map(p => {return { name: p[0], num: p[1]}})
+      .map(p => {
+         return {name: p[0], num: p[1]}
+      })
       .take(10)
       .value();
 
@@ -92,11 +94,13 @@ function createTopTenArchivers(where, data) {
    });
 
    var sortedTopTenList = [];
-   for (var key in topTenArchiverCols){
+   for (var key in topTenArchiverCols) {
       sortedTopTenList.push([key, topTenArchiverCols[key]]);
    }
-   sortedTopTenList.sort(function(a, b){return b[1] - a[1]});
-   var topTenArray = sortedTopTenList.slice(0,10);
+   sortedTopTenList.sort(function (a, b) {
+      return b[1] - a[1]
+   });
+   var topTenArray = sortedTopTenList.slice(0, 10);
 
    var chart = c3.generate({
       bindto: where,
@@ -109,14 +113,16 @@ function createTopTenArchivers(where, data) {
             ratio: 0.5 // this makes bar width 50% of length between ticks
          }
       },
-      axis : {
-         y : {
+      axis: {
+         y: {
             label: 'Mementos'
          },
-         x : {
-            type : 'categorized',
+         x: {
+            type: 'categorized',
             tick: {
-               format: function (x) { return ''; }
+               format: function (x) {
+                  return '';
+               }
             }
          }
       }
@@ -128,10 +134,10 @@ function createTopTenArchivers(where, data) {
  create chart top ten popular domains
  */
 function createTopTenPopularDomains(where, data) {
-   var topTen =_.chain(data)
+   var topTen = _.chain(data)
       .flatMap(mc => mc.cleanedDomains())
       .groupBy(d => d)
-      .mapValues((v,k)=> v.length)
+      .mapValues((v, k)=> v.length)
       .toPairs()
       .sortBy(p => -p[1])
       .take(10).value();
@@ -145,7 +151,7 @@ function createTopTenPopularDomains(where, data) {
 
    });
 
-   var chart =  c3.generate({
+   var chart = c3.generate({
       bindto: where,
       data: {
          x: 'x',
@@ -186,7 +192,9 @@ function createZoomableContainer(where, data) {
 
    var count = 0;
    var words = _.chain(data)
-      .flatMap(d => _.map(d.tagArray(),t => { return { 'tag': t, 'size': d.mementos.length} }))
+      .flatMap(d => _.map(d.tagArray(), t => {
+         return {'tag': t, 'size': d.mementos.length}
+      }))
       .uniq(to => to.tag)
       .map(d => {
          return {
@@ -195,7 +203,7 @@ function createZoomableContainer(where, data) {
             y: Math.floor(Math.random() * height) + 1,
             style: {
                'font-family': 'sans-serif',
-               'font-size':d.size  + 'px',
+               'font-size': d.size + 'px',
                'font-weight': 'bold',
                'fill': (count++ % 2 == 0) ? 'red' : 'blue'
             }
@@ -242,8 +250,7 @@ function createMementoPreviews(where, buttonOne, buttonTwo) {
 
    let someXvalue = [];
    let someYvalue = [];
-   for (var i = 0; i < 10; ++i)
-   {
+   for (var i = 0; i < 10; ++i) {
       someXvalue.push(i);
       someYvalue.push(Math.random() * 10 + 1);
    }
@@ -256,10 +263,9 @@ function createMementoPreviews(where, buttonOne, buttonTwo) {
  create some line chart, need to update this, not sure what it is
  */
 function createLineChart(where) {
-   let  chartLineX = [];
-   let  chartLineY = [];
-   for (var i = 0; i < 10; ++i)
-   {
+   let chartLineX = [];
+   let chartLineY = [];
+   for (var i = 0; i < 10; ++i) {
       chartLineX.push(i);
       chartLineY.push(Math.random() * 10 + 1);
    }
@@ -318,28 +324,150 @@ function createHistogramOfTags(where, data) {
    });
 }
 
+function yearMonthTagDomainTree(where,data){
 
-function tagOverlap(where,data) {
+   var compiled = _.template('<% _.forEach(dates, function(d) { %><%-d%>\n<% }); %>');
 
-   console.log(where,d3.select(where));
    var it = _.chain(data)
-       .flatMap(tm => tm.tagDateDomain)
-       .groupBy(m => _.toLower(m.tag))
-       .toPairs()
-       .map(p => {
-          var tldata = [];
-          var tag = p[0];
-          var byear =_.chain(p[1])
-              .groupBy(m => m.year())
-              .mapValues(g => g.length)
-              .toPairs()
-              .value();
-          console.log(byear);
+      .flatMap(tm => tm.tagDateDomain)
+      .groupBy(m => _.toLower(m.tag))
+      .toPairs()
+      .flatMap(p =>
+         _.chain(p[1])
+            .groupBy(m => m.year)
+            .mapValues(g =>_.groupBy(g, gm => gm.ms))
+            .flatMap(ym =>
+               _.flatMap(_.keys(ym), mnth => {
+                     return _.chain(ym[mnth])
+                        .groupBy(k => k.domain)
+                        .toPairs()
+                        .map(dm => {
+                           return {
+                              year: dm[1][0].year,
+                              month: dm[1][0].ms,
+                              tag: dm[1][0].tag,
+                              domain: dm[0],
+                              num: dm[1].length,
+                              dates: compiled({dates: _.map(dm[1],j => j.moment.format("h:mm:ss a"))})
+                           }
+                        }).value()
+                  }
+               )).value()).value();
+   var visualization = d3plus.viz()
+      .container(where)
+      .data(it)
+      .type("tree_map")
+      .id(["year","month","tag","domain"])
+      .size("num")
+      .time({"value": "year", "solo": it[0].year})
+      .tooltip({fullscrean:true,size:false,large: 450,small:450,value:["year","month","tag","domain","dates"]})
+      .draw();
+}
 
-          return byear;
-       })
-       .value();
-   console.log(it);
+
+function tagOverlap(where, data) {
+
+   console.log(where, d3.select(where));
+   var it = _.chain(data)
+      .flatMap(tm => tm.tagDateDomain)
+      .groupBy(m => _.toLower(m.tag))
+      .toPairs()
+      .flatMap(p => {
+         var tldata = [];
+         var tag = p[0];
+         return _.chain(p[1])
+            .groupBy(m => m.year)
+            .mapValues(g => g.length)
+            .toPairs()
+            .map(yc => {
+               return {
+                  year: +yc[0],
+                  num: yc[1],
+                  tag: tag
+               };
+            })
+            .value();
+      })
+      .sortBy(ynt => ynt.year)
+      .value();
+
+   var it2=
+      _.chain(data)
+         .flatMap(tm => tm.tagDateDomain)
+         .groupBy(m => _.toLower(m.tag))
+         .toPairs()
+         .flatMap(p =>
+            _.chain(p[1])
+               .groupBy(m => m.year)
+               .mapValues(g =>_.groupBy(g, gm => gm.ms))
+               .flatMap(ym =>
+                  _.flatMap(_.keys(ym), mnth => {
+                        return _.chain(ym[mnth])
+                           .groupBy(k => k.domain)
+                           .toPairs()
+                           .map(dm => {
+                              return {
+                                 year: dm[1][0].year,
+                                 month: dm[1][0].ms,
+                                 tag: dm[1][0].tag,
+                                 domain: dm[0],
+                                 num: dm[1].length
+                              }
+                           }).value()
+                     }
+                  )).value()).value();
+   // console.log(it);
+   var visualization = d3plus.viz()
+      .container(where)
+      .data(it2)
+      .type("tree_map")
+      .id(["year","month","tag","domain"])
+      .size("num")
+      .time({"value": "year", "solo": it[0].year})
+      .draw();
+
+   // var it2 = _.chain(data)
+   //    .flatMap(tm => tm.tagDateDomain)
+   //    .groupBy(m => _.toLower(m.tag))
+   //    .toPairs()
+   //    .flatMap(p =>
+   //       _.chain(p[1])
+   //          .groupBy(m => m.year)
+   //          .mapValues(g =>_.groupBy(g, gm => gm.ms))
+   //          .flatMap(ym =>
+   //             _.flatMap(_.keys(ym), mnth =>{
+   //                _.chain(ym[mnth])
+   //                   .groupBy(k => k.domain)
+   //                   .toPairs()
+   //                   .map(dm => {
+   //                      return {
+   //                         year: dm[1][0].year,
+   //                         month: dm[1][0].ms,
+   //                         tag: dm[1][0].tag,
+   //                         domain: dm[0],
+   //                         value: dm[1].length
+   //                      }
+   //                   }).value();
+   //                console.log(_.groupBy(ym[mnth],k => k.domain));
+   //                return _.map(ym[mnth], ymm => {
+   //
+   //                   return {
+   //                      year: ymm.year,
+   //                      month: ymm.ms,
+   //                      day: ymm.day,
+   //                      tag: ymm.tag,
+   //                      domain: ymm.domain
+   //                   }
+   //                });
+   //             }
+   //
+   //             )
+   //          )
+   //          .value()
+   //    )
+   //    .value();
+
+   console.log(it2);
 
 
    // var byYear = _.chain(data)
@@ -352,9 +480,9 @@ function tagOverlap(where,data) {
    //
    // console.log( _.flatMap(yrmnth, g => _.values(g)));
 
-  // console.log(_.chain(data).flatMap(d => _.map(d.mementos,m => {
-  //    return _.map(d.tagArray(),t => {
-  //       return { domain: m.cleanDomain(), date: m.date,tag: t };
-  //    })
-  // })).value());
+   // console.log(_.chain(data).flatMap(d => _.map(d.mementos,m => {
+   //    return _.map(d.tagArray(),t => {
+   //       return { domain: m.cleanDomain(), date: m.date,tag: t };
+   //    })
+   // })).value());
 }

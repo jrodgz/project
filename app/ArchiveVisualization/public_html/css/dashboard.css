@@ -94,6 +94,7 @@ body.application .return-link:hover,
 .chart-wrapper .chart-stage {
     overflow: hidden;
     padding: 5px 10px;
+    height: 90%;
     position: relative;
 }
 

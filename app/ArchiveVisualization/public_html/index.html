@@ -12,11 +12,11 @@
     <script src="js/libs/es6-shim.js"></script>
     <script src="js/libs/es6-sham.js"></script>
     <script src="js/libs/d3.js"></script>
-    <script src="js/libs/d3-extended.js"></script>
+    <script src="js/libs/d3plus.js"></script>
     <script src="js/libs/d3-timeline.js"></script>
     <script src="js/libs/d3-tip.js"></script>
-	<script src="js/libs/d3plus.js"></script>
     <script src="js/libs/c3.js"></script>
+    <script src="js/libs/d3-extended.js"></script>
     <script src="js/libs/jquery-2.2.1.js"></script>
     <script src="js/libs/moment.js"></script>
     <script src="js/libs/twix.js"></script>
@@ -26,6 +26,7 @@
     <script src="js/libs/strings.js"></script>
     <script src="js/libs/tldjs.js"></script>
     <script src="js/Memento.js"></script>
+    <script src="js/MementoTag.js"></script>
     <script src="js/TaggedMemmentos.js"></script>
     <script src="js/gui.js"></script>
     <script src="js/sheetparser.js"></script>
@@ -42,7 +43,7 @@
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="active"><a href="#all" aria-controls="home" role="tab" data-toggle="tab">All Tags</a></li>
-    <li role="presentation"><a href="#tags" aria-controls="profile" role="tab" data-toggle="tab">Tags</a></li>
+    <li role="presentation" ><a href="#tags" aria-controls="profile" role="tab" data-toggle="tab">Tags</a></li>
     <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>
     <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
 </ul>
@@ -131,16 +132,20 @@
                 </div>
             </div></div>
         <div role="tabpanel" class="tab-pane" id="tags">
-            <div class="col-sm-12">
-                <div class="chart">
-                    <div class="chart-wrapper">
-                        <div class="chart-title">
-                            Timeline
+            <row>
+                <div class="col-sm-12">
+                    <div class="chart">
+                        <div class="chart-wrapper" id="tagTLWrapper">
+                            <div class="chart-title">
+                                Tag year breakdown
+                            </div>
+                            <div class="chart-stage" id="tagTL">
+
+                            </div>
                         </div>
-                        <div class="slide-chart chart-stage" id="tagTL" data-chart-desc="timeline"></div>
                     </div>
                 </div>
-            </div>
+            </row>
         </div>
         <div role="tabpanel" class="tab-pane" id="messages">...</div>
         <div role="tabpanel" class="tab-pane" id="settings">...</div>
@@ -156,6 +161,9 @@
     'use strict';
     let it = "https://spreadsheets.google.com/feeds/list/1hf9yD08bQA825bAxA7fpchDh8q5Dn69K-sKFSs5_NsY/3/public/values?alt=json";
     let it2 = "https://spreadsheets.google.com/feeds/worksheets/1hf9yD08bQA825bAxA7fpchDh8q5Dn69K-sKFSs5_NsY/public/values?alt=json";
+
+    var reduced = "https://spreadsheets.google.com/feeds/list/1hf9yD08bQA825bAxA7fpchDh8q5Dn69K-sKFSs5_NsY/5/public/values?alt=json";
+
     var statusDiv = $('#chart-update');
     let sp = new sheetParser2(it);
     var showFirst = false;
@@ -169,15 +177,17 @@
         createTopTenKeywords('#topTenPopularKeywords', parsedData);
 		createTopTenArchivers('#topTenArchivers', parsedData);
         listenForClicks();
-        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-//            e.target // newly activated tab
-            if($(e.target).text() == "Tags" && !showFirst){
-                console.log("in text");
-                tagOverlap("#tagTL",parsedData);
-                showFirst = true;
-            }
-
-        });
+//        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+////            e.target // newly activated tab
+//            if($(e.target).text() == "Tags" && !showFirst){
+//                console.log("in text");
+////                $("#tagTL").height($("#tagTLWrapper").height()).trigger("resize");
+//                yearMonthTagDomainTree("#tagTL",parsedData);
+//                showFirst = true;
+//            }
+//
+//        });
+//        yearMonthTagDomainTree("#tagTL",parsedData);
         window.parsedData = parsedData;
 
     });

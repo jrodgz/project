@@ -17,32 +17,7 @@ class Memento {
             .stripPunctuation().s;
         var dt = this.date;
         var fullDom = this.domain;
-        this.tagproject = _.map(Array.from(this.tags), t => {
-            return {
-                tag: t,
-                date: dt,
-                domain: d ,
-                site: d,
-                fullD: fullDom,
-                jsDate: function () {
-                    return this.date.toDate();
-                },
-                year: function () {
-                    return this.date.year();
-                },
-                month: function () {
-                    return this.date.month();
-                },
-                day: function () {
-                    return this.date.day();
-                },
-                compare: function(m) {
-                    if (this.date.isBefore(m.date)) return -1;
-                    if (this.date.isSame(m.date)) return 0;
-                    return 1;
-                }
-            }
-        });
+        this.tagproject = _.map(Array.from(this.tags), t => new MementoTag (this,t));
     }
 
     getTagDomainDate() {
@@ -64,7 +39,7 @@ class Memento {
 
 
     day() {
-        return this.date.day();
+        return this.date.date();
     }
 
     cleanDomain() {
