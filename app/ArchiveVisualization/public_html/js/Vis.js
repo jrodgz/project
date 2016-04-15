@@ -244,7 +244,8 @@ function createZoomableContainer(where, data) {
 
     var group = drawing.createZoomableContainer(svg, width, height);
     drawing.drawGridLines(group, width, height, 100);
-    var view = new drawing.predefined.DynamicTextNodeView(group, width, height, svg);
+    var view = new drawing.predefined.DynamicTextNodeView(
+        group, width, height, svg, d3.select(where));
     view.drawControls($(where));
 }
 

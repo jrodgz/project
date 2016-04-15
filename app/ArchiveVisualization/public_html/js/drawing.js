@@ -175,6 +175,33 @@ var drawing = drawing || {};
         var word = null;
         var words = null;
     };
+
+    drawing.HtmlTable = function(g) { // d3 group
+        this.draw = function(dataset) {
+            if (table) {
+                table.remove();
+            };
+
+            table = group.append('table');
+            var tr = table.selectAll('tr')
+                .data(dataset)
+                .enter()
+                .append('tr');
+
+            tr.append('td').html(function(d) { return d.date; });
+            tr.append('td').html(function(d) { return d.urir; });
+            tr.append('td').html(function(d) { return d.urim; });
+        };
+
+        var table = null;
+        var group = g;
+
+        this.remove = function() {
+            if (table) {
+                table.remove();
+            }
+        }
+    };
     
     // A node link diagram with inter-connected nodes.
     drawing.TextNodes = function(g, w, h) {
@@ -193,6 +220,8 @@ var drawing = drawing || {};
                 for (j = 0; j < n; ++j) {
                     if (j != i && 
                         !connected[i][j] &&
+                        nodes[i].group != 1 && // TODO: figure out what to do with these
+                        nodes[i].group != 2 && // TODO: figure out what to do with these
                         nodes[i].group == nodes[j].group) {
                         connected[i][j] = true;
                         connected[j][i] = true;
@@ -505,7 +534,11 @@ var drawing = drawing || {};
 // Extend drawing with a few predefined views.
 (function(predefined, d3, $, drawing, preprocess, undefined) {
     // Expects a d3 selection.
-    predefined.DynamicTextNodeView = function(g, w, h, lg) {
+    predefined.DynamicTextNodeView = function(g,      // d3 group for nodes
+                                              w,      // width
+                                              h,      // height
+                                              s,      // original svg
+                                              div) {  // containing div as d3 selection
         // Expects a jQuery selection.
         this.drawControls = function(div) {
             div.prepend(controlsHtml);
@@ -598,7 +631,9 @@ var drawing = drawing || {};
 
         // remember: nodeCanvas.drawLinks();
         function draw() {
-            wordGroup.remove();
+            htmlTable.remove();
+            svg.css('display', 'block');
+
             if (group.resetPanZoom) {
                 group.resetPanZoom();
             }
@@ -624,36 +659,23 @@ var drawing = drawing || {};
         function drawMementos(payload) {
             nodeCanvas.remove();
             legend.remove();
+            svg.css('display', 'none');
 
             if (group.resetPanZoom) {
                 group.resetPanZoom();
             }
 
-            var data = [];
-            payload.forEach(function(v, i) {
-                var s = defaultTextStyle;
-                data.push({
-                    text: v.date + ': ' + v.urim,
-                    style: s,
-                    x: 25,
-                    y: 50 + (smallFontSize + mementoPadding) * i,
-                    color: 'black'
-                });
-            });
-
-            wordGroup.setData(data);
-            wordGroup.draw();
-            wordGroup.on('dblclick', function() {
-                alert('open memento in new tab');
-            });
+            htmlTable.draw(payload);
 
             drawMementos.visible = true;
+
             if (back && controls) {
                 back.css('display', 'inline');
                 controls.css('display', 'none');
             }
         }
 
+        var svg = s;
         var group = g;
 
         var back = null;
@@ -680,8 +702,8 @@ var drawing = drawing || {};
 
         var colorScale = d3.scale.category20();
         var nodeCanvas = new drawing.TextNodes(g, w, h);
-        var wordGroup = new drawing.WordGroup(g, smallFontSize);
-        var legend = new drawing.Legend(lg);
+        var htmlTable = new drawing.HtmlTable(div);
+        var legend = new drawing.Legend(s);
 
         var that = this;
 
