@@ -176,31 +176,51 @@ var drawing = drawing || {};
         var words = null;
     };
 
-    drawing.HtmlTable = function(g) { // d3 group
+    drawing.HtmlTable = function(g, height, width) { // d3 group
         this.draw = function(dataset) {
             if (table) {
                 table.remove();
             };
 
-            table = group.append('table');
-            var tr = table.selectAll('tr')
+            group.style('display', 'block');
+
+            table = group.append('table')
+                .attr('class', 'table-fill');
+
+            var thead = table.append('thead').append('tr');
+            thead.append('th').attr('class', 'text-left').html('Date');
+            thead.append('th').attr('class', 'text-left').html('URI-R');
+            thead.append('th').attr('class', 'text-left').html('URI-M');
+
+            var tbody = table.append('tbody').attr('class', 'table-hover');
+
+            var tr = tbody.selectAll('tr')
                 .data(dataset)
                 .enter()
                 .append('tr');
 
-            tr.append('td').html(function(d) { return d.date; });
-            tr.append('td').html(function(d) { return d.urir; });
-            tr.append('td').html(function(d) { return d.urim; });
-        };
+            tr.append('td').attr('class', 'text-left').html(function(d) { return d.date; });
+            tr.append('td').attr('class', 'text-left').html(function(d) { return d.urir; });
+            tr.append('td').attr('class', 'text-left').html(function(d) { 
+                return '<a href="' + d.urim + '" target="_blank">' + d.urim + '</a>';
+            });
 
-        var table = null;
-        var group = g;
+            group.style('overflow-x', 'scroll');
+            group.style('overflow-y', 'scroll');
+        };
 
         this.remove = function() {
             if (table) {
                 table.remove();
+                group.style('display', 'none');
             }
         }
+
+        var table = null;
+        var group = g.append('div')
+            .css('width', width + 'px')
+            .css('height', (height - 25) + 'px')
+            .css('white-space', 'nowrap');
     };
     
     // A node link diagram with inter-connected nodes.
@@ -220,8 +240,8 @@ var drawing = drawing || {};
                 for (j = 0; j < n; ++j) {
                     if (j != i && 
                         !connected[i][j] &&
-                        nodes[i].group != 1 && // TODO: figure out what to do with these
-                        nodes[i].group != 2 && // TODO: figure out what to do with these
+                        //nodes[i].group != 1 && // TODO: figure out what to do with these
+                        //nodes[i].group != 2 && // TODO: figure out what to do with these
                         nodes[i].group == nodes[j].group) {
                         connected[i][j] = true;
                         connected[j][i] = true;
@@ -543,25 +563,36 @@ var drawing = drawing || {};
         this.drawControls = function(div) {
             div.prepend(controlsHtml);
 
-            $('.group-by.category').on('click', function() {
+            $('.controls0').css('margin-left', '15px');
+
+            $('.controls0.category').on('click', function() {
                 active = $(this).attr('value');
-                if (!drawMementos.visible) {
-                    draw();
-                }
+                draw();
             });
 
-            $('.group-by').css('margin-left', '15px');
-
-            $('.group-by.filter').on('keypress', function(e) {
+            $('.controls0.filter').on('keypress', function(e) {
                 if (e.keyCode == 13) {
                     nodeCanvas.filterNodesByText($(this).val());
                 }
             })
             .css('margin-bottom', '10px');
 
-            controls = $('#group-buttons');
-            back = $('#back-button').on('click', function() { draw(); })
-                .css('margin-bottom', '5px');
+            $('#back-button').on('click', function() { draw(); })
+                .css('margin-bottom', '5px')
+                .css('margin-right', '15px');
+
+            $('.controls1').css('margin-left', '15px');
+
+            $('.controls1.order-by').on('click', function() {
+                orderMementos($(this).attr('value'), 
+                              $('#desc-checkbox:checked').length);
+            });
+
+            $('#desc-checkbox').css('margin-left', '40px');
+            $('#search-text').css('margin-left', '50px');
+
+            controls0 = $('#controls0');
+            controls1 = $('#controls1');
 
             draw();
         };
@@ -577,7 +608,9 @@ var drawing = drawing || {};
                         style: defaultTextStyle,
                         payload: tags[key],
                         group: tags[key].length,
-                        offset: drawing.visualLength(key, fontSize, font),
+                        offset: drawing.visualLength(key, 
+                                                     defaultFontSize, 
+                                                     defaultFont),
                         color: colorScale(tags[key].length)
                     });
 
@@ -597,6 +630,40 @@ var drawing = drawing || {};
             nodeCanvas.setData(tagNodes);
         };
 
+        this.setDates = function() {
+            if (dateNodes == null) {
+                dateNodes = [];
+                var dates = preprocess.getDates();
+                var counts = [];
+
+                for (key in dates) {
+                    dateNodes.push({
+                        text: key,
+                        style: defaultTextStyle,
+                        payload: dates[key],
+                        group: dates[key].length,
+                        offset: drawing.visualLength(key,
+                                                     defaultFontSize,
+                                                     defaultFont),
+                        color: colorScale(dates[key].length)
+                    });
+
+                    counts.push(dates[key].length);
+                }
+
+                counts = _.uniq(counts);
+                counts.sort();
+                dateLegendMarks = counts.map(function(d) {
+                    return {
+                        category: d + ' mementos',
+                        color: colorScale(d)
+                    };
+                });
+            }
+
+            nodeCanvas.setData(dateNodes);
+        };
+
         this.setDomains = function() {
             if (domainNodes == null) {
                 domainNodes = [];
@@ -609,7 +676,9 @@ var drawing = drawing || {};
                         style: defaultTextStyle,
                         payload: domains[key],
                         group: domains[key].length,
-                        offset: drawing.visualLength(key, fontSize, font),
+                        offset: drawing.visualLength(key, 
+                                                     defaultFontSize, 
+                                                     defaultFont),
                         color: colorScale(domains[key].length)
                     });
 
@@ -641,6 +710,9 @@ var drawing = drawing || {};
             if (active == 'tags') {
                 that.setTags();
                 legend.draw(tagLegendMarks);
+            } else if (active == 'dates') {
+                that.setDates();
+                legend.draw(dateLegendMarks);
             } else {
                 that.setDomains();
                 legend.draw(domainLegendMarks);
@@ -650,13 +722,15 @@ var drawing = drawing || {};
             nodeCanvas.on('dblclick', drawMementos);
             
             drawMementos.visible = false;
-            if (back && controls) {
-                back.css('display', 'none');
-                controls.css('display', 'inline');
+            if (controls0 && controls1) {
+                controls0.css('display', 'inline');
+                controls1.css('display', 'none');
             }
         }
 
         function drawMementos(payload) {
+            mementos = payload;
+
             nodeCanvas.remove();
             legend.remove();
             svg.css('display', 'none');
@@ -669,31 +743,53 @@ var drawing = drawing || {};
 
             drawMementos.visible = true;
 
-            if (back && controls) {
-                back.css('display', 'inline');
-                controls.css('display', 'none');
+            if (controls0 && controls1) {
+                controls0.css('display', 'none');
+                controls1.css('display', 'inline');
+            }
+        }
+
+        function orderMementos(orderBy, descending) {
+            if (mementos) {
+                if (orderBy == 'urir') {
+                    mementos = _.sortBy(mementos, 'urir');
+                } else if (orderBy == 'urim') {
+                    mementos = _.sortBy(mementos, 'urim');
+                } else {
+                    mementos = _.sortBy(mementos, 'datei');
+                }
+
+                if (descending) {
+                    mementos.reverse();
+                }
+
+                htmlTable.draw(mementos);
             }
         }
 
         var svg = s;
         var group = g;
 
-        var back = null;
-        var controls = null;
+        var controls0 = null;
+        var controls1 = null;
+
         var tagNodes = null;
         var tagLegendMarks = null;
         var domainNodes = null;
         var domainLegendMarks = null;
+        var dateNodes = null;
+        var dateLegendMarks = null;
+
+        var mementos = null;
 
         var active = 'tags';
 
-        var font = 'sans-serif';
-        var fontSize = 30;
-        var smallFontSize = 23;
+        var defaultFont = 'sans-serif';
+        var defaultFontSize = 25;
         var mementoPadding = 5;
         var defaultTextStyle = {
-            'font-family': font,
-            'font-size': fontSize + 'px',
+            'font-family': defaultFont,
+            'font-size': defaultFontSize + 'px',
             'font-weight': 'bold',
             'fill': 'slateblue',
             'stroke': 'black',
@@ -702,18 +798,25 @@ var drawing = drawing || {};
 
         var colorScale = d3.scale.category20();
         var nodeCanvas = new drawing.TextNodes(g, w, h);
-        var htmlTable = new drawing.HtmlTable(div);
+        var htmlTable = new drawing.HtmlTable(div, h, w);
         var legend = new drawing.Legend(s);
 
         var that = this;
 
         var controlsHtml = "<span>\
-<span id='group-buttons'>\
-<input class='group-by category' type='radio' name='group-by' value='tags' checked='checked' /> tags\
-<input class='group-by category' type='radio' name='group-by' value='domains' /> domains\
-<input class='group-by filter' type='text' value='' />\
+<span id='controls0'>\
+Cluster Mementos By: \
+<input class='controls0 category' type='radio' name='group-by' value='tags' checked='checked' /> tags\
+<input class='controls0 category' type='radio' name='group-by' value='dates' /> date\
+<input class='controls0 category' type='radio' name='group-by' value='domains' /> domains <span id='search-text'>Search:</span> \
+<input class='controls0 filter' type='text' value='' />\
 </span>\
-<input id='back-button' type='submit' value='Back' />\
+<span id='controls1'>\
+<input id='back-button' class='controls1' type='submit' value='Back' /> order by: \
+<input class='controls1 order-by' type='radio' name='order-by' value='date' checked='checked' /> date\
+<input class='controls1 order-by' type='radio' name='order-by' value='urir' /> urir\
+<input class='controls1 order-by' type='radio' name='order-by' value='urim' /> urim\
+<input id='desc-checkbox' class='controls1' type='checkbox' name='descending' /> descending\
 </span>";
     };
 }(window.drawing.predefined = window.drawing.predefined || {}, 
