@@ -240,8 +240,8 @@ var drawing = drawing || {};
                 for (j = 0; j < n; ++j) {
                     if (j != i && 
                         !connected[i][j] &&
-                        //nodes[i].group != 1 && // TODO: figure out what to do with these
-                        //nodes[i].group != 2 && // TODO: figure out what to do with these
+                        nodes[i].group != 1 && // TODO: figure out what to do with these
+                        nodes[i].group != 2 && // TODO: figure out what to do with these
                         nodes[i].group == nodes[j].group) {
                         connected[i][j] = true;
                         connected[j][i] = true;
