@@ -577,6 +577,11 @@ var drawing = drawing || {};
             })
             .css('margin-bottom', '10px');
 
+            $('.controls0.submit-search').on('click', function() {
+                nodeCanvas.filterNodesByText($('.controls0.filter').val());
+            })
+            .css('margin-left', '15px');
+
             $('#back-button').on('click', function() { draw(); })
                 .css('margin-bottom', '5px')
                 .css('margin-right', '15px');
@@ -810,6 +815,7 @@ Cluster Mementos By: \
 <input class='controls0 category' type='radio' name='group-by' value='dates' /> date\
 <input class='controls0 category' type='radio' name='group-by' value='domains' /> domains <span id='search-text'>Search:</span> \
 <input class='controls0 filter' type='text' value='' />\
+<input class='controls0 submit-search' type='submit' value='search' />\
 </span>\
 <span id='controls1'>\
 <input id='back-button' class='controls1' type='submit' value='Back' /> order by: \
