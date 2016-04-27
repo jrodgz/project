@@ -1,113 +1,97 @@
 doctype html
-html(lang="eng")
+html(lang='eng')
     head
-        meta(http-equiv="Content-Type" content="text/html; charset=UTF-8")
-        meta(http-equiv="x-ua-compatible", content="ie=edge")
-        title= "cs725-Memento-Archive-Collection-Visualization"
-        meta(name="description", description=description)
-        meta(name="viewport", content="width=device-width, initial-scale=1")
-        link(rel="apple-touch-icon", href="apple-touch-icon.png")
-        link(rel="stylesheet", href="/css/boostrapflat.css",type="text/css")
-        link(rel="stylesheet", href="/css/dashboard.css",type="text/css")
-        link(rel="stylesheet", href="/css/timeline-chart.css",type="text/css")
-        link(rel="stylesheet", href="/css/d3-tip.css",type="text/css")
-        link(rel="stylesheet", href="/css/c3.css",type="text/css")
-        link(rel="stylesheet", href="/css/table.css",type="text/css")
-        script(src='/js/jquery.min.js',type="text/javascript")
-        script(src='/js/bootstrap.min.js',type="text/javascript")
-        script(src='/js/lodash.min.js',type="text/javascript")
-        script(src='/js/serialize.js',type="text/javascript")
-        script(src='/js/d3.min.js',type="text/javascript")
-        script(src='/js/d3plus.full.min.js',type="text/javascript")
-        script(src='/js/d3timeline.js',type="text/javascript")
-        script(src='/js/d3-tip.js',type="text/javascript")
-        script(src='/js/c3.min.js',type="text/javascript")
-        script(src='/js/d3-extended.min.js',type="text/javascript")
-        script(src='/js/preprocess.js',type="text/javascript")
-        script(src='/js/drawing.js',type="text/javascript")
-        script(src='/js/slider.js',type="text/javascript")
-body.application
-    .navbar.navbar-inverse.navbar-fixed-top(role='navigation')
-        ul.nav.nav-tabs(role='tablist')
-            li.active(role='presentation')
-                a(href='#all', aria-controls='home', role='tab', data-toggle='tab') All Tags
-            li(role='presentation')
-                a(href='#tags', aria-controls='profile', role='tab', data-toggle='tab') Tags
-    .container-fluid
-        .tab-content
-            #all.tab-pane.active(role='tabpanel')
-                .row
-                    .col-sm-12
-                        .charts
-                            #box1.chart
-                                .chart-wrapper
-                                    .chart-title
-                                        | Timeline
-                                    #chart1.slide-chart.chart-stage(data-chart-desc='timeline')
-                            #box2.chart
-                                .chart-wrapper
-                                    .chart-title
-                                        | Word Play
-                                    #chart2.slide-chart.chart-stage(data-chart-desc='word spread')
-                            #box3.chart
-                                .chart-wrapper
-                                    .chart-title
-                                        | Tags
-                                    #chart3.slide-chart.chart-stage(data-chart-desc='tag histogram')
-                            #box4.chart
-                                .chart-wrapper
-                                    .chart-title
-                                        | Year Month Tag Domain Tree Map
-                                    #chart4.slide-chart.chart-stage(data-chart-desc='yearMonthTagDomainTreeMap')
-                            #box5.chart
-                                .chart-wrapper
-                                    .chart-title
-                                        | Domain Tag Year Month Tree Map
-                                    #chart5.slide-chart.chart-stage(data-chart-desc='domainTagYearMonthTreeMap')
-                            #box6.chart
-                                .chart-wrapper
-                                    .chart-title
-                                        | Tag Domain Year Month Tree Map
-                                    #chart6.slide-chart.chart-stage(data-chart-desc='yearTagDomainYearMonthTreeMap')
-                            #box7.chart
-                                .chart-wrapper
-                                    .chart-title
-                                        | Memento Connection Graph
-                                    #chart7.slide-chart.chart-stage(data-chart-desc='mementoConnectionGraph')
-                .row
-                    .col-sm-12
-                        .slideshow
-                            span#prev_chart_container.move.left
-                                | ←
-                                span#prev_chart
-                            span#next_chart_container.move.right
-                                span#next_chart
-                                |  →
-                .row
-                    .col-sm-4
-                        .detail-chart-wrapper
-                            .chart-title
-                                | Top 10 Archiving Years
-                            #topTenArchivingYears.top-ten-chart.chart-stage(data-chart-desc='something')
-                    .col-sm-4
-                        .detail-chart-wrapper
-                            .chart-title
-                                | Top 10 Popular Domains
-                            #topTenPopularDomains.top-ten-chart.chart-stage(data-chart-desc='word spread')
-                    .col-sm-4
-                        .detail-chart-wrapper
-                            .chart-title
-                                | Top 10 Common Tags
-                            #topTenPopularKeywords.top-ten-chart.chart-stage(data-chart-desc='word spread')
-            #tags.tab-pane(role='tabpanel')
-                row
-                    .col-sm-12
-                        .chart
-                            #tagTLWrapper.chart-wrapper
-                                .chart-title
-                                    | Tag year breakdown
-                                #tagTL.chart-stage
+        meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+        meta(http-equiv='x-ua-compatible', content='ie=edge')
+        title cs725-Memento-Archive-Collection-Visualization
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        link(rel='apple-touch-icon', href='apple-touch-icon.png')
+        link(rel='stylesheet', href='/css/bootstrap.min.css', type='text/css')
+        link(rel='stylesheet', href='/css/dashboard.css', type='text/css')
+        link(rel='stylesheet', href='/css/timeline-chart.css', type='text/css')
+        link(rel='stylesheet', href='/css/d3-tip.css', type='text/css')
+        link(rel='stylesheet', href='/css/c3.css', type='text/css')
+        link(rel='stylesheet', href='/css/table.css', type='text/css')
+        script(src='/js/jquery.min.js', type='text/javascript')
+        script(src='/js/d3.min.js', type='text/javascript')
+        script(src='/js/c3.min.js', type='text/javascript')
+        script(src='/js/d3plus.full.min.js', type='text/javascript')
+        script(src='/js/lodash.min.js', type='text/javascript')
+        script(src='/js/string.min.js', type='text/javascript')
+        script(src='/js/serialize.js', type='text/javascript')
+        script(src='/js/d3timeline.js', type='text/javascript')
+        script(src='/js/d3-tip.js', type='text/javascript')
+        script(src='/js/preprocess.js', type='text/javascript')
+        script(src='/js/drawing.js', type='text/javascript')
+        script(src='/js/slider.js', type='text/javascript')
+    body.application
+        nav.navbar.navbar-default.navbar-fixed-top(role='navigation')
+            .container-fluid
+                .navbar-header
+                    p.navbar-text Controls
+                    button.btn.btn-default.navbar-btn(type='button') Overview
+                    button.btn.btn-default.navbar-btn(type='button') Tags
+                    button.btn.btn-default.navbar-btn(type='button') Resources
+        .container-fluid
+            .row
+                .col-sm-12
+                    .charts
+                        #box1.chart
+                            .chart-wrapper
+                                .chart-title Timeline
+                                #chart1.slide-chart.chart-stage.timeline-chart(data-chart-desc='timeline')
+                        #box2.chart
+                            .chart-wrapper
+                                .chart-title Word Play
+                                #chart2.slide-chart.chart-stage(data-chart-desc='word spread')
+                        #box3.chart
+                            .chart-wrapper
+                                .chart-title Tags
+                                #chart3.slide-chart.chart-stage(data-chart-desc='tag histogram')
+                        #box4.chart
+                            .chart-wrapper
+                                .chart-title Year Month Tag Domain Tree Map
+                                #chart4.slide-chart.chart-stage(data-chart-desc='yearMonthTagDomainTreeMap')
+                        #box5.chart
+                            .chart-wrapper
+                                .chart-title Domain Tag Year Month Tree Map
+                                #chart5.slide-chart.chart-stage(data-chart-desc='domainTagYearMonthTreeMap')
+                        #box6.chart
+                            .chart-wrapper
+                                .chart-title Tag Domain Year Month Tree Map
+                                #chart6.slide-chart.chart-stage(data-chart-desc='yearTagDomainYearMonthTreeMap')
 
-    script(src='/js/doVis.js')
-    span#ruler(style='visibility: hidden; white-space: nowrap;')
-
+            .row
+                .col-sm-12
+                    .slideshow
+                        span#prev_chart_container.move.left
+                            | ←
+                            span#prev_chart
+                        span#next_chart_container.move.right
+                            span#next_chart
+                            |  →
+            .row
+                .col-sm-4
+                    .detail-chart-wrapper
+                        .chart-title Top 10 Archiving Years
+                        #topTenArchivingYears.top-ten-chart.chart-stage(data-chart-desc='something')
+                .col-sm-4
+                    .detail-chart-wrapper
+                        .chart-title Top 10 Popular Domains
+                        #topTenPopularDomains.top-ten-chart.chart-stage(data-chart-desc='word spread')
+                .col-sm-4
+                    .detail-chart-wrapper
+                        .chart-title Top 10 Common Tags
+                        #topTenPopularKeywords.top-ten-chart.chart-stage(data-chart-desc='word spread')
+            .row
+                .col-sm-8
+                    .detail-chart-wrapper
+                        .chart-title Number of Mementos to number of SAME URI-R
+                        #numMtoNumOlap.top-ten-chart.chart-stage(data-chart-desc='something')
+                .col-sm-8
+                    .detail-chart-wrapper
+                        .chart-title Number of Mementos to Time Spanned
+                        #numMtoTimeSpanned.top-ten-chart.chart-stage.timeline-chart(data-chart-desc='word spread')
+        span#ruler(style='visibility: hidden; white-space: nowrap;')
+        script(src='/js/bootstrap.min.js', type='text/javascript')
+        script(src='/js/doVis.js')

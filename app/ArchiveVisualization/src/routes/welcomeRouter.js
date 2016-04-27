@@ -24,18 +24,28 @@ welcomeRouter.post('/', (req, res, next)=> {
    
    sp.loadSheet(d => {
       storage.setItem('data',JSON.stringify(d));
-      res.render('vis', {
-         pretty: true
-      });
-      console.log("Done")
+      res.redirect('/vis');
+      // res.render('vis', {
+      //    pretty: true
+      // });
+      console.log("Done");
    });
 
    console.log(url);
 });
 
+welcomeRouter.get('/vis', (req, res, next) => {
+   console.log("Got the get vis");
+   res.render('vis', {
+      pretty: true
+   });
+});
 
 welcomeRouter.get('/data',(req, res, next)=> {
    console.log("got data");
    res.json(JSON.parse(storage.getItem('data')));
 });
+
+
+
 module.exports = welcomeRouter;

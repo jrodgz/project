@@ -2,10 +2,11 @@ function listenForClicks() {
     // by default, chart1 is shown
     var currentChart = 1;
     var numberOfChartsOnPage = $('.chart').length;
+    console.log(numberOfChartsOnPage);
     updatenavigationTextForArrows(currentChart);
 
     $('.right').click(function () {
-        if (currentChart < numberOfChartsOnPage) {
+        if (currentChart <= numberOfChartsOnPage) {
             $("#box" + currentChart).hide(function () {
                 currentChart++;
                 updatenavigationTextForArrows(currentChart);

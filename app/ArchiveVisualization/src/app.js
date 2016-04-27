@@ -8,6 +8,7 @@ import logger from 'morgan';
 
 var welcomePage = require('./routes/welcomeRouter');
 
+
 const app = global.app = express();
 
 app.set('views', path.join(__dirname, 'views'));

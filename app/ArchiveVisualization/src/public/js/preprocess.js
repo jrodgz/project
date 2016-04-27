@@ -28,7 +28,7 @@ var preprocess = window.preprocess || {};
                     var payload = {
                         urim: memento.original,
                         urir: domain,
-                        date: memento.dateString,
+                        date: memento.sdateString,
                         datei: memento.datei
                     };
 
@@ -38,11 +38,11 @@ var preprocess = window.preprocess || {};
 
                     domains[domain].push(payload);
 
-                    if (dates[memento.dateString] == null) {
-                        dates[memento.dateString] = [];
+                    if (dates[memento.sdateString] == null) {
+                        dates[memento.sdateString] = [];
                     }
 
-                    dates[memento.dateString].push(payload);
+                    dates[memento.sdateString].push(payload);
 
                     tm.tags.forEach(function(tag) {
                         var tag = tag.replace(/[^a-zA-Z0-9]/g, '');

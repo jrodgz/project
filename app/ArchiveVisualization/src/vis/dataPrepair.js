@@ -127,7 +127,7 @@ class dataPrepair {
                .flatMap(ym =>
                   _.flatMap(_.keys(ym), mnth => {
                         return _.chain(ym[mnth])
-                           .groupBy(k => k.domain)
+                           .groupBy(k => k.domainWithSuffix )
                            .toPairs()
                            .map(dm => {
                               return {
@@ -165,7 +165,7 @@ class dataPrepair {
                                  year: dm[1][0].year,
                                  month: dm[0],
                                  tag: dm[1][0].tag,
-                                 domain: dm[1][0].domain,
+                                 domain: dm[1][0].domainWithSuffix ,
                                  num: dm[1].length,
                                  dates: compiled({dates: _.map(dm[1], j => j.moment.format("h:mm:ss a"))})
                               }
@@ -195,7 +195,7 @@ class dataPrepair {
                                  year: dm[1][0].year,
                                  month: dm[0],
                                  tag: dm[1][0].tag,
-                                 domain: dm[1][0].domain,
+                                 domain: dm[1][0].domainWithSuffix ,
                                  num: dm[1].length,
                                  dates: compiled({dates: _.map(dm[1], j => j.moment.format("h:mm:ss a"))})
                               }
@@ -208,16 +208,16 @@ class dataPrepair {
 
    _makeDataForTagDomainYearMonthDayGraph(){
       var tagDateDomain = _.chain(this.data)
-         .flatMap(tm => tm.tagDateDomain).value();
+         .flatMap(tm => tm.getFullTag()).value();
 
       var g = new jsnx.DiGraph();
      
       var nodes = _.chain(tagDateDomain)
-         .flatMap(tm => [{ id: tm.domainWithSuffix},{ id: tm.tag},{ id: tm.dateTimeString()}])
-         .uniqBy('id')
+         .flatMap(tm => [{ name: tm.domainWithSuffix},{ name: tm.tag},{ name: tm.dateTimeString()}])
+         .uniqBy('name')
          .value();
 
-      nodes.forEach(n => g.addNode(n.id));
+      nodes.forEach(n => g.addNode(n.name));
 
       var ttdp = _.chain(tagDateDomain)
          .groupBy(m => m.tag)
@@ -258,13 +258,13 @@ class dataPrepair {
          var out =g.outDegree(n);
          var iin =g.inDegree(n);
          sizedNodes[n] =  {
-            size: out + iin,
+            size: 1,
             out: out,
             iin: iin
          }
       });
       nodes.forEach(n => {
-         n.size = sizedNodes[n.id].size;
+         n.howBig = sizedNodes[n.id].size;
          n.connectionsOut = sizedNodes[n.id].out;
          n.connectionsIn = sizedNodes[n.id].iin;
       });
@@ -272,9 +272,79 @@ class dataPrepair {
       return  {nodes: nodes, edges: edges};
    }
 
+   getTagSharing(){
+      let c = 0;
+      var shared = _.map(this.data, tmm => {
+         var cc = c++;
+         return {tm: tmm, num: cc};
+      });
+      let len = shared.length;
+      let keep = [];
+      for (var i = 0; i < len; ++i) {
+         // console.log(i);
+         var cur = shared[i];
+         var others = _.filter(shared, o => (o.num != cur.num && cur.tm.shareTags(o.tm.tset)));
+         var sinfo = [];
+         if (others.length > 0) {
+            others.forEach(o => sinfo.push(cur.tm.getSharedInfo(o.tm,cur.num,o.num)));
+            sinfo = _.uniqWith(sinfo, (oo,o) =>{
+               return oo.to == o.from && o.to == oo.from;
+            });
+            keep.push(sinfo);
+         } 
+
+      }
+
+      keep = _.chain(keep)
+         .flatMap(kk => kk)
+         .groupBy(kk => kk.sharedTags)
+         .mapValues(ar =>{
+            if(ar.length > 1){
+               return _.chain(ar)
+                  .flatMap(v => _.map(v.sameYMDTagDomain,vv => {
+                     return {
+                        date: vv[0],
+                        dateShare: vv[1]
+                     };
+                  }))
+                  .groupBy(it => it.date)
+                  .mapValues(vv =>_.chain(vv)
+                     .flatMap(vvv => vvv.dateShare)
+                     .map(it => {
+                        return {
+                           domain: it[0],
+                           time: it[1]
+                        };
+                     })
+                     .groupBy(it => it.domain)
+                     .mapValues(vv => {
+                        return _.chain(vv)
+                           .flatMap(vvv => vvv.time)
+                           .uniqWith((a,b) => {
+                              if(a.one && b.one)
+                                 return a.urir == b.urir;
+                              return true;
+                           }).value();
+                     })
+                     .toPairs()
+                     .value()
+                  )
+                  .toPairs()
+
+                  .value();
+            }
+            return [ar[0].sharedTags,ar[0]. sameYMDTagDomain];
+         }).toPairs()
+         .filter(it => it[0] != 'Rememberence')
+         .value();
+      return keep;
+   }
+
    makeDataForVis(cb) {
       console.log("In dataPrepair doing the things");
       let out = {};
+      out.timeDateWithOverlap = _.map(this.data,tm => tm.getMementoTimeData());
+      out.tagSharing = _.map(this.data,tm => tm.getMementoTimeData());
       out.timeline = this._makeDataForTimeLine();
       out.topTenArchingYears = this._makeDataForTopTenArchivingYears();
       console.log("Got top ten archiving years");
@@ -287,7 +357,6 @@ class dataPrepair {
       out.yMTDTree = this._makeDataForYearMonthTagDomainTree();
       out.domainTYMTree = this._makeDataForDomainTagYearMonthTree();
       out.tagDomainYearMonthTree = this._makeDataForDomainTagYearMonthTree();
-      out.tagDomainYearMonthDatGraph = this._makeDataForTagDomainYearMonthDayGraph();
 
       out.parsedData = _.map(this.data,tm => tm.getSerializableData());
       console.log("Got year month tag domain tree");

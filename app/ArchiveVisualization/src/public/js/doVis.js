@@ -104,16 +104,15 @@ function timeGraph(where, data) {
    var visualization = d3plus.viz()
       .container(where)
       .type("network")
-      .data(data.nodes)//{value:nodes, overlap: 0.5})
-      // .nodes({overlap: 0.5})
-      .edges( data.edges)
-      // .size("size")
-      .id("id")
-      // .tooltip(["connectionsd", "connectionsIn"])
-      // .descs({
-      //    "connectionsd": "How many Tags/Domains/Dates this node points to",
-      //    "connectionsIn": "How many Tags/Domains/Dates point to this node"
-      // })
+      .data(data.nodes)
+      .edges(data.edges)
+      .size("howBig")
+      .id("name")
+      .tooltip(["connectionsOut", "connectionsIn"])
+      .descs({
+         "connectionsOut": "How many Tags/Domains/Dates this node points to",
+         "connectionsIn": "How many Tags/Domains/Dates point to this node"
+      })
       .resize(true)
       .draw();
 }
@@ -145,8 +144,8 @@ function tagDomainYearMonthDatGraph(where,data) {
       .type("network")
       .data(data.nodes)
       .nodes({overlap: 0.5})
-      .edges({value: data.edges, arrows: 2})
-      // .size("size")
+      .edges(data.edges)
+      .size("size")
       .id("id")
       .tooltip(["connectionsOut", "connectionsIn"])
       .descs({
@@ -212,13 +211,42 @@ function createTimeLine(where, tldata) {
 
 }
 
+function createTimeLineOL(where, tldata) {
+   var tl = new TimelineChart(where, tldata, {
+      tip: function (d) {
+         return d.urim + '<br>' +d.at || d.tip +'<br>' +d.from + '<br>' + d.to;
+      },
+      ttip: function (d) {
+         let dit = S(d.label);
+         if (dit.contains(',')) {
+            return "Tags: " + dit.replaceAll(',', ',<br>').s;
+         } else {
+            return "Tags: " + d.s;
+         }
+      }
+   });
+
+}
+
+function numMtoOlap(where,data) {
+   var visualization = d3plus.viz()
+      .container(where)  // container DIV to hold the visualization
+      .data(data)  // data to use with the visualization
+      .type("scatter")    // visualization type
+      .id("tag")         // key for which our data is unique on
+      .x("nol")         // key for x-axis
+      .y("nm")        // key for y-axis
+      .draw();
+
+}
+
 // d.domainTYMTree ;
 // d.tagDomainYearMonthTree ;
 // d.tagDomainYearMonthDatGraph ;
 
 $.getJSON("/data",function(d) {
    console.log(d);
-
+   var otl = [];
    d.timeline.forEach(function (i) {
       i.data.forEach(function (ii) {
          ii.at = new Date(ii.at);
@@ -226,7 +254,31 @@ $.getJSON("/data",function(d) {
       });
    });
 
-   createTimeLine('#chart1',d.timeline );
+
+   var numMToOverlap = [];
+   d.timeDateWithOverlap.forEach(function (i) {
+      var id = {label: i.tagString, data:[]};
+      if(i.hasOverlap){
+         numMToOverlap.push({
+            tag: i.tagString,
+            nm: i.numberOfMementos,
+            nol: i.overlapData.length,
+         });
+
+         i.overlapData.forEach(function (ii) {
+            id.data.push( {
+               type:  TimelineChart.TYPE.INTERVAL,
+               from: new Date(ii.fd),
+               to: new Date(ii.ld),
+               tip: ii.fullOut,
+            });
+         });
+         otl.push(id);
+      }
+
+   });
+
+   createTimeLine('#chart1',d.timeline);
    createTopTenArchivingYears('#topTenArchivingYears', d.topTenArchingYears );
    console.log("Got top ten archiving years");
    createTopTenKeywords('#topTenPopularKeywords', d.topTenKeyWords);
@@ -239,7 +291,11 @@ $.getJSON("/data",function(d) {
    yearMonthTagDomainTree('#chart4',d.yMTDTree );
    domainTagYearMonthTree('#chart5',d.domainTYMTree);
    yearTagDomainYearMonthTree('#chart6',d.tagDomainYearMonthTree);
-   timeGraph('#chart7',d.tagDomainYearMonthDatGraph);
+   createTimeLineOL('#mtimeolap',otl);
+   numMtoOlap("#numMtoNumOlap",numMToOverlap );
+   // #numMtoTimeSpanned
+   //  #numMtoNumOlap
+
    listenForClicks();
   
 

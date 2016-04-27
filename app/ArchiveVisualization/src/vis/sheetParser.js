@@ -6,7 +6,8 @@ import TaggedMemmentos from './TaggedMemmentos';
 import request from "request";
 import _ from 'lodash';
 import S from 'string';
-import dataPrepair from './dataPrepair'
+import dataPrepair from './dataPrepair';
+import fs from 'fs';
 
 
 class sheetParser {
@@ -31,6 +32,7 @@ class sheetParser {
          request(this._url,(error,response,body) => {
             if(error)
                alert("error loading sheet",error);
+            fs.writeFile('sheet.json',JSON.stringify(JSON.parse(body)), err => console.log(err));
             this.parseSheet(JSON.parse(body),cb);
          });
       }
@@ -43,12 +45,13 @@ class sheetParser {
          .toPairs()
          .map(p => {
             var t = new Set(p[0].split(',').map(s => S(s).trim().s));
+            var ft = p[0];
             var d = {
                tags: t,
                tagString: p[0],
                mementos: _.map(p[1], e => {
                      var m = new Memento(this.linkExtractor.exec(e['gsx$uri-m'].$t.trim()), e['gsx$uri-m'].$t.trim());
-                     m.addTags(t);
+                     m.addTags(t,ft);
                      return m;
                   }
                )
@@ -56,6 +59,7 @@ class sheetParser {
             return new TaggedMemmentos(d)
          })
          .value();
+      // cb(parsed);
       console.log("Prepairing Data");
       // let pWorker = new Promise((resolve,reject)=>{
       //    resolve(new dataPrepair(parsed))

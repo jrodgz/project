@@ -180,7 +180,7 @@ var drawing = drawing || {};
         this.draw = function(dataset) {
             if (table) {
                 table.remove();
-            };
+            }
 
             group.style('display', 'block');
 
@@ -214,13 +214,13 @@ var drawing = drawing || {};
                 table.remove();
                 group.style('display', 'none');
             }
-        }
+        };
 
         var table = null;
         var group = g.append('div')
-            .css('width', width + 'px')
-            .css('height', (height - 25) + 'px')
-            .css('white-space', 'nowrap');
+            .style('width', width + 'px')
+            .style('height', (height - 25) + 'px')
+            .style('white-space', 'nowrap');
     };
     
     // A node link diagram with inter-connected nodes.
@@ -379,7 +379,7 @@ var drawing = drawing || {};
                     if (nLinks == 2) {
                         return 50;
                     } else if (nLinks < 10) {
-                        return 75
+                        return 75;
                     } else if (nLinks < 20) {
                         return 100;
                     } else {
@@ -401,8 +401,8 @@ var drawing = drawing || {};
                             o.x += fi;
                         });
                         
-                        node.attr('x', function(d) { return d.x - d.offset; })
-                        node.attr('y', function(d) { return d.y; })
+                        node.attr('x', function(d) { return d.x - d.offset; });
+                        node.attr('y', function(d) { return d.y; });
                     }
                     if (link)
                     {
@@ -607,7 +607,7 @@ var drawing = drawing || {};
                 tagNodes = [];
                 var tags = preprocess.getTags();
                 var counts = [];
-                for (key in tags) {
+                for (var key in tags) {
                     tagNodes.push({
                         text: key,
                         style: defaultTextStyle,
@@ -706,7 +706,7 @@ var drawing = drawing || {};
         // remember: nodeCanvas.drawLinks();
         function draw() {
             htmlTable.remove();
-            svg.css('display', 'block');
+            svg.style('display', 'block');
 
             if (group.resetPanZoom) {
                 group.resetPanZoom();
@@ -738,7 +738,7 @@ var drawing = drawing || {};
 
             nodeCanvas.remove();
             legend.remove();
-            svg.css('display', 'none');
+            svg.style('display', 'none');
 
             if (group.resetPanZoom) {
                 group.resetPanZoom();

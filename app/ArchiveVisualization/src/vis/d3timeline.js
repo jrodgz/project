@@ -9,9 +9,7 @@ import S from 'string';
 export default class TimelineChart {
    constructor(element, data, opts) {
       let self = this;
-      d3.select(element).clear();
-      d3.select(element).addClass('timeline-chart');
-
+      
       let options = this.extendOptions(opts);
 
 
