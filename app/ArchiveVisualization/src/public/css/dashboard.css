@@ -78,7 +78,31 @@ body.application .return-link:hover,
     overflow: hidden;
 }
 
+.charts2 {
+    margin: 0px;
+    padding: 0px;
+    height: 750px;
+    overflow: hidden;
+}
+
+.charts3 {
+    margin: 0px;
+    padding: 0px;
+    height: 750px;
+    overflow: hidden;
+}
+
 .slide-chart {
+    height: 700px;
+    width: 99%;
+}
+
+.slide-chart2 {
+    height: 700px;
+    width: 99%;
+}
+
+.slide-chart3 {
     height: 700px;
     width: 99%;
 }
@@ -109,6 +133,19 @@ body.application .return-link:hover,
     margin: 20px 100px 25px 100px;
     height: 30px;
 }
+
+.slideshow2 {
+    background: #f2f2f2;
+    margin: 20px 100px 25px 100px;
+    height: 30px;
+}
+
+.slideshow3 {
+    background: #f2f2f2;
+    margin: 20px 100px 25px 100px;
+    height: 30px;
+}
+
 
 .chart-wrapper .chart-title {
     border-bottom: 1px solid #d7d7d7;
@@ -159,3 +196,42 @@ body.application .return-link:hover,
     cursor:pointer;
 }
 
+.move2 {
+    text-align:center;
+    background:#fff;
+    color: #000;
+    border: 1px solid #e2e2e2;
+    border: 1px solid #e2e2e2;
+    border-radius: 3px;
+    padding: 7px;
+}
+
+.left2 {
+    float:left;
+    cursor:pointer;
+}
+
+.right2 {
+    float: right;
+    cursor:pointer;
+}
+
+.move3 {
+    text-align:center;
+    background:#fff;
+    color: #000;
+    border: 1px solid #e2e2e2;
+    border: 1px solid #e2e2e2;
+    border-radius: 3px;
+    padding: 7px;
+}
+
+.left3 {
+    float:left;
+    cursor:pointer;
+}
+
+.right3 {
+    float: right;
+    cursor:pointer;
+}

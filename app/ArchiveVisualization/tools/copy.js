@@ -33,8 +33,11 @@ async function copy({ watch } = {}) {
   fs.createReadStream('node_modules/d3-extended/d3-extended.min.js').pipe(fs.createWriteStream('build/public/js/d3-extended.min.js'));
   fs.createReadStream('node_modules/d3-tip/index.js').pipe(fs.createWriteStream('build/public/js/d3-tip.js'));
   fs.createReadStream('node_modules/d3plus/d3plus.full.min.js').pipe(fs.createWriteStream('build/public/js/d3plus.full.min.js'));
+  fs.createReadStream('node_modules/d3plus/d3plus.full.min.js').pipe(fs.createWriteStream('build/public/js/d3plus.full.min.js'));
   fs.createReadStream('node_modules/lodash/lodash.min.js').pipe(fs.createWriteStream('build/public/js/lodash.min.js'));
- 
+  fs.createReadStream('node_modules/string/dist/string.min.js').pipe(fs.createWriteStream('build/public/js/string.min.js'));
+  fs.createReadStream('node_modules/dagre-d3/dist/dagre-d3.min.js').pipe(fs.createWriteStream('build/public/js/dagre-d3.min.js'));
+
 
 
 

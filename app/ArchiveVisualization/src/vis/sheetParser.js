@@ -56,18 +56,12 @@ class sheetParser {
                   }
                )
             };
-            return new TaggedMemmentos(d)
+            return new TaggedMemmentos(d,ft)
          })
          .value();
       // cb(parsed);
-      console.log("Prepairing Data");
-      // let pWorker = new Promise((resolve,reject)=>{
-      //    resolve(new dataPrepair(parsed))
-      // });
-      // pWorker.then(val => {
-      //    console.log("We are in then",val);
-      //    val.makeDataForVis(cb);
-      // }).catch(reason => console.log(reason));
+      // console.log("Prepairing Data");
+
       let dprepair = new dataPrepair(parsed);
       dprepair.makeDataForVis(cb);
    }

@@ -5,6 +5,7 @@ import _ from 'lodash';
 import TimelineChart from './d3timeline';
 import S from 'string';
 import serialize from 'node-serialize';
+import sameTagDomainTimeData from './utils';
 
 var jsnx = require('jsnetworkx');
 
@@ -205,6 +206,38 @@ class dataPrepair {
       return it;
    }
 
+   _makeDataForCircles(){
+      let tagSet = { tagedMs: [],tags:[]};
+      this.data.forEach(tmm => {
+         tagSet.tags.push(tmm.fullTagS);
+         let tagDateDomain= tmm.getFullTag();
+         var nodes = [];
+         var edges = [];
+         var grouped = _.chain(tagDateDomain).groupBy(it => it.fulluriout).toPairs().value();
+         nodes.push({name:tmm.fullTagS});
+         
+         grouped.forEach(g => {
+            edges.push({source:tmm.fullTagS,target:g[0],strength:g[0].length});
+            g[1].forEach(gg => {
+               nodes.push({name:gg.fulluriout});
+               edges.push({source:g[0],target:gg.fulluriout});
+               nodes.push({name:gg.dateTimeString()});
+               edges.push({source:gg.fulluriout,target:gg.dateTimeString()});
+            });
+         });
+
+        
+         let kl2 = _.countBy(edges,e => {
+            return e.source+e.target;
+         });
+         
+         edges.forEach(e => {
+            e.strength = kl2[e.source+e.target];
+         });
+         tagSet.tagedMs.push({nodes: nodes, edges: edges,focus: tmm.fullTagS});
+      });
+      return tagSet;
+   }
 
    _makeDataForTagDomainYearMonthDayGraph(){
       var tagDateDomain = _.chain(this.data)
@@ -258,93 +291,157 @@ class dataPrepair {
          var out =g.outDegree(n);
          var iin =g.inDegree(n);
          sizedNodes[n] =  {
-            size: 1,
+            size: out + iin,
             out: out,
             iin: iin
          }
       });
       nodes.forEach(n => {
-         n.howBig = sizedNodes[n.id].size;
-         n.connectionsOut = sizedNodes[n.id].out;
-         n.connectionsIn = sizedNodes[n.id].iin;
+         n.howBig = sizedNodes[n.name].size;
+         n.connectionsOut = sizedNodes[n.name].out;
+         n.connectionsIn = sizedNodes[n.name].iin;
       });
 
-      return  {nodes: nodes, edges: edges};
+      let max = _.maxBy(nodes,n => n.connectionsOut);
+      return  {nodes: nodes, edges: edges,focus: max};
    }
 
-   getTagSharing(){
-      let c = 0;
-      var shared = _.map(this.data, tmm => {
-         var cc = c++;
-         return {tm: tmm, num: cc};
-      });
-      let len = shared.length;
-      let keep = [];
-      for (var i = 0; i < len; ++i) {
-         // console.log(i);
-         var cur = shared[i];
-         var others = _.filter(shared, o => (o.num != cur.num && cur.tm.shareTags(o.tm.tset)));
-         var sinfo = [];
-         if (others.length > 0) {
-            others.forEach(o => sinfo.push(cur.tm.getSharedInfo(o.tm,cur.num,o.num)));
-            sinfo = _.uniqWith(sinfo, (oo,o) =>{
-               return oo.to == o.from && o.to == oo.from;
+   getTagOlapGraph(){
+      let tagSet = { tagedMs: []};
+      this.data.forEach(tmm => {
+         let olap = tmm.getMementoOverlapData();
+         var ns = new Set();
+
+         var edges = [];
+         if(olap.haveOlap){
+            
+            olap.olapMs.forEach(olm => {
+
+               ns.add(olm.domain);
+               ns.add(olm.burir);
+               ns.add(olm.fullOut);
+               edges.push({source:tmm.fullTagS,target:olm.fullOut});
+               edges.push({source:olm.fullOut,target:olm.domain});
+               edges.push({source:olm.domain,target:olm.burir});
             });
-            keep.push(sinfo);
-         } 
+            let kl2 = _.countBy(edges,e => {
+               return e.source+e.target;
+            });
 
-      }
+            edges.forEach(e => {
+               e.strength = kl2[e.source+e.target];
+            });
+            var nodes = _.map(Array.from(ns),ooo => {
+               return {name: ooo};
+            });
+            nodes.push({name:tmm.fullTagS});
+            tagSet.tagedMs.push({nodes: nodes, edges: edges,focus: tmm.fullTagS});
+         }
 
-      keep = _.chain(keep)
-         .flatMap(kk => kk)
-         .groupBy(kk => kk.sharedTags)
-         .mapValues(ar =>{
-            if(ar.length > 1){
-               return _.chain(ar)
-                  .flatMap(v => _.map(v.sameYMDTagDomain,vv => {
-                     return {
-                        date: vv[0],
-                        dateShare: vv[1]
-                     };
-                  }))
-                  .groupBy(it => it.date)
-                  .mapValues(vv =>_.chain(vv)
-                     .flatMap(vvv => vvv.dateShare)
-                     .map(it => {
-                        return {
-                           domain: it[0],
-                           time: it[1]
-                        };
-                     })
-                     .groupBy(it => it.domain)
-                     .mapValues(vv => {
-                        return _.chain(vv)
-                           .flatMap(vvv => vvv.time)
-                           .uniqWith((a,b) => {
-                              if(a.one && b.one)
-                                 return a.urir == b.urir;
-                              return true;
-                           }).value();
-                     })
-                     .toPairs()
-                     .value()
-                  )
-                  .toPairs()
+         // var grouped = _.chain(tagDateDomain).groupBy(it => it.purled.hostname).toPairs().value();
+         // nodes.push({name:tmm.fullTagS});
+         //
+         // grouped.forEach(g => {
+         //    edges.push({source:tmm.fullTagS,target:g[0],strength:g[0].length});
+         //    var timeDate = _.chain(g[1]).groupBy(gg => gg.dateString()).toPairs().value();
+         //    timeDate.forEach(gg => {
+         //       if(gg[1].length > 1){
+         //          nodes.push({name:gg[0]});
+         //          let len = gg[1].length;
+         //          for(var i = 0; i < len; ++i){
+         //             if(i+1 < len){
+         //                var olap =sameTagDomainTimeData(gg[1][i],gg[1][i+1],false);
+         //             }
+         //          }
+         //       }
+         //
+         //       edges.push({source:g[0],target:gg.fulluriout});
+         //       nodes.push({name:gg.dateTimeString()});
+         //       edges.push({source:gg.fulluriout,target:gg.dateTimeString()});
+         //    });
+         // });
 
-                  .value();
-            }
-            return [ar[0].sharedTags,ar[0]. sameYMDTagDomain];
-         }).toPairs()
-         .filter(it => it[0] != 'Rememberence')
-         .value();
-      return keep;
+
+
+      });
+      return tagSet;
+      // let c = 0;
+      // var shared = _.map(this.data, tmm => {
+      //    var cc = c++;
+      //    return {tm: tmm, num: cc};
+      // });
+      // let len = shared.length;
+      // let keep = [];
+      // for (var i = 0; i < len; ++i) {
+      //    // console.log(i);
+      //    var cur = shared[i];
+      //    var others = _.filter(shared, o => (o.num != cur.num && cur.tm.shareTags(o.tm.tset)));
+      //    var sinfo = [];
+      //    if (others.length > 0) {
+      //       others.forEach(o => sinfo.push(cur.tm.getSharedInfo(o.tm,cur.num,o.num)));
+      //       sinfo = _.uniqWith(sinfo, (oo,o) =>{
+      //          return oo.to == o.from && o.to == oo.from;
+      //       });
+      //       keep.push(sinfo);
+      //    } 
+      //
+      // }
+      //
+      // keep = _.chain(keep)
+      //    .flatMap(kk => kk)
+      //    .groupBy(kk => kk.sharedTags)
+      //    .mapValues(ar =>{
+      //       if(ar.length > 1){
+      //          return _.chain(ar)
+      //             .flatMap(v => _.map(v.sameYMDTagDomain,vv => {
+      //                return {
+      //                   date: vv[0],
+      //                   dateShare: vv[1]
+      //                };
+      //             }))
+      //             .groupBy(it => it.date)
+      //             .mapValues(vv =>_.chain(vv)
+      //                .flatMap(vvv => vvv.dateShare)
+      //                .map(it => {
+      //                   return {
+      //                      domain: it[0],
+      //                      time: it[1]
+      //                   };
+      //                })
+      //                .groupBy(it => it.domain)
+      //                .mapValues(vv => {
+      //                   return _.chain(vv)
+      //                      .flatMap(vvv => vvv.time)
+      //                      .uniqWith((a,b) => {
+      //                         if(a.one && b.one)
+      //                            return a.urir == b.urir;
+      //                         return true;
+      //                      }).value();
+      //                })
+      //                .toPairs()
+      //                .value()
+      //             )
+      //             .toPairs()
+      //
+      //             .value();
+      //       }
+      //       return [ar[0].sharedTags,ar[0]. sameYMDTagDomain];
+      //    }).toPairs()
+      //    .filter(it => it[0] != 'Rememberence')
+      //    .value();
+      // return keep;
+      // return 1;
    }
 
    makeDataForVis(cb) {
       console.log("In dataPrepair doing the things");
       let out = {};
       out.timeDateWithOverlap = _.map(this.data,tm => tm.getMementoTimeData());
-      out.tagSharing = _.map(this.data,tm => tm.getMementoTimeData());
+
+      out.tdol = _.chain(out.timeDateWithOverlap).filter(it=>it.hasOverlap).map(it => {
+         return {ts: it.tagString};
+      }).value();
+      out.tagOlapGraph = this.getTagOlapGraph();
       out.timeline = this._makeDataForTimeLine();
       out.topTenArchingYears = this._makeDataForTopTenArchivingYears();
       console.log("Got top ten archiving years");
@@ -357,7 +454,7 @@ class dataPrepair {
       out.yMTDTree = this._makeDataForYearMonthTagDomainTree();
       out.domainTYMTree = this._makeDataForDomainTagYearMonthTree();
       out.tagDomainYearMonthTree = this._makeDataForDomainTagYearMonthTree();
-
+      out.graphData = this._makeDataForCircles();
       out.parsedData = _.map(this.data,tm => tm.getSerializableData());
       console.log("Got year month tag domain tree");
       console.log(out.parsedData);

@@ -3,6 +3,7 @@
 import 'babel-polyfill';
 import tld from 'tldjs';
 import S from 'string';
+import purl from 'purl';
 
 class MementoTag {
    constructor(m, tag) {
@@ -18,6 +19,9 @@ class MementoTag {
          .stripPunctuation().s;
       this.domainWithSuffix = tld.getDomain(m.domain);
       this.fullDom = m.domain;
+      this.fulluri = m.fulluri;
+      this.purled = purl(this.fulluri);
+      this.fulluriout = this.purled.host+this.purled.pathname;
    }
 
    getSerializableData(){

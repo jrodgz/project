@@ -100,22 +100,7 @@ function createHistogramOfTags(where, data) {
    });
 }
 
-function timeGraph(where, data) {
-   var visualization = d3plus.viz()
-      .container(where)
-      .type("network")
-      .data(data.nodes)
-      .edges(data.edges)
-      .size("howBig")
-      .id("name")
-      .tooltip(["connectionsOut", "connectionsIn"])
-      .descs({
-         "connectionsOut": "How many Tags/Domains/Dates this node points to",
-         "connectionsIn": "How many Tags/Domains/Dates point to this node"
-      })
-      .resize(true)
-      .draw();
-}
+
 
 function yearMonthTagDomainTree(where, data) {
    var visualization = d3plus.viz()
@@ -240,13 +225,95 @@ function numMtoOlap(where,data) {
 
 }
 
+
+function timeGraph(data) {
+   var len = data.tagedMs.length;
+   for(var i = 0; i <len; ++i){
+      d3plus.viz()
+         .container("#cchart"+(i+1))
+         .type("rings")
+         .data(data.tagedMs[i].nodes)
+         .id('name')
+         .edges({
+            "size": "strength",
+            "value": data.tagedMs[i].edges
+         })
+         .resize(true)
+         .focus(data.tags[i])
+         .draw();
+   }
+
+}
+
+// var tableData = [];
+// tableData.push({
+//    index: data[i].tagString,
+//    "Number Of Mementos": data[i].numberOfMementos,
+//    "Spans": data[i].spansHuman,
+//    "Time Span": data[i].spans,
+//    "Number of URI-Rs": data[i].urirs.length,
+//    "Has Overlap": data[i].hasOverlap ? "Yes":"No",
+//
+// });
+//
+// d3plus.viz()
+//    .container("#cchartt"+(i+1))
+//    .type("table")
+//    .data(tableData)
+//    .id("index")
+//    .shape("square")
+//    .cols(["Number Of Mementos", "Spans", "Time Span","Number of URI-Rs","Has Overlap"])
+//    .resize(true)
+//    .draw();
+// if(data[i].hasOverlap){
+//    var odata = [
+//
+//    ];
+//    data[i].overlapData.forEach(function (old) {
+//       odata.push({
+//          index: old.urir,
+//          "Overlaps By": old.fullOut,
+//          "Date 1": new Date(old.fd).toString(),
+//          "Date 2": new Date(old.lf).toString()
+//       });
+//    });
+//
+//    d3plus.viz()
+//       .container("#occhartt"+(i+1))
+//       .type("table")
+//       .data(odata)
+//       .id("index")
+//       .shape("square")
+//       .cols(["Overlaps By", "Date 1", "Date 2"])
+//       .resize(true)
+//       .draw();
+function olapGraph(data) {
+   var len = data.tagedMs.length;
+   for(var i = 0; i <len; ++i){
+      d3plus.viz()
+         .container("#cchartt"+(i+1))
+         .type("rings")
+         .data(data.tagedMs[i].nodes)
+         .id('name')
+         .edges({
+            "size": "strength",
+            "value": data.tagedMs[i].edges
+         })
+         .resize(true)
+         .focus(data.tagedMs[i].focus)
+         .draw();
+   }
+
+
+}
+
 // d.domainTYMTree ;
 // d.tagDomainYearMonthTree ;
 // d.tagDomainYearMonthDatGraph ;
 
 $.getJSON("/data",function(d) {
+   
    console.log(d);
-   var otl = [];
    d.timeline.forEach(function (i) {
       i.data.forEach(function (ii) {
          ii.at = new Date(ii.at);
@@ -254,49 +321,30 @@ $.getJSON("/data",function(d) {
       });
    });
 
-
-   var numMToOverlap = [];
-   d.timeDateWithOverlap.forEach(function (i) {
-      var id = {label: i.tagString, data:[]};
-      if(i.hasOverlap){
-         numMToOverlap.push({
-            tag: i.tagString,
-            nm: i.numberOfMementos,
-            nol: i.overlapData.length,
-         });
-
-         i.overlapData.forEach(function (ii) {
-            id.data.push( {
-               type:  TimelineChart.TYPE.INTERVAL,
-               from: new Date(ii.fd),
-               to: new Date(ii.ld),
-               tip: ii.fullOut,
-            });
-         });
-         otl.push(id);
-      }
-
-   });
-
+   olapGraph(d.tagOlapGraph);
    createTimeLine('#chart1',d.timeline);
    createTopTenArchivingYears('#topTenArchivingYears', d.topTenArchingYears );
-   console.log("Got top ten archiving years");
+
    createTopTenKeywords('#topTenPopularKeywords', d.topTenKeyWords);
-   console.log("Got top ten key words");
+
    createTopTenPopularDomains('#topTenPopularDomains', d.topTenDomains);
-   console.log("Got top ten domains");
+
    createHistogramOfTags('#chart3', d.tagHistogram);
-   console.log("Got tag histogram");
+
    createZoomableContainer('#chart2', d.parsedData);
    yearMonthTagDomainTree('#chart4',d.yMTDTree );
    domainTagYearMonthTree('#chart5',d.domainTYMTree);
    yearTagDomainYearMonthTree('#chart6',d.tagDomainYearMonthTree);
-   createTimeLineOL('#mtimeolap',otl);
-   numMtoOlap("#numMtoNumOlap",numMToOverlap );
+
+   timeGraph(d.graphData);
+
+   // numMtoOlap("#numMtoNumOlap",numMToOverlap );
    // #numMtoTimeSpanned
    //  #numMtoNumOlap
 
    listenForClicks();
+   listenForClicks2(d.graphData.tagedMs.length);
+   listenForClicks3();
   
 
 });

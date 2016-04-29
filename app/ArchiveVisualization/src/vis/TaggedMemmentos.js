@@ -9,9 +9,10 @@ import {sameTagDomainTimeData,mgbFullURIFilterShare} from './utils';
 
 
 class TaggedMemmentos {
-   constructor(data) {
+   constructor(data,ft) {
       this.tags = Array.from(data.tags);
       this.tset = data.tags;
+      this.fullTagS = ft;
       this.tagString = data.tagString;
       this.mementos = data.mementos;
       this.mementos.sort((m1, m2)=> m1.compare(m2));

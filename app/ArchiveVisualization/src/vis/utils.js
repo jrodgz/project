@@ -4,6 +4,7 @@ import 'babel-polyfill';
 import tld from 'tldjs';
 import _ from 'lodash';
 import S from 'string';
+import purl from 'purl';
 
 
 export function mgbFullURIFilter(arr) {
@@ -43,17 +44,19 @@ export function mgbFullURIFilterShare(arr) {
 export function overLapData(m1, m2) {
    var twixed, ts, th;
    twixed = m1.doTwix(m2);
-   ts = `: ${twixed.format()}`;
+   ts = `${twixed.format()}`;
    th = twixed.humanizeLength();
    if (th.indexOf('a few seconds') == -1) {
-      ts = "";
+      ts = twixed.simpleFormat("YYYY-MM-DD hmmA");
    }
    return {
-      urir: m1.fulluri,
+      urir1: m1.fulluri,
+      urir2: m2.fulluri,
+      burir: m1.fulluri +" - "+ m1.fulluri,
       domain: m1.domainWithSuffix,
       easyReadLength: th,
       fullLength: ts,
-      fullOut: `have time span between of ${th}${ts}`,
+      fullOut: `have time span between of ${th} ${ts}`,
       fd: m1.jsDate(),
       ld: m2.jsDate()
    };
@@ -67,9 +70,11 @@ export function sameTagDomainTimeData(m1, m2,same) {
    if (th.indexOf('a few seconds') == -1) {
       ts = "";
    }
+   var purled = purl(m1.fullUri);
+   var purled2 = purl(m2.fullUri);
    if(same){
       ret = {
-         urir: m1.fullUri,
+         urir: purled.host+purled.pathname,
          domain: m1.domainWithSuffix,
          easyReadLength: th,
          fullLength: ts,
@@ -81,8 +86,8 @@ export function sameTagDomainTimeData(m1, m2,same) {
       };
    } else {
       ret = {
-         urir1: m1.fullUri,
-         urir2: m2.fullUri,
+         urir1: purled.host+purled.pathname,
+         urir2: purled2.host+purled2.pathname,
          domain: m1.domainWithSuffix,
          easyReadLength: th,
          fullLength: ts,

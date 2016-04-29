@@ -174,7 +174,7 @@ const serverConfig = extend(true, {}, config, {
    node: {
       console: true,
       global: false,
-      process: false,
+      process: true,
       Buffer: false,
       __filename: false,
       __dirname: false,

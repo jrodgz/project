@@ -6,7 +6,8 @@ import storage from 'node-persist';
 
 storage.initSync();
 var welcomeRouter = express.Router();
-
+var tags = null;
+var olap = null;
 welcomeRouter.get('/', (req, res, next) => {
    console.log("Got the welcome page");
    res.render('welcomePage', {
@@ -23,11 +24,10 @@ welcomeRouter.post('/', (req, res, next)=> {
    let sp = new sheetParser(url);
    
    sp.loadSheet(d => {
+      tags = d.graphData.tags;
+      olap  = d.tdol;
       storage.setItem('data',JSON.stringify(d));
       res.redirect('/vis');
-      // res.render('vis', {
-      //    pretty: true
-      // });
       console.log("Done");
    });
 
@@ -37,7 +37,9 @@ welcomeRouter.post('/', (req, res, next)=> {
 welcomeRouter.get('/vis', (req, res, next) => {
    console.log("Got the get vis");
    res.render('vis', {
-      pretty: true
+      pretty: true,
+      "tags": tags,
+      "olap": olap
    });
 });
 
