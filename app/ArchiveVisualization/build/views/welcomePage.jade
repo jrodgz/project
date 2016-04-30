@@ -1,0 +1,23 @@
+doctype html
+html(class="no-js", lang="")
+    head
+        meta(charset="utf-8")
+        meta(http-equiv="x-ua-compatible", content="ie=edge")
+        //title= "cs725-Memento-Archive-Collection-Visualization"
+        title= title
+        meta(name="description", description=description)
+        meta(name="viewport", content="width=device-width, initial-scale=1")
+        meta(http-equiv="Content-Type",content="text/html")
+        link(rel="stylesheet", href="/css/boostrapflat.css",type="text/css")
+    body
+        .container-fluid
+            .page-header
+                h1 #{headConent}
+            form.form-inline(role='form', name='enter-sheet', method='POST', data-toggle='validator')
+                .form-group
+                    label(for='sheet-get') Sheet URL
+                    input#sheet-get.form-control(type='url', pattern='^((([A-Za-z]{3,9}:(?://)?)spreadsheets.google[A-Za-z0-9.-]+|(?:www.spreadsheets.google|[-;:&=+$,w]+@)[A-Za-z0-9.-]+)((?:/[+~%/.w-]*)???(?:[-+=&;%@.w]*)#?(?:[.!/\w]*))?)', name='sheetURL', placeholder='goodle doc url', required='')
+                button.btn.btn-default(type='submit') Load Sheet
+        script(src='/js/jquery.min.js')
+        script(src='/js/bootstrap.min.js')
+
