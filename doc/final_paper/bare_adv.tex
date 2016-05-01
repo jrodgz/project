@@ -94,11 +94,11 @@ To make the boundary between main and complementary contents more clear to the u
 \subsection{Resource specific idioms}
 One of the primary areas of focus, alike most recent work, is time. Knowing when a particular resource was archived, is the first step in identifying differences over a lifetime and drawing conclusions as to how temporal periods affected particular resources. For this reason, Web Archive Visualizer places primary focus on the Timeline view, as seen in Figure \ref{fig:mesh3}. The purpose of this idiom is to let users view keywords associated with archived resources, over time. Aside from the obvious, keyword dominance over time, this chart also allows us to see the levels of activity as the collection years grow. When zoomed out, the scatterplot can outline this trend easily, leading us towards identifying temporal trends and outliers within our collection. \par
 
-Another resource specific idiom presented in our vis is wordplay, as shown in figure \ref{fig:mesh6}. The purpose of this idiom is to outline the keyword clusters and its associations between resources and mementos. Its use is primarily evident when one wants to identify areas that are created by different keywords. Take for example a keyword ``cat''. By using this view, the user can see mementos and resources that are centered around ``cats''. In addition, the view allows us to create a cluster of like words, that are also found within points of interest. In the above example, this would create a closer distance between keywords like ``animals'' and ``cats''. Lastly, if the categorical number of keywords becomes exponentially difficult to manage due to its size, filtering and zooming will create a controlled setting for many prospecive users. \par
+Another resource specific idiom presented in our vis is wordplay, as shown in figure \ref{fig:mesh6}. The purpose of this idiom is to outline the keyword clusters and its associations between resources and mementos. Its use is primarily evident when one wants to identify areas that are created by different keywords. Take for example a keyword ``cat''. By using this view, the user can see mementos and resources that are centered around ``cats''. In addition, the view allows us to create a cluster of like words, that are also found within points of interest. In the above example, this would create a closer distance between keywords like ``animals'' and ``cats''. Lastly, if the categorical number of keywords becomes exponentially difficult to manage due to its size, filtering and zooming will create a controlled setting for many prospective users. \par
 
-Web Archive Visualizer also contains a keyword barchart, which allows users to view the associated counts of different tags, and how they relate to the rest of the collection. Depending on the area of focus in the archive, this particular idiom can be a great identifier of primary word associations in the archiving efforts. It can help answer questions such as: ``What words are primarily found in the web archives?'' and ``Is there a shift in categories of those words within the entire collection, or do they all fall within a similar scope?'' \par 
+Web Archive Visualizer also contains a keyword bar chart, which allows users to view the associated counts of different tags, and how they relate to the rest of the collection. Depending on the area of focus in the archive, this particular idiom can be a great identifier of primary word associations in the archiving efforts. It can help answer questions such as: ``What words are primarily found in the web archives?'' and ``Is there a shift in categories of those words within the entire collection, or do they all fall within a similar scope?'' \par 
 
-For those who find bar chart counts limiting, the system also provides temporal tree maps. This idiom takes the barchart results a bit further, in which they identify the spread of keywords over time for both resources and mementos. While a bar chart showing keyword counts can help answer many questions, temporal tree maps can provide reasoning and awareness as to why those counts have their respectful values. This idiom allows for navigation through the years, and resources, allowing the user to pinpoint exactly what time is primarily responsible for an increase or decrease in keyword associations. Temporal tree maps also have another large benefit, in which they present size with importance per year. This makes it especially easy to compare how particular keywords relate to the remainder of the collection within a year. \par
+For those who find bar chart counts limiting, the system also provides temporal tree maps. This idiom takes the bar chart results a bit further, in which they identify the spread of keywords over time for both resources and mementos. While a bar chart showing keyword counts can help answer many questions, temporal tree maps can provide reasoning and awareness as to why those counts have their respectful values. This idiom allows for navigation through the years, and resources, allowing the user to pinpoint exactly what time is primarily responsible for an increase or decrease in keyword associations. Temporal tree maps also have another large benefit, in which they present size with importance per year. This makes it especially easy to compare how particular keywords relate to the remainder of the collection within a year. \par
 
 Lastly, the system concludes resource specific views with the inclusion of keyword timegraphs, and their association with resources and mementos. This idiom aims to show both overlaps in archiving and which domains are responsible for the basis of our entire collection. Note, while there is no single correct chart to use when answering a diverse amount of questions, it is the goal of these specific views to help answer as many as possible by emphasizing their collaborative use. In some cases, many views can answer several different questions, but the ease of getting that answer will drastically differ between the idioms of choice. \par
 
@@ -137,7 +137,7 @@ benefit from our vis tool support.
 
 At the domain situation level we characterize URI-M collections from the digital preservation domain.
 A collection of mementos includes URI-Ms associated to different attributes such as tags, dates, archiver, 
-and URI-R. We then produce a design that comes from requirements formalized by several interviews performed 
+and URI-R. We then produced a design that comes from requirements formalized by several interviews performed 
 with the course instructor.
 
 At the data/task abstraction level we represent the collection of URI-Ms as a table
@@ -151,7 +151,7 @@ we produced a system with a number of varied views, each supporting a unique set
 actions and targets.
 
 We support the discover action via views that provide knowledge that was not previously known.
-Complementray views, top 10 charts addressing different areas, are examples of this. We support the present action via a number of timelines 
+Complementary views, top 10 charts addressing different areas, are examples of this. We support the present action via a number of timelines 
 which can be used for expressing how the data evolves over time. 
 We also support general enjoyment; our visualization makes it much easier to digest the
 collection overall in comparison to its spreadsheet form. We support the 
@@ -173,15 +173,15 @@ The second decision was the inclusion and utilization of juxtaposed views.
 Given a varied number of abstract tasks, we felt that the overall delivery efficiency would
 be maximized by juxtaposing a number of smaller navigable views, each subject to its
 own secondary encodings. Some of these include ordering, selection, navigation, and
-the encoding of different attributes via color.
+the encoding of different attributes via color hue.
 
 The third decision centered around extensive use of filtering and aggregation. A consistently driving goal 
 was providing access to a dataset that lacks semantics in its raw form. Many of our
 individual views aggregate data items by attribute and filter for items of interest 
 in attempts to mitigate cognitive load on the user. 
 
-All in all, the primary goal of this visualization system was to provide access to a dataset that is otherwise inaccessible in
-its raw form. Via the use of multiple idioms (summarized above) we present the dataset
+All in all, the primary goal of this visualization system was to provide access to an otherwise inaccessible dataset.
+Via the use of multiple idioms (summarized above) we present the dataset
 from multiple, varied perspectives that enable effective analysis, search, and query.
 
 \begin{table}
@@ -191,17 +191,18 @@ from multiple, varied perspectives that enable effective analysis, search, and q
 \centering
 \begin{tabular}{l|l}
     \hline
-    Heading One  &  Heading Two\\
+    Idiom  &  Web Archive Visualizer\\
     \hline
     \hline
-	Idiom & Web Archive Visualizer \\ \hline
 	What: Data & Web archive collection \\ \hline
-	What: Derived & Table, attributes \\   \hline
-	Why: Tasks & Table, attributes \\  \hline
-	How: Encode & \parbox[t]{5cm}{Separate, Order, Align, Color Categories Size, Area for Quantity, Timeline,  Time Graph, Bar Chart, Histogram, Bubble Chart, Word Map, Treemap} \\ \hline
-	How: Manipulate & Navigate, Pan Zoom \\  \hline
-	How: Facet & Juxtapose view \\  \hline
-	How: Reduce & Zooming, filtering, aggregate \\  \hline
+	What: Derived & Table with multiple attributes \\   \hline
+	Why: Tasks & \parbox[t]{5cm}{Discover trends over time, discover extremes, general enjoyment, lookup, browse, locate, and explore individual items and items grouped by attribute, identify individual items, compare and summarize data} \\ \hline
+	How: Encode & \parbox[t]{5cm}{Timeline,  Time Graph, Bar Chart, Histogram, Bubble Chart, Word Map, Treemap} \\ \hline
+	How: Manipulate & Navigate, Pan, Zoom \\  \hline
+	How: Facet & Juxtapose views \\  \hline
+	How: Arrange & Separate, Order, Align \\ \hline
+	How: Map & Size and area for quantity, color hue for category \\ \hline
+	How: Reduce & Aggregation and filtering \\  \hline
 Scale & \parbox[t]{5cm}{Attributes: half a dozen, Total items: several hundred} \\
 	\\
     \hline
@@ -227,9 +228,9 @@ Understanding and creating relationships within web archives are tasks that can 
 Web archive Visualizer is able to accomplish its goals by creating resource specific and general views. This split of information is a strategic approach to conserving cognitive memory, while allowing attention and focus towards particular areas of interest. The specific views allow for more low level characteristic analysis, spanning results in the entire collection. This includes idioms such as: bar chart showing counts of all keywords, timespan analysis of mementos, and the temporal evolution of resource archives. On the other hand, general views give us a higher level analysis of our collection, in which they summarize our collection. Having a combination of both is crucial, as the number of possible answers and comparison analytics can promote a larger understanding for our audience. \par
 
 \section{Final Thoughts}
-Looking towards the future, it is clear that our current system would significantly benefit from the use of contexutal linking and highlighting. While the views presented in the Web Archive Visualizer have their primary intetions of use, synchronizing areas of focus accross all views would significantly improve user experience. It is our belief that aside from easier navigation, the intended audiance would be able to perform comparisons and attribute localization both quicker and easier. \par
+Looking towards the future, it is clear that our current system would significantly benefit from the use of contextual linking and highlighting. While the views presented in the Web Archive Visualizer have their primary intentions of use, synchronizing areas of focus across all views would significantly improve user experience. It is our belief that aside from easier navigation, the intended audience would be able to perform comparisons and attribute localization both quicker and easier. \par
 
-In the context of future evaluation, we aim to perform validation analysis on the system. We could use this analysis to improve, or reshape, the views that the users are looking to see and actually have. In addition, as more like tools arise, tests can be performed to identify which tools are the most useful in understanding moderately sized collections, and how our deisgned system comparses to them. \par
+In the context of future evaluation, we aim to perform validation analysis on the system. We could use this analysis to improve, or reshape, the views that the users are looking to see and actually have. In addition, as more like tools arise, tests can be performed to identify which tools are the most useful in understanding moderately sized collections, and how our designed system compares to them. \par
 
 
 % Can use something like this to put references on a page
