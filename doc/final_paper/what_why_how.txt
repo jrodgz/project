@@ -1,0 +1,77 @@
+Analysis -- Analyze your system using the what/why/how framework (include and 
+explain the table from your presentation) and discuss the design decisions you 
+made at the data/task abstraction level and the visual encoding/interaction 
+idiom level (as done in Chapter 4).
+
+--------------------------------------------------------------------------------
+
+This project was created as part of the Information Visualization class taught
+at Old Dominion University. In it we read through Tamara Munzner's "Visualization 
+Analysis and Design", in which she presents a framework for the systematic analysis
+of visualizations and a common language for their evaluation; the What, Why, How 
+Framework. The What, Why, How Framework provides abstractions for validating visualizations
+at four distinct, nested levels of design 
+(Domain, Data/Task Abstraction, Encoding/Interaction Idiom, Algorithm).
+This project's scope and duration did not allow explicitly performing the different
+validation techniques discussed by Munzner at the different levels. 
+However, we justify the decisions made at each level with respect to the What, Why, How 
+Framework next.
+
+Our domain situation is explicitly characterized by the work and research performed by web archivers. 
+Web archivers digitally preserve records so that we can later replay and study them. 
+In the course of doing so, they amass collections which they need to share and 
+query for facts in general. These problems of search, analysis, and query directly 
+benefit from our vis tool support. 
+
+At the domain situation level we characterize URI-M collections from the digital preservation domain.
+A collection of mementos includes URI-Ms associated to different attributes such as tags, dates, archiver, 
+and URI-R. We then produce a design that comes from requirements formalized by several interviews performed 
+with Dr. Weigle at the beginning of the semester.
+
+At the data/task abstraction level we represent the collection of URI-Ms as a table
+with a number of items made up of a number of attributes. We did this to facilitate 
+identifying a varied number of abstract tasks. Tables can be easily sorted and aggregated
+enabling a number of actions and targets.
+
+One of our primary goals was supporting a wide number of abstract tasks. Because of this
+we produced a system with a number of varied views, each supporting a unique set of
+actions and targets.
+
+We support the discover action via views that provide knowledge that was not previously known.
+Our top 10 views are examples of this. We support the present action via a number of timelines 
+which can be used for expressing how the data evolves over time. 
+We also support general enjoyment; our visualization makes it much easier to digest the
+collection overall in comparison to its raw spreadsheet form. We support the 
+lookup action via our word map view in which a specific (or incomplete) item or 
+attribute can search for (or looked up), and then explored as a table for a number of individual
+targets. Our treemap, view supports the browse and explore action, allowing the dynamic 
+navigation of item sets aggregated by different attributes. Finally, our visualization allows 
+compare and summarize via our juxtaposed top 10 views. Most of our abstract targets
+involve individual items, individual attributes, and trends over time.
+
+At the encoding/interaction level we made three primary decisions. The first is 
+more of a rule of thumb, rather than an explicit encoding. It is the rule of thumb 
+discussed by Munzner as "Overview First, Zoom and Filter, Details on Demand". 
+A large chunk of our screen real estate is dedicated to summarize oriented idioms. 
+These idioms start the user off with a general awareness of the entire information space
+and allow requesting item subsets categorized by multiple attributes.
+
+The second was the use of juxtaposed views.
+Given a varied number of abstract tasks, we felt that overall delivery efficiency would
+be maximized by juxtaposing a number of smaller navigable views, each subject to its
+own secondary encodings. Some of these include ordering, selection, navigation, and
+the encoding of different attributes via color.
+
+The third is extensive use of filtering and aggregation. A consistently driving goal 
+was providing access to a dataset that lacks semantics in its raw form. Many of our
+individual views aggregate data items by attribute and filter for items of interest 
+in attempts to mitigate cognitive load on the user. Via the use of multiple idioms
+summarized below we aim to provide access to an otherwise inaccessible dataset from 
+multiple, varied perspectives.
+
+(And then to our table in the presentation we need to add this if it doesn't have it).
+
+How: Encode | Timeline, Time Graph, Bar Chart, Histogram, Bubble Chart, Word Map, Treemap 
+
+I think that's all of them in our vis?
+Is top 10 circle one called bubble chart?
